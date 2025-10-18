@@ -1,0 +1,49 @@
+:root{
+  --cx: 50%;
+  --cy: 100%;
+  --rx: 0px;
+  --ry: 0px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  font-family:system-ui,sans-serif;
+  color:#fff;
+  background:#000;
+  overflow-y:scroll;
+}
+
+.hero{
+  min-height:100vh;
+  background:#fff;
+}
+
+.section{
+  min-height:120vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff;
+  color: #000;
+}
+
+.text-wrap{
+  max-width: clamp(32ch, calc(var(--rx) * 1.2), 90ch);
+  margin: 0 auto;
+  padding-inline: 2rem;
+}
+
+
+h1,h2{margin:0;text-shadow:0 2px 14px rgba(0,0,0,.6)}
+.content{padding:18vh 6vw 0}
+
+.reveal-overlay{
+  position:fixed;inset:0;
+  background:#000;
+  pointer-events:none;
+  z-index:9999;
+  -webkit-mask:radial-gradient(ellipse var(--rx) var(--ry) at var(--cx) var(--cy), transparent 99%, #000 100%);
+          mask:radial-gradient(ellipse var(--rx) var(--ry) at var(--cx) var(--cy), transparent 99%, #000 100%);
+  will-change:-webkit-mask,mask;
+}
