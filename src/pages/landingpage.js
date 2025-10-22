@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "lil-gui";
+import { Shadow } from "../components/shadow.js";
 
 export function mountLandingPage(canvas) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -15,7 +16,7 @@ export function mountLandingPage(canvas) {
   camera.position.set(0, 2.0, 5.0);
   scene.add(camera);
 
-  const room = { ROOM_W: 15, ROOM_H: 10, ROOM_D: 50 };
+  const room = { ROOM_W: 15, ROOM_H: 15, ROOM_D: 60 };
   const SIDE_LEN = room.ROOM_D;
   const FLOOR_Y = -room.ROOM_H / 2 + 0.01;
   const WALL_Z = -room.ROOM_D / 2;
@@ -36,6 +37,9 @@ export function mountLandingPage(canvas) {
   const back = new THREE.Mesh(new THREE.PlaneGeometry(room.ROOM_W, room.ROOM_H), wallMat);
   back.position.set(0, 0, WALL_Z);
   scene.add(back);
+
+  const sceneGui = new GUI({ title: "Scene Controls" });
+  Shadow(scene, room, WALL_Z, sceneGui);
 
   const leftWall = new THREE.Mesh(new THREE.PlaneGeometry(SIDE_LEN, room.ROOM_H), wallMat);
   leftWall.rotation.y = Math.PI / 2;
@@ -105,8 +109,8 @@ export function mountLandingPage(canvas) {
     },
     frontLeft: {
         color: "#ffffff",
-        intensity: 20,
-        penumbra: 0.28,
+        intensity: 5,
+        penumbra: 0.14,
         decay: 0.1,
         angleDeg: 30,
         posX: -6.34,
@@ -117,8 +121,8 @@ export function mountLandingPage(canvas) {
     },
     frontRight: {
         color: "#ffffff",
-        intensity: 20,
-        penumbra: 0.28,
+        intensity: 5,
+        penumbra: 0.14,
         decay: 0.1,
         angleDeg: 30,
         posX: 6.34,
@@ -255,6 +259,7 @@ export function mountLandingPage(canvas) {
       cancelAnimationFrame(raf);
       removeEventListener("resize", onResize);
       gui.destroy();
+      sceneGui.destroy();
       renderer.dispose();
     }
   };
