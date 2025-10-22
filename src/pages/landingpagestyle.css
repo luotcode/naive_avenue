@@ -1,0 +1,22 @@
+#scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* (Optional) overlay corners for future menu/logo */
+.overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+.overlay .corner {
+  pointer-events: auto;
+  position: absolute;
+  padding: 8px 10px;
+  font-size: 12px;
+  opacity: 0.75;
+  
+}
+.overlay .corner.left { left: 10px; top: 10px; }
+.overlay .corner.right { right: 10px; top: 10px; }
