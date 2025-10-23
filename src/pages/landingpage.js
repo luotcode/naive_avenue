@@ -3,7 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "lil-gui";
 import { Shadow } from "../components/shadow.js";
 
-export function mountLandingPage(canvas) {
+export function mountLandingPage(canvas, navigate) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.setSize(innerWidth, innerHeight);
@@ -16,7 +16,7 @@ export function mountLandingPage(canvas) {
   camera.position.set(0, 2.0, 5.0);
   scene.add(camera);
 
-  const room = { ROOM_W: 15, ROOM_H: 15, ROOM_D: 60 };
+  const room = { ROOM_W: 20, ROOM_H: 15, ROOM_D: 70 };
   const SIDE_LEN = room.ROOM_D;
   const FLOOR_Y = -room.ROOM_H / 2 + 0.01;
   const WALL_Z = -room.ROOM_D / 2;
@@ -30,7 +30,7 @@ export function mountLandingPage(canvas) {
   });
 
   const floorMat = new THREE.MeshBasicMaterial({
-    color: 0x20242b,
+    color: 0x000000,
     side: THREE.DoubleSide
   });
 
@@ -39,28 +39,9 @@ export function mountLandingPage(canvas) {
   scene.add(back);
 
   const sceneGui = new GUI({ title: "Scene Controls" });
-  Shadow(scene, room, WALL_Z, sceneGui);
+  const ctl = Shadow(scene, room, WALL_Z, sceneGui, camera, renderer.domElement, navigate);
 
-  const leftWall = new THREE.Mesh(new THREE.PlaneGeometry(SIDE_LEN, room.ROOM_H), wallMat);
-  leftWall.rotation.y = Math.PI / 2;
-  leftWall.position.set(-room.ROOM_W / 2, 0, WALL_Z + SIDE_LEN / 2);
-  scene.add(leftWall);
-
-  const rightWall = new THREE.Mesh(new THREE.PlaneGeometry(SIDE_LEN, room.ROOM_H), wallMat);
-  rightWall.rotation.y = -Math.PI / 2;
-  rightWall.position.set(room.ROOM_W / 2, 0, WALL_Z + SIDE_LEN / 2);
-  scene.add(rightWall);
-
-  const floor = new THREE.Mesh(new THREE.PlaneGeometry(room.ROOM_W, SIDE_LEN), floorMat);
-  floor.rotation.x = -Math.PI / 2;
-  floor.position.set(0, FLOOR_Y, WALL_Z + SIDE_LEN / 2);
-  floor.receiveShadow = false;
-  floor.castShadow = false;
-  scene.add(floor);
-
-  const viewTarget = new THREE.Vector3(0, -1.0, -room.ROOM_D * 0.35);
-  const bounds = { halfW: room.ROOM_W / 2 - 0.2, halfH: room.ROOM_H / 2 - 0.2, minZ: -room.ROOM_D * 0.1, maxZ: room.ROOM_D * 0.4 };
-
+  const viewTarget = new THREE.Vector3(0, -0.95, WALL_Z * 0.65);
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.enablePan = false;
@@ -72,6 +53,42 @@ export function mountLandingPage(canvas) {
   controls.maxPolarAngle = THREE.MathUtils.degToRad(95);
   controls.minDistance = 5.5;
   controls.maxDistance = 14.0;
+
+  controls.enableRotate = false; 
+  ctl.enablePointerRotate(renderer.domElement, { yawSens: 0.005, pitchSens: 0.003 });
+
+  const angle = Math.PI * 2 / 3; 
+
+  const leftWall = new THREE.Mesh(
+    new THREE.PlaneGeometry(SIDE_LEN, room.ROOM_H),
+    wallMat
+  );
+  leftWall.rotation.y = -angle; 
+  leftWall.position.set(
+    -(room.ROOM_W / 2), 
+    0,
+    WALL_Z + Math.sin(Math.PI / 6) * (room.ROOM_W / 2)
+  );
+  scene.add(leftWall);
+
+  const rightWall = new THREE.Mesh(
+    new THREE.PlaneGeometry(SIDE_LEN, room.ROOM_H),
+    wallMat
+  );
+  rightWall.rotation.y = angle; 
+  rightWall.position.set(
+    room.ROOM_W / 2,
+    0,
+    WALL_Z + Math.sin(Math.PI / 6) * (room.ROOM_W / 2)
+  );
+  scene.add(rightWall);
+
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(room.ROOM_W, SIDE_LEN), floorMat);
+  floor.rotation.x = -Math.PI / 2;
+  floor.position.set(0, FLOOR_Y, WALL_Z + SIDE_LEN / 2);
+  floor.receiveShadow = false;
+  floor.castShadow = false;
+  scene.add(floor);
 
   const ambient = new THREE.AmbientLight(0xffffff, 0.35);
   scene.add(ambient);
@@ -110,7 +127,7 @@ export function mountLandingPage(canvas) {
     frontLeft: {
         color: "#ffffff",
         intensity: 5,
-        penumbra: 0.14,
+        penumbra: 0.07,
         decay: 0.1,
         angleDeg: 30,
         posX: -6.34,
@@ -122,7 +139,7 @@ export function mountLandingPage(canvas) {
     frontRight: {
         color: "#ffffff",
         intensity: 5,
-        penumbra: 0.14,
+        penumbra: 0.07,
         decay: 0.1,
         angleDeg: 30,
         posX: 6.34,
@@ -131,7 +148,7 @@ export function mountLandingPage(canvas) {
         aimX: -75,
         aimY: -20
     }
-    };
+  };
 
   function updateBack() {
     const angle = THREE.MathUtils.degToRad(THREE.MathUtils.clamp(params.back.angleDeg ?? 28, 1, 89));
@@ -231,17 +248,9 @@ export function mountLandingPage(canvas) {
   frF.add(params.frontRight, "decay", 0.1, 3, 0.1).onChange(updateLights);
   frF.addColor(params.frontRight, "color").onChange(updateLights);
 
-  function clampCamera() {
-    const p = camera.position;
-    p.x = THREE.MathUtils.clamp(p.x, -bounds.halfW, bounds.halfW);
-    p.y = THREE.MathUtils.clamp(p.y, -bounds.halfH + 0.4, bounds.halfH);
-    p.z = THREE.MathUtils.clamp(p.z, bounds.minZ, bounds.maxZ);
-  }
-
   let raf = 0;
   function render() {
     controls.update();
-    clampCamera();
     renderer.render(scene, camera);
     raf = requestAnimationFrame(render);
   }

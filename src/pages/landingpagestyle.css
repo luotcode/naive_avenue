@@ -1,22 +1,82 @@
-#scene {
+@font-face {
+  font-family: 'Schroffer Mono';
+  src: url('/fonts/SchrofferMonoVF.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+.stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;         
+}
+
+.webgl {
   display: block;
   width: 100%;
   height: 100%;
 }
 
-/* (Optional) overlay corners for future menu/logo */
-.overlay {
-  position: fixed;
+.brand {
+  position: absolute;
+  top: 15px;                
+  left: 25px;
+  z-index: 10;             
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.stage .brand img {
+  height: 150px;
+  width: 150px;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+  transition: transform .2s ease, opacity .2s ease;
+}
+
+.brand:hover img {
+  transform: translateY(-1px) scale(1.02);
+  opacity: 0.95;
+}
+
+@media (max-width: 600px) {
+  .stage .brand img {
+    height: 100px;
+    width: 100px;
+  }
+}
+
+.landing-corners {
+  position: absolute;
   inset: 0;
   pointer-events: none;
 }
-.overlay .corner {
-  pointer-events: auto;
+.landing-corners .corner {
   position: absolute;
-  padding: 8px 10px;
-  font-size: 12px;
-  opacity: 0.75;
-  
+  bottom: 18px;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
-.overlay .corner.left { left: 10px; top: 10px; }
-.overlay .corner.right { right: 10px; top: 10px; }
+.landing-corners .corner.left { left: 18px; text-align: left; }
+.landing-corners .corner.right { right: 18px; text-align: right; }
+.landing-corners .corner-line {
+  font-family: "Schroffer Mono", monospace;
+  font-weight: 500;
+  font-style: bold;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: -1.1%;
+  color: rgba(247,252,197,1);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (max-width: 600px) {
+  .landing-corners .corner { bottom: 12px; }
+  .landing-corners .corner-line { font-size: 14px; }
+}
