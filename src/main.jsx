@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LandingPage from "./pages/LandingPage.jsx";
+import AboutPage from "./pages/AboutPage.jsx";
 
 import EmilyPage from "./pages/artworkpages/EmilyPage.jsx";
 import IvyPage from "./pages/artworkpages/IvyPage.jsx";
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/emily-sarten" element={<EmilyPage />} />
         <Route path="/ivy-vo" element={<IvyPage />} />
         <Route path="/lhpg" element={<LhpgPage />} />

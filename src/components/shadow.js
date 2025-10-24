@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-export function Shadow(scene, room, WALL_Z, gui, camera, domEl, navigate) {
+export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
   const texLoader = new THREE.TextureLoader();
   const posters = [];
   const animated = [];
@@ -31,8 +31,10 @@ export function Shadow(scene, room, WALL_Z, gui, camera, domEl, navigate) {
   {
     id: "P1",
     name: "Emily Sarten",
+    type: "video",
     href: "/emily-sarten",
     url: "/assets/Art & Leisure (Crying) - Emily Sarten.png",
+    type: "video",
     width: 4.31,
     opacity: 0.4,
     blurPx: 3,
@@ -45,6 +47,7 @@ export function Shadow(scene, room, WALL_Z, gui, camera, domEl, navigate) {
   {
     id: "P2",
     name: "Ivy Vo",
+    type: "embbed",
     href: "/ivy-vo",
     url: "/assets/G9 - Ivy Vo.png",
     width: 5.01,
@@ -62,6 +65,7 @@ export function Shadow(scene, room, WALL_Z, gui, camera, domEl, navigate) {
     id: "P3",
     name: "LHPG",
     href: "/lhpg",
+    type: "video",
     url: "/assets/LHPG.png",
     width: 3.82,
     opacity: 0.3,
@@ -76,6 +80,7 @@ export function Shadow(scene, room, WALL_Z, gui, camera, domEl, navigate) {
     id: "P4",
     name: "Le Thanh Thao",
     href: "/le-thanh-thao",
+    type: "video",
     url: "/assets/Giac mo Chapiti - Le Thanh Thao.png",
     width: 5.3,
     opacity: 0.3,
@@ -248,6 +253,7 @@ export function Shadow(scene, room, WALL_Z, gui, camera, domEl, navigate) {
     texLoader.load(encodeURI(cfg.url), (tex) => {
       const poster = buildPosterMesh(tex, cfg);
 
+      /*
       if (gui) {
         const folder = gui.addFolder(`Shadow – ${cfg.id}`);
         const state = {
@@ -337,6 +343,7 @@ export function Shadow(scene, room, WALL_Z, gui, camera, domEl, navigate) {
           if (entry) entry.base = { x: poster.position.x, y: poster.position.y, z: poster.position.z, rotZ: poster.rotation.z };
         }
       }
+      */
     });
   });
 

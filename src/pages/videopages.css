@@ -1,0 +1,124 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: auto;
+}
+
+.art-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  overflow: auto;
+
+  font-family: "Schroffer Mono", monospace;
+  font-weight: 500;
+  font-style: bold;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: -1.1%;
+  color: rgba(247, 252, 197, 1);
+  -webkit-font-smoothing: antialiased;
+}
+
+.brand {
+  position: absolute;
+  top: 15px;
+  left: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.brand img {
+  height: 185px;
+  width: auto;
+}
+
+.oval-wrapper {
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  width: 160vh;
+  height: 150vh;
+  transform: translate(-50%, -50%) scale(1);
+  border-radius: 50%;
+  overflow: hidden;
+  z-index: 1;
+  transition: all 1.2s cubic-bezier(0.85, 0, 0.15, 1);
+  cursor: pointer;
+}
+
+.oval-expanded {
+  top: 50%;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+.oval-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 1.5s ease-in-out;
+}
+
+.oval-expanded .oval-image {
+  transform: scale(1.1);
+}
+
+.bottom-left,
+.bottom-right {
+  position: absolute;
+  bottom: 40px;
+  line-height: 1.4em;
+}
+
+.bottom-left {
+  left: 40px;
+}
+
+.bottom-right {
+  right: 40px;
+  text-align: right;
+}
+
+.menu {
+  position: fixed;
+  top: 25px;
+  right: 40px;
+}
+
+.brand,
+.menu,
+.bottom-left,
+.bottom-right {
+  z-index: 10;
+  position: fixed;
+}
+
+.description-section {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: calc(160vh + 80px) auto 50vh; 
+  padding: 0 40px;
+  font-size: 18px;
+  line-height: 1.7;
+  font-family: "Charmonman", cursive;
+  color: rgba(247, 252, 197, 0.9);
+  font-weight: 400;
+  font-size: 27px;
+  line-height: 150%;
+  letter-spacing: -1.1%;
+  text-align: center;
+  transition: margin 1.2s ease, opacity 0.8s ease;
+  z-index: 2;
+}
+
+.art-page.expanded .description-section {
+  margin: 110vh auto 20vh; 
+}
+

@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { mountLandingPage } from "./landingpage";
 import logoUrl from "/logo.png";
+import MenuOverlay from "../components/menuoverlay";
 
 export default function LandingPage() {
   const canvasRef = useRef();
@@ -23,6 +24,9 @@ export default function LandingPage() {
       >
         <img src={logoUrl} alt="Logo" />
       </button>
+
+      <div className="menu"> <MenuOverlay /> </div>
+
       <div className="landing-corners">
         <div className="corner left">
           <div className="corner-line">WRONG BIANELLE</div>
