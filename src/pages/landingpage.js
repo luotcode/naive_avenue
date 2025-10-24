@@ -90,7 +90,7 @@ export function mountLandingPage(canvas, navigate) {
   floor.castShadow = false;
   scene.add(floor);
 
-  const ambient = new THREE.AmbientLight(0xffffff, 0.35);
+  const ambient = new THREE.AmbientLight(0xffffff, 0.0);
   scene.add(ambient);
 
   const backSpot = new THREE.SpotLight(0xffffff, 9.5, room.ROOM_D * 1.8, 1.0, 0.9, 2.0);
@@ -106,9 +106,8 @@ export function mountLandingPage(canvas, navigate) {
   const frontLeft = makeSpot(0xffffff);
   const frontRight = makeSpot(0xffffff);
 
-  // ===== Params =====
     const params = {
-    ambient: 1,
+    ambient: 0,
     back: {
         posX: 0,
         y: 0,
@@ -118,7 +117,9 @@ export function mountLandingPage(canvas, navigate) {
         angleDeg: 43.2,
         margin: 0.04,
         color: "#ffffff",
-        intensity: 237.7,
+        intensity: 200,
+        minIntensity: 100,
+        pulseSpeed: 35.0,
         penumbra: 0.47,
         decay: 0.9,
         haloMul: 5,
@@ -204,8 +205,13 @@ export function mountLandingPage(canvas, navigate) {
     ambient.intensity = params.ambient;
   }
   updateLights();
+  backSpot.intensity = params.back.minIntensity ?? 100;
 
-  // ===== GUI =====
+  const clock = new THREE.Clock();
+  let backAnimDir = 1; 
+  const backAnimMin = params.back.minIntensity ?? 100;
+  const backAnimMax = params.back.intensity;
+
   const gui = new GUI({ title: "Light Controls" });
   gui.add(params, "ambient", 0, 1, 0.01).onChange(updateLights);
 
@@ -219,6 +225,8 @@ export function mountLandingPage(canvas, navigate) {
   backF.add(params.back, "margin", 0, 0.5, 0.005).onChange(updateLights);
   backF.addColor(params.back, "color").onChange(updateLights);
   backF.add(params.back, "intensity", 0, 1000, 0.1).onChange(updateLights);
+  backF.add(params.back, "pulseSpeed", 0.01, 50, 0.01).name("pulse speed").onChange((v) => {
+  });
   backF.add(params.back, "penumbra", 0, 1, 0.01).onChange(updateLights);
   backF.add(params.back, "decay", 0.1, 3, 0.1).onChange(updateLights);
   backF.add(params.back, "haloMul", 1.0, 5.0, 0.01).onChange(updateLights);
@@ -251,6 +259,19 @@ export function mountLandingPage(canvas, navigate) {
   let raf = 0;
   function render() {
     controls.update();
+
+    const dt = clock.getDelta();
+    const speed = params.back.pulseSpeed ?? 2.0;
+    backSpot.intensity += backAnimDir * speed * dt;
+
+    if (backAnimDir > 0 && backSpot.intensity >= backAnimMax) {
+      backSpot.intensity = backAnimMax;
+      backAnimDir = -1;
+    } else if (backAnimDir < 0 && backSpot.intensity <= backAnimMin) {
+      backSpot.intensity = backAnimMin;
+      backAnimDir = 1;
+    }
+
     renderer.render(scene, camera);
     raf = requestAnimationFrame(render);
   }

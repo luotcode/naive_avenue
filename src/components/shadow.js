@@ -7,6 +7,22 @@ export function Shadow(scene, room, WALL_Z, gui, camera, domEl, navigate) {
   const clock = new THREE.Clock();
   let raf = 0;
 
+  const tooltip = document.createElement("div");
+  tooltip.className = "shadow-tooltip";
+  tooltip.style.position = "fixed";
+  tooltip.style.pointerEvents = "none";
+  tooltip.style.padding = "6px 8px";
+  tooltip.style.background = "rgba(0,0,0,0.75)";
+  tooltip.style.color = "#f7fcc5"; 
+  tooltip.style.borderRadius = "4px";
+  tooltip.style.fontSize = "13px";
+  tooltip.style.fontFamily = "Schroffer Mono, monospace";
+  tooltip.style.zIndex = "10000";
+  tooltip.style.opacity = "0";
+  tooltip.style.transition = "opacity 0.08s ease, transform 0.08s ease";
+  tooltip.style.whiteSpace = "nowrap";
+  document.body.appendChild(tooltip);
+
   const shadowRoot = new THREE.Group();
   shadowRoot.position.z = 0;         
   scene.add(shadowRoot);
@@ -194,6 +210,23 @@ export function Shadow(scene, room, WALL_Z, gui, camera, domEl, navigate) {
     poster.frustumCulled = false;  
     poster.renderOrder = 10;
     poster.userData.href = cfg.href;
+    poster.userData.name = cfg.name;
+
+    // prepare an offscreen canvas to sample pixels from the source image
+    try {
+      const img = tex.image || tex.source?.data;
+      if (img && img.width && img.height) {
+        const sCanvas = document.createElement('canvas');
+        sCanvas.width = img.width;
+        sCanvas.height = img.height;
+        const sCtx = sCanvas.getContext('2d');
+        // draw the image into the canvas for pixel sampling
+        sCtx.drawImage(img, 0, 0, img.width, img.height);
+        poster.userData.sampler = { canvas: sCanvas, ctx: sCtx, width: img.width, height: img.height };
+      }
+    } catch (err) {
+      // sampling is optional; fail silently if cross-origin or other issues
+    }
 
     placeByConfig(poster, cfg);
     poster.rotation.set(0, 0, THREE.MathUtils.degToRad(cfg.rotationDeg ?? 0));
@@ -311,23 +344,140 @@ export function Shadow(scene, room, WALL_Z, gui, camera, domEl, navigate) {
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
 
+  let hoveredPoster = null;
+  let didDrag = false;
+  let lastMousePos = { x: 0, y: 0 };
+
   function onPointerMove(e) {
     const rect = (domEl || document.body).getBoundingClientRect();
     mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-    raycaster.setFromCamera(mouse, camera);
-    const hit = raycaster.intersectObjects(posters, false)[0];
-    (domEl || document.body).style.cursor = hit ? "pointer" : "default";
-  }
 
-  function onClick() {
+    const dx = e.clientX - lastMousePos.x;
+    const dy = e.clientY - lastMousePos.y;
+    if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
+      didDrag = true;
+    }
+    lastMousePos.x = e.clientX;
+    lastMousePos.y = e.clientY;
+
     raycaster.setFromCamera(mouse, camera);
-    const hit = raycaster.intersectObjects(posters, false)[0];
-    if (hit && hit.object?.userData?.href && typeof navigate === "function") {
-      navigate(hit.object.userData.href);
+    const hits = raycaster.intersectObjects(posters, false);
+    let effectiveHit = null;
+
+    for (const h of hits) {
+      const sampler = h.object.userData?.sampler;
+      let isShadowPixel = true; 
+      if (sampler) {
+        const uv = h.uv || h.uv2 || null;
+        if (uv) {
+          const px = Math.floor(uv.x * (sampler.width - 1));
+          const py = Math.floor((1 - uv.y) * (sampler.height - 1));
+          try {
+            const data = sampler.ctx.getImageData(px, py, 1, 1).data;
+            const r = data[0], g = data[1], b = data[2], a = data[3];
+            const brightness = (r + g + b) / 3;
+            if (a < 10) {
+              isShadowPixel = false;
+            } else if (brightness > 60) {
+              isShadowPixel = false;
+            } else {
+              isShadowPixel = true;
+            }
+          } catch (err) {
+            isShadowPixel = true;
+          }
+        }
+      }
+
+      if (isShadowPixel) {
+        effectiveHit = h;
+        break;
+      }
+    }
+
+    if (effectiveHit) {
+      const obj = effectiveHit.object;
+      hoveredPoster = obj;
+      (domEl || document.body).style.cursor = "pointer";
+      const name = obj.userData?.name || "";
+      if (name) {
+        tooltip.textContent = name;
+        const pad = 12;
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        requestAnimationFrame(() => {
+          const tw = tooltip.getBoundingClientRect().width;
+          const th = tooltip.getBoundingClientRect().height;
+          let tx = e.clientX + pad;
+          let ty = e.clientY + pad;
+          if (tx + tw + 8 > vw) tx = e.clientX - tw - pad;
+          if (ty + th + 8 > vh) ty = e.clientY - th - pad;
+          tooltip.style.left = tx + "px";
+          tooltip.style.top = ty + "px";
+          tooltip.style.transform = "none";
+          tooltip.style.opacity = "1";
+          tooltip.style.display = "block";
+        });
+      }
+    } else {
+      hoveredPoster = null;
+      (domEl || document.body).style.cursor = "default";
+      tooltip.style.opacity = "0";
+      tooltip.style.display = "none";
     }
   }
 
+  function onPointerDown(e) {
+    didDrag = false;
+    lastMousePos.x = e.clientX;
+    lastMousePos.y = e.clientY;
+  }
+
+  function onClick(e) {
+    raycaster.setFromCamera(mouse, camera);
+    const hits = raycaster.intersectObjects(posters, false);
+
+    const tipVisible = Boolean(
+      tooltip && tooltip.parentNode && tooltip.style.display !== "none" && parseFloat(tooltip.style.opacity || "0") > 0
+    );
+
+    if (!tipVisible) return;
+
+    if (!didDrag && typeof navigate === "function") {
+      let destHref = null;
+      try {
+        const tipName = tooltip?.textContent?.trim();
+        if (tipName) {
+          const cfg = postersConfig.find(c => c.name === tipName);
+          if (cfg && cfg.href) destHref = cfg.href;
+        }
+      } catch (err) {
+        // ignore
+      }
+
+      if (!destHref && hoveredPoster?.userData?.href) destHref = hoveredPoster.userData.href;
+      if (!destHref && hits[0]?.object?.userData?.href) destHref = hits[0].object.userData.href;
+
+      if (destHref) {
+        try {
+          (domEl || document.body).style.cursor = "default";
+          hoveredPoster = null;
+          if (tooltip) {
+            tooltip.style.opacity = "0";
+            tooltip.style.display = "none";
+            if (tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
+          }
+        } catch (err) {
+          // ignore
+        }
+
+        navigate(destHref);
+      }
+    }
+  }
+
+  (domEl || window).addEventListener("pointerdown", onPointerDown);
   (domEl || window).addEventListener("pointermove", onPointerMove, { passive: true });
   (domEl || window).addEventListener("click", onClick);
 
@@ -367,22 +517,36 @@ export function Shadow(scene, room, WALL_Z, gui, camera, domEl, navigate) {
   function enablePointerRotate(targetEl = domEl || window, opts = {}) {
     if (rotateEnabled) return;
     rotateEnabled = true;
+
     const SENS_X = opts.yawSens ?? 0.005;
     const SENS_Y = opts.pitchSens ?? 0.004;
     const PITCH_MIN = opts.pitchMin ?? -Math.PI / 6;
     const PITCH_MAX = opts.pitchMax ??  Math.PI / 6;
 
-    onDownRef = (e) => { dragActive = true; lastX = e.clientX; lastY = e.clientY; };
+    onDownRef = (e) => {
+      dragActive = true;
+      lastX = e.clientX;
+      lastY = e.clientY;
+    };
+
     onMoveRef = (e) => {
       if (!dragActive) return;
       const dx = e.clientX - lastX;
       const dy = e.clientY - lastY;
-      lastX = e.clientX; lastY = e.clientY;
+      lastX = e.clientX;
+      lastY = e.clientY;
 
-      rot.y += dx * SENS_X;                                   // yaw (Y)
-      rot.x = THREE.MathUtils.clamp(rot.x + dy * SENS_Y, PITCH_MIN, PITCH_MAX); // pitch (X)
+      rot.y += dx * SENS_X;
+      rot.x = THREE.MathUtils.clamp(rot.x + dy * SENS_Y, PITCH_MIN, PITCH_MAX);
       shadowRoot.rotation.set(rot.x, rot.y, 0);
+
+      const parallaxScale = 2.5;
+      const MAX_X = room.ROOM_W * 0.35;
+      const MAX_Z = room.ROOM_D * 0.35;
+      shadowRoot.position.x += ((THREE.MathUtils.clamp(rot.y * parallaxScale, -MAX_X, MAX_X)) - shadowRoot.position.x) * 0.1;
+      shadowRoot.position.z += ((THREE.MathUtils.clamp(rot.x * parallaxScale, -MAX_Z, MAX_Z)) - shadowRoot.position.z) * 0.1;
     };
+
     onUpRef = () => { dragActive = false; };
 
     targetEl.addEventListener("pointerdown", onDownRef);
@@ -407,6 +571,7 @@ export function Shadow(scene, room, WALL_Z, gui, camera, domEl, navigate) {
       (domEl || window).removeEventListener("pointermove", onPointerMove);
       (domEl || window).removeEventListener("click", onClick);
       disablePointerRotate();
+      if (tooltip && tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
     }
   };
 }

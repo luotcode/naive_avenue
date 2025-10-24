@@ -22,7 +22,7 @@
 .brand {
   position: absolute;
   top: 15px;                
-  left: 25px;
+  left: 10px;
   z-index: 10;             
   background: transparent;
   border: 0;
