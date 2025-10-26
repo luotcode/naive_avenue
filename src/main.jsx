@@ -23,7 +23,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/ivy-vo" element={<IvyPage />} />
         <Route path="/lhpg" element={<LhpgPage />} />
         <Route path="/le-thanh-thao" element={<ThanhThaoPage />} />
-        <Route path="/NguyenHoangGiaBao" element={<NguyenHoangGiaBaoPage />} />
+        <Route path="/nguyen-hoang-gia-bao" element={<NguyenHoangGiaBaoPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
