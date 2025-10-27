@@ -1,7 +1,7 @@
 import VideoPages from "../VideoPages.jsx";
 import "../videopages.css";
 
-export default function RicardoBordiniPage() {
+export default function RicardoBodiniPage() {
   return (
     <VideoPages
       imageSrc="/assets/EineKleine.mp4"

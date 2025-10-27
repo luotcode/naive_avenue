@@ -1,9 +1,13 @@
 import EmbeddedPages from "../EmbeddedPages.jsx";
 
+const mediaList = ["https://www.youtube.com/embed/Hki6RqI-eMA?si=iuQzq4ELiP3I6LMr",
+                    "https://player.vimeo.com/video/1130930037?h=a6d80588de",
+];
+
 export default function LeThanhThaoPage() {
   return (
     <EmbeddedPages
-      mediaSrc="https://drive.google.com/file/d/1s2nZ_fm1Ga-lB9JLOgqJ_Xt6h33J-F3s/preview"
+      mediaList={mediaList}
       title="WRONG BIANELLE"
       date="1 NOV 2025 — XX XX 2026"
       artistName="LE THANH THAO"

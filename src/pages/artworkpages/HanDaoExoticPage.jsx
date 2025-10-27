@@ -11,17 +11,10 @@ export default function HanDaoDanOngPage() {
       description={
         <>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-            tempor incididunt ut labore et dolore magna aliqua. 
+            "“You're so exotic looking!” is an interactive web poem that explores the complex issues surrounding the commodification of Asian women, particularly through the phenomenon of mail-order brides and the fetishization of Asian women commonly referred to as ""yellow fever"".
           </p>
           <p>
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi 
-            ut aliquip ex ea commodo consequat.
-          </p>
-          <p>
-            Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-            non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+This interactive poem project delves into the harmful stereotypes surrounding Asian women, which have been perpetuated by Western films and media. These portrayals have presented Asian women as hyper-sexual and hyper-heterosexual, and presenting them as perfect complements to the exaggerated masculinity of White Men. This reinforces male-centered and male-dominated ideologies, where Asian women are expected to exist solely to serve men and be sexually consumed by them."
           </p>
         </>
       }
