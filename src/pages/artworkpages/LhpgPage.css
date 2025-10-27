@@ -1,0 +1,39 @@
+.essay-container {
+  width: 600px;
+  height: 85vh;
+  overflow-y: auto;
+  margin: 0 auto;
+  line-height: 1.7;
+  font-family: 'Georgia', serif;
+  text-align: left;
+  margin-top: 25px;
+  -ms-overflow-style: none;  
+    scrollbar-width: none;
+}
+
+.essay-container::-webkit-scrollbar { 
+    display: none;
+}
+
+.essay-part {
+  margin-bottom: 6rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.essay-part.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cursor {
+  display: inline-block;
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
