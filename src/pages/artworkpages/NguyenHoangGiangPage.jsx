@@ -1,6 +1,7 @@
 import EmbeddedPages from "../EmbeddedPages.jsx";
 
-const mediaList = ["https://www.youtube.com/embed/videoseries?si=45slXPw5Lp27MAj_&amp;list=PL1XPUaT5BfVsW7ynczRD9puWMO-N7uTaa"];
+const mediaList = ["https://drive.google.com/file/d/1r6q0qL04lbYDiW590mOcJSxGEVEeHFEa/preview",
+  "https://www.youtube.com/embed/videoseries?si=45slXPw5Lp27MAj_&amp;list=PL1XPUaT5BfVsW7ynczRD9puWMO-N7uTaa"];
 
 export default function NguyenHoangGiangPage() {
   return (

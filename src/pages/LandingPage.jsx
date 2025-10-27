@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { mountLandingPage } from "./landingpage";
 import logoUrl from "/logo.png";
@@ -8,10 +8,34 @@ export default function LandingPage() {
   const canvasRef = useRef();
   const navigate = useNavigate();
 
+  const [idle, setIdle] = useState(false);
+  const idleTimeout = useRef(null);
+  const [hasInteracted, setHasInteracted] = useState(false);
+
+  // Mount Landing Page Scene
   useEffect(() => {
     const { dispose } = mountLandingPage(canvasRef.current, navigate);
     return () => dispose();
   }, [navigate]);
+
+  // Idle detection
+  useEffect(() => {
+    const resetIdleTimer = () => {
+      if (!hasInteracted) setHasInteracted(true); // mark first interaction
+      clearTimeout(idleTimeout.current);
+      if (idle) setIdle(false);
+      idleTimeout.current = setTimeout(() => setIdle(true), 5000); // 5s idle
+    };
+
+    const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
+    events.forEach((evt) => window.addEventListener(evt, resetIdleTimer));
+
+    return () => {
+      clearTimeout(idleTimeout.current);
+      events.forEach((evt) => window.removeEventListener(evt, resetIdleTimer));
+    };
+  }, [idle, hasInteracted]);
+
 
   return (
     <div className="stage">
@@ -38,6 +62,19 @@ export default function LandingPage() {
           <div className="corner-line">INSIDE OF THE PROJECTION</div>
         </div>
       </div>
+
+      {hasInteracted && idle && (
+        <div className="screensaver" onClick={() => setIdle(false)}>
+          <video
+            src="/assets/EineKleine.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="screensaver-video"
+          />
+        </div>
+      )}
     </div>
   );
 }

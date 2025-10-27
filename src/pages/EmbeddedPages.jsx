@@ -50,7 +50,7 @@ export default function EmbeddedPages({
             ) : isYouTube(src) ? (
               <iframe
                 className="sk-media"
-                src={`https://www.youtube.com/embed/${ytId(src)}?autoplay=1&loop=1&controls=1&playsinline=1&modestbranding=1&rel=0&playlist=${ytId(src)}`}
+                src={`https://www.youtube.com/embed/${ytId(src)}?autoplay=1&loop=1&controls=0&playsinline=1&modestbranding=1&rel=0&playlist=${ytId(src)}`}
                 title={`${title || "video"}-${i}`}
                 allow="autoplay; encrypted-media; picture-in-picture"
                 allowFullScreen

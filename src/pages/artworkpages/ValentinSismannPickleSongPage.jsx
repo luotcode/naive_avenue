@@ -4,7 +4,7 @@ import "../videopages.css";
 export default function ValentinSismannPage() {
   return (
     <VideoPages
-      imageSrc="/assets/Valentin Sismann - Picklesong (2025) - Valentin Sismann.mov"
+      imageSrc="https://www.youtube.com/watch?v=Va7qY0uxyVQ"
       title="WRONG BIANELLE"
       date="1 NOV 2025 - XX XX 2026"
       artistName="VALENTIN SISMANN"
