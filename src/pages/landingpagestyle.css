@@ -85,6 +85,22 @@
   animation: fadeIn 3.5s ease forwards;
 }
 
+.screensaver::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at center,
+    transparent 45%,
+    rgba(255, 255, 255, 0.6) 70%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  mix-blend-mode: screen;
+  animation: fadeIn 2s ease forwards;
+}
+
+
 .screensaver-video {
   width: 100%;
   height: 100%;

@@ -24,7 +24,7 @@ export default function LandingPage() {
       if (!hasInteracted) setHasInteracted(true); 
       clearTimeout(idleTimeout.current);
       if (idle) setIdle(false);
-      idleTimeout.current = setTimeout(() => setIdle(true), 5000); 
+      idleTimeout.current = setTimeout(() => setIdle(true), 2000); 
     };
 
     const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];

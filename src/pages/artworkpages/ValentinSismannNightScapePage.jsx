@@ -4,25 +4,15 @@ import "../videopages.css";
 export default function ValentinSismannPage() {
   return (
     <VideoPages
-      imageSrc="/assets/EineKleine.mp4" 
+      mediaSrc="https://youtu.be/Q27kUZwy4is" 
       title = "WRONG BIANELLE"
       date = "1 NOV 2025 - XX XX 2026"
-      artistName = "EMILY SARTEN"
-      projectName = "AMAZING PROJECT TITLE"
+      artistName = "VALENTIN SISMANNN"
+      projectName = "NIGHTSCAPE"
       description={
         <>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-            tempor incididunt ut labore et dolore magna aliqua. 
-          </p>
-          <p>
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi 
-            ut aliquip ex ea commodo consequat.
-          </p>
-          <p>
-            Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-            non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            At night, a group of photographers become the landscape they observe.
           </p>
         </>
       }
