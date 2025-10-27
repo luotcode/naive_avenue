@@ -21,10 +21,10 @@ export default function LandingPage() {
   // Idle detection
   useEffect(() => {
     const resetIdleTimer = () => {
-      if (!hasInteracted) setHasInteracted(true); // mark first interaction
+      if (!hasInteracted) setHasInteracted(true); 
       clearTimeout(idleTimeout.current);
       if (idle) setIdle(false);
-      idleTimeout.current = setTimeout(() => setIdle(true), 5000); // 5s idle
+      idleTimeout.current = setTimeout(() => setIdle(true), 5000); 
     };
 
     const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
