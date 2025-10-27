@@ -1,27 +1,23 @@
 import EmbeddedPages from "../EmbeddedPages.jsx";
 
+const mediaList = ["https://drive.google.com/file/d/1xUJ5Kfz-A1HYASfI3vdm7TM9GCu9AfQL/preview"];
+
 export default function DangKhangNinhPage() {
   return (
     <EmbeddedPages
-      mediaSrc="https://youre-so-exotic-looking.netlify.app/"
+      mediaList={mediaList}
       title = "WRONG BIANELLE"
       date="1 NOV 2025 — XX XX 2026"
-      artistName="HAN DAO"
-      projectName="YOU'RE SO EXOTIC LOOKING!"
+      artistName="DANG KHANG NINH"
+      projectName="INTO THE EDEN OF AMBIGUITIES: A WALK WITH AI"
       description={
         <>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-            tempor incididunt ut labore et dolore magna aliqua. 
-          </p>
-          <p>
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi 
-            ut aliquip ex ea commodo consequat.
-          </p>
-          <p>
-            Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-            non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+             A book-length critical essay that discusses how AI impacts human ontology. Based on Martin Heidegger's phenomenology of modern technology, 
+             I argue that AI represents the highest ontological danger since it depletes human knowledge and creativity, similarly to how other forms 
+             of modern technology have exploited natural resources and human labor. From this parallel, I offer a thesis: We should use environmentalism 
+             as an inspiration for how to develop and utilize AI. This approach constitutes an ethical re-orientation named "Eden of Ambiguities," guided 
+             by three principles: locality, interconnectedness, and ambiguity.
           </p>
         </>
       }

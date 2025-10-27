@@ -16,7 +16,7 @@ export default function NguyenHoangGiaBaoPage() {
         <MenuOverlay />
       </div>
 
-      <div className="sk-stage">
+      <div className="sk-stage" style={{height: "100vh"}}>
         <div>
             <div className="web-wrapper">
               <iframe
@@ -39,7 +39,7 @@ export default function NguyenHoangGiaBaoPage() {
         <div>KINH CHIEU AI (TOI HANH GIA - GIA THANH TOI)</div>
       </div>
 
-      <div className="sk-desc"><>
+      {/* <div className="sk-desc"><>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
             tempor incididunt ut labore et dolore magna aliqua. 
@@ -53,7 +53,7 @@ export default function NguyenHoangGiaBaoPage() {
             cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
             non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
           </p>
-        </></div>
+        </></div> */}
     </div>
   );
 }
