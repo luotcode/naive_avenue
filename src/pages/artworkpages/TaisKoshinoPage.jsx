@@ -1,7 +1,7 @@
 import VideoPages from "../VideoPages.jsx";
 import "../videopages.css";
 
-export default function EmilyPage() {
+export default function TaisKoshinoPage() {
   return (
     <VideoPages
       imageSrc="/assets/EineKleine.mp4"
