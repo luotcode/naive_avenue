@@ -22,6 +22,12 @@
   transition: opacity 1s ease, transform 1s ease;
 }
 
+.line br {
+  display: block;
+  margin-bottom: 1em; /* adjust this value for more or less space */
+  content: "";
+}
+
 .essay-part.fade-in {
   opacity: 1;
   transform: translateY(0);
@@ -30,6 +36,13 @@
 .cursor {
   display: inline-block;
   animation: blink 1s steps(1) infinite;
+}
+
+.zigzag {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: red;
+  text-decoration-thickness: 1px;
 }
 
 @keyframes blink {

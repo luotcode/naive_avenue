@@ -106,53 +106,52 @@ function TypewriterParagraph({ text, index, onTypingEnd }) {
   const [displayedText, setDisplayedText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
 
+  const formattedText = renderFormattedHTML(text); 
+
   useEffect(() => {
     let i = 0;
     const interval = setInterval(() => {
-      setDisplayedText(text.slice(0, i));
+      setDisplayedText(formattedText.slice(0, i)); 
       i++;
-      if (i > text.length) {
+      if (i > formattedText.length) {
         clearInterval(interval);
         setIsTyping(false);
         onTypingEnd?.();
       }
-    }, 25);
+    }, 30);
     return () => clearInterval(interval);
-  }, [text, onTypingEnd]);
+  }, [formattedText, onTypingEnd]);
 
   return (
     <div id={`part-${index}`} className="essay-part fade-in">
-      {renderFormattedText(displayedText)}
+      <span
+        className="line"
+        dangerouslySetInnerHTML={{ __html: displayedText }}
+      />
       {isTyping && <span className="cursor">█</span>}
     </div>
   );
 }
 
+
 function FrozenParagraph({ text, index }) {
   return (
-    <div id={`part-${index}`} className="essay-part fade-in">
-      {renderFormattedText(text)}
-    </div>
+    <div
+      id={`part-${index}`}
+      className="essay-part fade-in"
+      dangerouslySetInnerHTML={{ __html: renderFormattedHTML(text) }}
+    />
   );
 }
 
-function renderFormattedText(text) {
-  const lines = text.split("\n");
-  const formatText = (line) =>
-    line
-      .replace(/\*\*\*(.+?)\*\*\*/g, "<strong><em>$1</em></strong>")
-      .replace(/__\*\*(.+?)\*\*__/g, "<u><strong>$1</strong></u>")
-      .replace(/__\*(.+?)\*__/g, "<u><em>$1</em></u>")
-      .replace(/__(.+?)__/g, "<u>$1</u>")
-      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-      .replace(/\*(.+?)\*/g, "<em>$1</em>");
-
-  return lines.map((line, i) => (
-    <p
-      key={i}
-      className="line"
-      dangerouslySetInnerHTML={{ __html: formatText(line) }}
-    />
-  ));
+function renderFormattedHTML(text) {
+  return text
+    .replace(/\*\*\*(.+?)\*\*\*/g, "<strong><em>$1</em></strong>")
+    .replace(/__\*\*(.+?)\*\*__/g, "<span class='zigzag'><strong>$1</strong></span>")
+    .replace(/__\*(.+?)\*__/g, "<span class='zigzag'><em>$1</em></span>")
+    .replace(/__(.+?)__/g, "<span class='zigzag'>$1</span>")
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.+?)\*/g, "<em>$1</em>")
+    .replace(/\n/g, "<br><br>");
 }
 
