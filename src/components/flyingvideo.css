@@ -1,0 +1,40 @@
+.flying-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 1000;
+  pointer-events: auto;
+  transform: translate(var(--start-x, 0), var(--start-y, 0))
+    rotate(var(--start-rotate, 0deg));
+}
+
+.flying-video.show {
+  animation: flyAcross var(--anim-duration, 15s) ease-in-out forwards;
+}
+
+.flying-video:hover {
+  cursor: pointer;
+}
+
+@keyframes flyAcross {
+  0% {
+    transform: translate(var(--start-x), var(--start-y))
+      rotate(var(--start-rotate));
+    opacity: 1;
+  }
+  30% {
+    opacity: 1;
+    transform: translate(var(--mid-x), var(--mid-y)) rotate(0deg);
+  }
+  70% {
+    transform: translate(var(--mid-x), var(--mid-y)) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--end-x), var(--end-y))
+      rotate(var(--end-rotate));
+    opacity: 1;
+  }
+}

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { mountLandingPage } from "./landingpage";
 import logoUrl from "/logo.png";
 import MenuOverlay from "../components/menuoverlay";
+import FlyingVideo from "../components/flyingvideo";
+import flyingVideoSrc from "/assets/The AI dance with us!.webm";
 
 export default function LandingPage() {
   const canvasRef = useRef();
@@ -26,7 +28,7 @@ export default function LandingPage() {
       if (!hasInteracted) setHasInteracted(true);
       clearTimeout(idleTimeout.current);
       if (idle) setIdle(false);
-      idleTimeout.current = setTimeout(() => setIdle(true), 2000);
+      idleTimeout.current = setTimeout(() => setIdle(true), 10000); // Set idle time!!!
     };
 
     const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
@@ -58,6 +60,7 @@ export default function LandingPage() {
   return (
       <div className="stage">
         <canvas ref={canvasRef} className="webgl" />
+        <FlyingVideo src={flyingVideoSrc} />
         <button
           className="brand"
           onClick={() => navigate("/")}
