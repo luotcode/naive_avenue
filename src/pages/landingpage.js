@@ -38,7 +38,6 @@ export function mountLandingPage(canvas, navigate) {
   back.position.set(0, 0, WALL_Z);
   scene.add(back);
 
-  const sceneGui = new GUI({ title: "Scene Controls" });
   const ctl = Shadow(scene, room, WALL_Z, camera, renderer.domElement, navigate, null);
 
   const viewTarget = new THREE.Vector3(0, -0.95, WALL_Z * 0.65);
@@ -55,7 +54,6 @@ export function mountLandingPage(canvas, navigate) {
   controls.maxDistance = 14.0;
 
   controls.enableRotate = false; 
-  ctl.enablePointerRotate(renderer.domElement, { yawSens: 0.005, pitchSens: 0.003 });
 
   const angle = Math.PI * 2 / 3; 
 
@@ -106,7 +104,7 @@ export function mountLandingPage(canvas, navigate) {
   const frontLeft = makeSpot(0xffffff);
   const frontRight = makeSpot(0xffffff);
 
-    const params = {
+  const params = {
     ambient: 0,
     back: {
         posX: 0,
@@ -117,10 +115,10 @@ export function mountLandingPage(canvas, navigate) {
         angleDeg: 43.2,
         margin: 0.04,
         color: "#ffffff",
-        intensity: 200,
+        intensity: 300,
         minIntensity: 100,
-        pulseSpeed: 35.0,
-        penumbra: 0.47,
+        pulseSpeed: 90.0,
+        penumbra: 1,
         decay: 0.9,
         haloMul: 5,
         haloIntensity: 200
@@ -130,12 +128,12 @@ export function mountLandingPage(canvas, navigate) {
         intensity: 5,
         penumbra: 0.07,
         decay: 0.1,
-        angleDeg: 30,
+        angleDeg: 31.8,
         posX: -6.34,
         y: -1.35,
         z: -18.6,
-        aimX: 75,
-        aimY: -20
+        aimX: -18,
+        aimY: -2.17
     },
     frontRight: {
         color: "#ffffff",
@@ -146,8 +144,8 @@ export function mountLandingPage(canvas, navigate) {
         posX: 6.34,
         y: -1.35,
         z: -18.6,
-        aimX: -75,
-        aimY: -20
+        aimX: 18,
+        aimY: -2.17
     }
   };
 
@@ -212,7 +210,6 @@ export function mountLandingPage(canvas, navigate) {
   const backAnimMin = params.back.minIntensity ?? 100;
   const backAnimMax = params.back.intensity;
 
-  /*
   const gui = new GUI({ title: "Light Controls" });
   gui.add(params, "ambient", 0, 1, 0.01).onChange(updateLights);
 
@@ -256,7 +253,7 @@ export function mountLandingPage(canvas, navigate) {
   frF.add(params.frontRight, "penumbra", 0, 1, 0.01).onChange(updateLights);
   frF.add(params.frontRight, "decay", 0.1, 3, 0.1).onChange(updateLights);
   frF.addColor(params.frontRight, "color").onChange(updateLights);
-  */
+  
   let raf = 0;
   function render() {
     controls.update();
@@ -289,8 +286,7 @@ export function mountLandingPage(canvas, navigate) {
     dispose() {
       cancelAnimationFrame(raf);
       removeEventListener("resize", onResize);
-      // gui.destroy();
-      sceneGui.destroy();
+      gui.destroy();
       renderer.dispose();
     }
   };

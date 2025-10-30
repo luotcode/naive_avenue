@@ -7,6 +7,11 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
   const clock = new THREE.Clock();
   let raf = 0;
 
+  let autoRotateSpeed = 0.0005; 
+  let userInteracting = false;
+  let lastUserAction = 0;
+  const AUTO_RESUME_DELAY = 2000;
+
   // ===== tooltip =====
   const tooltip = document.createElement("div");
   tooltip.className = "shadow-tooltip";
@@ -24,101 +29,95 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
   tooltip.style.whiteSpace = "nowrap";
   document.body.appendChild(tooltip);
 
-  // ================================
-  // 1. CAROUSEL ROOT + 6 PANELS 60°
-  // ================================
+  // ===== carousel root + 8 panels (45 deg) =====
   const shadowCarousel = new THREE.Group();
   scene.add(shadowCarousel);
 
   const panels = [];
-  const PANEL_COUNT = 6;
-  const R = room.ROOM_D ? room.ROOM_D * 0.45 : 14; // bán kính treo panel quanh phòng
+  const PANEL_COUNT = 10;
+  const R = room.ROOM_D ? room.ROOM_D * 0.45 : 14;
+  const ANG_OFFSET = 0;
 
   for (let i = 0; i < PANEL_COUNT; i++) {
     const g = new THREE.Group();
-    const ang = (i / PANEL_COUNT) * Math.PI * 2; // cách 60 độ
+    const ang = (i / PANEL_COUNT) * Math.PI * 2 + ANG_OFFSET;
 
-    // đặt panel lên vòng tròn
     const x = Math.sin(ang) * R;
     const z = -Math.cos(ang) * R;
     g.position.set(x, 0, z);
-
-    // quay mặt panel nhìn vào tâm
     g.lookAt(0, 0, 0);
 
     shadowCarousel.add(g);
     panels.push(g);
   }
 
-  // ================================
-  // 2. POSTERS CONFIG
-  // ================================
   const postersConfig = [
+    // group 1
     {
       id: "P1",
       group: 1,
       name: "you are so exotic looking!",
-      href: "/you-are-so-exotic-looking",
+      href: "/han-dao-you-are-so-exotic-looking",
       url: "/assets/you are so exotic looking! - Hân Đào.png",
-      width: 2.63,
+      width: 4.5,
       opacity: 0.6,
-      blurPx: 3,
-      rotationDeg: 0,
-      pos: { mode: "uv", u: 0.254, v: 0.389 },
-      float: { ampX: 0.01, ampY: 0.22, ampRotDeg: 3, speed: 1.3, phase: 0.3 },
+      blurPx: 5,
+      rotationDeg: 10,
+      pos: { mode: "uv", u: 0.204, v: 0.40 },
+      float: { ampX: 0.01, ampY: 0.22, ampRotDeg: 5.9, speed: 2.3, phase: 0.3 },
     },
     {
       id: "P2",
       group: 1,
       name: "Dan ong - Han Dao",
-      href: "/dan-ong-han-dao",
+      href: "/han-dao-dan-ong",
       url: "/assets/Đàn ông - Hân Đào.png",
-      width: 5.01,
+      width: 6.8,
       opacity: 0.3,
       blurPx: 3.53,
-      rotationDeg: 2,
-      pos: { mode: "uv", u: 0.2, v: 0.44 },
-      float: { ampX: 0, ampY: 0.17, ampRotDeg: 2, speed: 0.9, phase: 1.1 },
+      rotationDeg: 10,
+      pos: { mode: "uv", u: 0.1, v: 0.45 },
+      float: { ampX: 0.2, ampY: 0.37, ampRotDeg: 2, speed: 0.9, phase: 1.1 },
     },
     {
       id: "P3",
       group: 1,
       name: "Kinh chieu AI - Nguyen Hoang Gia Bao",
-      href: "/human-learning",
+      href: "/nguyen-hoang-gia-bao",
       url: "/assets/Nguyễn Hoàng Gia Bảo_.png",
-      width: 3,
+      width: 3.8,
       opacity: 0.7,
       blurPx: 2.4,
       rotationDeg: 0,
-      pos: { mode: "uv", u: 0.267, v: 0.646 },
+      pos: { mode: "uv", u: 0.15, v: 0.686 },
       float: { ampX: 0.03, ampY: 0.12, ampRotDeg: 3.5, speed: 1.25, phase: 0.6 },
     },
     {
       id: "P4",
       group: 1,
       name: "Nighscape – Sismann 2",
-      href: "/nightscape-sismann",
+      href: "/valentin-sismann-nightscape",
       url: "/assets/Nighscape - Sismann 2.png",
-      width: 1.5,
+      width: 1.4,
       opacity: 0.5,
       blurPx: 3.1,
-      rotationDeg: 3.9,
-      pos: { mode: "uv", u: 0.13, v: 0.6 },
+      rotationDeg: 18.9,
+      pos: { mode: "uv", u: 0.00, v: 0.62 },
       float: { ampX: 0.02, ampY: 0.13, ampRotDeg: 3, speed: 1.1, phase: 0.4 },
     },
 
-    // group 2: 5 -> 8
+    // group 2
     {
       id: "P5",
       group: 2,
       name: "G9 – Ivy Vo",
-      href: "/g9-ivy-vo",
+      href: "/ivy-vo",
       url: "/assets/G9 - Ivy Vo.png",
-      width: 6,
+      width: 7,
       opacity: 0.15,
       blurPx: 4.86,
       rotationDeg: -10,
-      pos: { mode: "uv", u: 0.578, v: 0.605 },
+      pos: { mode: "uv", u: 0.205, v: 0.51 },
       float: { ampX: 0.01, ampY: 0.16, ampRotDeg: 2, speed: 0.95, phase: 0.9 },
     },
     {
@@ -127,12 +126,12 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "Art & Leisure (Crying) – Emily Sarten",
       href: "/emily-sarten",
       url: "/assets/Art & Leisure (Crying) - Emily Sarten.png",
-      width: 5.5,
+      width: 4.5,
       opacity: 0.51,
-      blurPx: 2.4,
+      blurPx: 3.6,
       rotationDeg: -1,
-      pos: { mode: "uv", u: 0.43, v: 0.632 },
-      float: { ampX: 0, ampY: 0.1, ampRotDeg: 0.5, speed: 1, phase: 0.1 },
+      pos: { mode: "uv", u: 0.097, v: 0.592 },
+      float: { ampX: 0.3, ampY: 0.1, ampRotDeg: 6.5, speed: 1, phase: 0.1 },
     },
     {
       id: "P7",
@@ -140,53 +139,53 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "LHPG",
       href: "/lhpg",
       url: "/assets/LHPG.png",
-      width: 4.61,
+      width: 3.61,
       opacity: 0.35,
       blurPx: 3,
       rotationDeg: -5.9,
-      pos: { mode: "uv", u: 0.403, v: 0.389 },
+      pos: { mode: "uv", u: 0.10, v: 0.389 },
       float: { ampX: 0.02, ampY: 0.14, ampRotDeg: 2.5, speed: 1.05, phase: 1.7 },
     },
     {
       id: "P8",
       group: 2,
       name: "Giac mo Chapiti – Lê Thanh Thảo",
-      href: "/giac-mo-chapiti",
+      href: "/le-thanh-thao",
       url: "/assets/Giac mo Chapiti - Le Thanh Thao.png",
       width: 5.01,
       opacity: 0.3,
       blurPx: 2.8,
       rotationDeg: -10.7,
-      pos: { mode: "uv", u: 0.592, v: 0.376 },
-      float: { ampX: 0.02, ampY: 0.15, ampRotDeg: 3, speed: 1, phase: 1.2 },
+      pos: { mode: "uv", u: 0.24, v: 0.41 },
+      float: { ampX: 0.2, ampY: 0.19, ampRotDeg: 3, speed: 1, phase: 1.2 },
     },
 
-    // group 3: 9 -> 12
+    // group 3
     {
       id: "P9",
       group: 3,
       name: "Eden AI – Dang Khang Ninh",
-      href: "/eden-ai",
+      href: "/dang-khang-ninh",
       url: "/assets/Eden AI - Dang Khang Ninh.png",
-      width: 3.8,
-      opacity: 0.4,
+      width: 7.18,
+      opacity: 0.25,
       blurPx: 3.02,
-      rotationDeg: 0,
-      pos: { mode: "uv", u: 0.808, v: 0.403 },
-      float: { ampX: 0, ampY: 0.08, ampRotDeg: 0.2, speed: 0.7, phase: 0 },
+      rotationDeg: 2,
+      pos: { mode: "uv", u: 0.271, v: 0.303 },
+      float: { ampX: 0.3, ampY: 0.08, ampRotDeg: 8, speed: 0.7, phase: 0 },
     },
     {
       id: "P10",
       group: 3,
       name: "Trust In AI",
-      href: "/derivative-of-trio-a",
+      href: "/luong-cam-anh",
       url: "/assets/trustin_AI.png",
-      width: 4.51,
-      opacity: 0.2,
+      width: 6.51,
+      opacity: 0.22,
       blurPx: 3,
       rotationDeg: -2,
-      pos: { mode: "uv", u: 0.754, v: 0.578 },
-      float: { ampX: 0, ampY: 0.1, ampRotDeg: 1.3, speed: 0.7, phase: 0.4 },
+      pos: { mode: "uv", u: 0.17, v: 0.618 },
+      float: { ampX: 0.1, ampY: 0.1, ampRotDeg: 5.3, speed: 0.7, phase: 0.4 },
     },
     {
       id: "P11",
@@ -194,40 +193,39 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "Water lilies",
       href: "/the-ai-dance-with-us",
       url: "/assets/Water lilies.png",
-      width: 2.8,
-      opacity: 0.33,
+      width: 3.4,
+      opacity: 0.53,
       blurPx: 3,
       rotationDeg: 0,
-      pos: { mode: "uv", u: 0.889, v: 0.619 },
-      float: { ampX: 0.0, ampY: 0.11, ampRotDeg: 1, speed: 0.8, phase: 1.7 },
+      pos: { mode: "uv", u: 0.322, v: 0.639 },
+      float: { ampX: 0.4, ampY: 0.11, ampRotDeg: 2.9, speed: 0.8, phase: 1.7 },
     },
     {
       id: "P12",
       group: 3,
       name: "THE CHRONICLE OF ARTIFICIAL DIVINITY",
-      href: "/the-chronicle-of-artificial-divinity",
+      href: "/ha-thao",
       url: "/assets/THE CHRONICLE OF ARTIFICIAL DIVINITY - Thảo Hà.png",
-      width: 2.93,
+      width: 3.23,
       opacity: 0.5,
-      blurPx: 3.2,
+      blurPx: 3.8,
       rotationDeg: -4,
-      pos: { mode: "uv", u: 0.727, v: 0.389 },
-      float: { ampX: 0.0, ampY: 0.09, ampRotDeg: 2, speed: 0.7, phase: 0.3 },
+      pos: { mode: "uv", u: 0.11, v: 0.349 },
+      float: { ampX: 0.2, ampY: 0.5, ampRotDeg: 4.5, speed: 1.2, phase: 0.3 },
     },
-
-    // group 4: 13 -> 15
+      // group 4
     {
       id: "P13",
       group: 4,
       name: "Derivative of Trio A - Lyon Nguyen",
       href: "/derivative-of-trio-a-lyon-nguyen",
       url: "/assets/Derivative of Trio A - Lyon Nguyễn.png",
-      width: 8.3,
+      width: 3.5,
       opacity: 0.5,
       blurPx: 3.2,
       rotationDeg: -4,
-      pos: { mode: "uv", u: 0.21, v: 0.52 },
-      float: { ampX: 0.0, ampY: 0.09, ampRotDeg: 2, speed: 0.7, phase: 0.3 },
+      pos: { mode: "uv", u: 0.10, v: 0.47 },
+      float: { ampX: 0.1, ampY: 0.29, ampRotDeg: 5, speed: 0.7, phase: 0.2 },
     },
     {
       id: "P14",
@@ -235,12 +233,12 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "Picklespong - Valentin Sismann",
       href: "/picklespong-valentin-sismann",
       url: "/assets/Valentin Sismann - Picklesong (2025)_.png",
-      width: 3.93,
+      width: 1.23,
       opacity: 0.5,
-      blurPx: 3.2,
-      rotationDeg: -4,
-      pos: { mode: "uv", u: 0.3, v: 0.62 },
-      float: { ampX: 0.0, ampY: 0.09, ampRotDeg: 2, speed: 0.7, phase: 0.3 },
+      blurPx: 5.2,
+      rotationDeg: -20,
+      pos: { mode: "uv", u: 0.19, v: 0.68 },
+      float: { ampX: 0.1, ampY: 0.25, ampRotDeg: 3, speed: 0.7, phase: 0.6 },
     },
     {
       id: "P15",
@@ -248,30 +246,31 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "Human Learning - Giang IT",
       href: "/human-learning-giang-it",
       url: "/assets/Human Learning - Giang IT.png",
-      width: 5.93,
+      width: 4.43,
       opacity: 0.5,
       blurPx: 3.2,
       rotationDeg: -4,
-      pos: { mode: "uv", u: 0.3, v: 0.48 },
-      float: { ampX: 0.0, ampY: 0.09, ampRotDeg: 2, speed: 0.7, phase: 0.3 },
+      pos: { mode: "uv", u: 0.23, v: 0.37 },
+      float: { ampX: 0.0, ampY: 0.6, ampRotDeg: 1, speed: 0.9, phase: 0.3 },
     },
   ];
 
-  // panelIndex -> những group nào nó nhận
+  // ===== panel -> accepted groups (3 groups each) =====
+  // pattern 4 panel lặp lại:
+  // 0: [1,2,3]
+  // 1: [4,1,2]
+  // 2: [3,4,1]
+  // 3: [2,3,4]
+  // 4: [1,2,3] ...
   function getPanelGroups(panelIndex) {
-    // 0: (1,2)
-    // 1: (3,4)
-    // 2: (1,2)
-    // 3: (3,4)
-    // 4: (1,2)
-    // 5: (3,4)
-    const even = panelIndex % 2 === 0;
-    return even ? [1, 2] : [3, 4];
+    const mod = panelIndex % 2;
+    if (mod === 0) return [1, 2];
+    if (mod === 1) return [3, 4];
+    // if (mod === 2) return [3, 4, 1];
+    // return [2, 3, 4];
   }
 
-  // ================================
-  // 3. SHADER MAT
-  // ================================
+  // ===== shader material =====
   function makeBlurPosterMat(tex, blurPx = 2.0, opacity = 1.0) {
     const img = tex.image || tex.source?.data;
     const tw = img && img.width ? img.width : 1024;
@@ -324,21 +323,15 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     });
   }
 
-  // đặt poster lên panel (dùng hệ UV như cũ)
-  function placeOnPanel(mesh, cfg) {
-    let u = 0.5;
-    let v = 0.5;
-    if (cfg.pos && cfg.pos.mode === "uv") {
-      u = THREE.MathUtils.clamp(cfg.pos.u ?? 0.5, 0, 1);
-      v = THREE.MathUtils.clamp(cfg.pos.v ?? 0.5, 0, 1);
-    }
-    const PANEL_FILL = 1.0; // nếu muốn tràn mép thì tăng lên 1.05
-    const x = (u - 0.5) * room.ROOM_W * PANEL_FILL;
+  // helper place by uv (wrap u)
+  function placeByUV(mesh, u, v) {
+    const uu = ((u % 1) + 1) % 1;
+    const x = (uu - 0.5) * room.ROOM_W;
     const y = (v - 0.5) * room.ROOM_H;
     mesh.position.set(x, y, 0);
   }
 
-  function buildPosterMesh(tex, cfg, targetPanel) {
+  function buildPosterMesh(tex, cfg, targetPanel, uOffset = 0) {
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.anisotropy = 8;
     tex.premultiplyAlpha = true;
@@ -360,7 +353,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     poster.userData.href = cfg.href;
     poster.userData.name = cfg.name;
 
-    // alpha sampler
+    // sampler
     try {
       const img = tex.image || tex.source?.data;
       if (img && img.width && img.height) {
@@ -369,11 +362,22 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
         sCanvas.height = img.height;
         const sCtx = sCanvas.getContext("2d");
         sCtx.drawImage(img, 0, 0, img.width, img.height);
-        poster.userData.sampler = { canvas: sCanvas, ctx: sCtx, width: img.width, height: img.height };
+        poster.userData.sampler = {
+          canvas: sCanvas,
+          ctx: sCtx,
+          width: img.width,
+          height: img.height,
+        };
       }
     } catch (err) {}
 
-    placeOnPanel(poster, cfg);
+    const u0 = cfg.pos?.u ?? 0.5;
+    const v0 = cfg.pos?.v ?? 0.5;
+    const uFinal = u0 + uOffset;
+
+    placeByUV(poster, uFinal, v0);
+    console.log("poster placed at uv:", cfg.name, uFinal, v0);
+
     poster.rotation.set(0, 0, THREE.MathUtils.degToRad(cfg.rotationDeg ?? 0));
 
     const base = {
@@ -389,98 +393,24 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     return poster;
   }
 
-  // ========== build posters vào 6 panel ==========
-  // với mỗi panel, xem nó nhận group nào rồi mới add
+  // ===== build posters to 8 panels =====
   panels.forEach((panel, panelIndex) => {
-    const acceptedGroups = getPanelGroups(panelIndex); // ví dụ [1,2] hoặc [3,4]
+    const acceptedGroups = getPanelGroups(panelIndex); // length = 3
 
-    postersConfig.forEach((cfg) => {
-      if (!acceptedGroups.includes(cfg.group)) return;
+    acceptedGroups.forEach((g, idxInPanel) => {
+      // 0 -> +0; 1 -> +1/3; 2 -> +2/3
+      const uOffset = idxInPanel === 0 ? 0.0 : idxInPanel === 1 ? 0.333 : 0.667;
 
-      texLoader.load(encodeURI(cfg.url), (tex) => {
-        const poster = buildPosterMesh(tex, cfg, panel);
-
-        if (gui) {
-          const folder = gui.addFolder(`P${cfg.id} – panel ${panelIndex}`);
-          const state = {
-            visible: true,
-            opacity: cfg.opacity ?? 1.0,
-            blur: cfg.blurPx ?? 2.0,
-            width: cfg.width ?? 3.0,
-            rotationDeg: cfg.rotationDeg ?? 0,
-            u: cfg.pos?.u ?? 0.5,
-            v: cfg.pos?.v ?? 0.5,
-            ampX: cfg.float?.ampX ?? 0,
-            ampY: cfg.float?.ampY ?? 0.2,
-            ampRotDeg: cfg.float?.ampRotDeg ?? 2,
-            speed: cfg.float?.speed ?? 0.8,
-            phase: cfg.float?.phase ?? 0,
-          };
-
-          folder.add(state, "visible").onChange((v) => (poster.visible = v));
-          folder.add(state, "opacity", 0, 1, 0.01).onChange((v) => (poster.material.uniforms.uOpacity.value = v));
-          folder.add(state, "blur", 0.0, 5, 0.01).onChange((v) => (poster.material.uniforms.uBlurPx.value = v));
-          folder.add(state, "width", 0.2, 8, 0.01).onChange((v) => {
-            const curW = poster.geometry.parameters.width;
-            const curH = poster.geometry.parameters.height;
-            const aspect2 = curW / curH;
-            const hNew = v / aspect2;
-            poster.geometry.dispose();
-            poster.geometry = new THREE.PlaneGeometry(v, hNew);
-            applyPosition();
-          });
-
-          const uvF = folder.addFolder("UV Position (u, v)");
-          uvF.add(state, "u", 0, 1, 0.001).onChange(applyPosition);
-          uvF.add(state, "v", 0, 1, 0.001).onChange(applyPosition);
-
-          const rotF = folder.addFolder("Rotation");
-          rotF.add(state, "rotationDeg", -180, 180, 0.1).onChange((val) => {
-            poster.rotation.set(0, 0, THREE.MathUtils.degToRad(val));
-            const entry = animated.find((a) => a.mesh === poster);
-            if (entry) entry.base.rotZ = poster.rotation.z;
-          });
-
-          const floatF = folder.addFolder("Float");
-          floatF.add(state, "ampX", 0, 1, 0.001).onChange((v) => {
-            const e = animated.find((a) => a.mesh === poster);
-            if (e) (e.float = e.float || {}, e.float.ampX = v);
-          });
-          floatF.add(state, "ampY", 0, 1, 0.001).onChange((v) => {
-            const e = animated.find((a) => a.mesh === poster);
-            if (e) (e.float = e.float || {}, e.float.ampY = v);
-          });
-          floatF.add(state, "ampRotDeg", 0, 30, 0.1).onChange((v) => {
-            const e = animated.find((a) => a.mesh === poster);
-            if (e) (e.float = e.float || {}, e.float.ampRotDeg = v);
-          });
-          floatF.add(state, "speed", 0, 3, 0.01).onChange((v) => {
-            const e = animated.find((a) => a.mesh === poster);
-            if (e) (e.float = e.float || {}, e.float.speed = v);
-          });
-          floatF.add(state, "phase", 0, Math.PI * 2, 0.01).onChange((v) => {
-            const e = animated.find((a) => a.mesh === poster);
-            if (e) (e.float = e.float || {}, e.float.phase = v);
-          });
-
-          function applyPosition() {
-            const localCfg = { ...cfg, pos: { mode: "uv", u: state.u, v: state.v } };
-            placeOnPanel(poster, localCfg);
-            const entry = animated.find((a) => a.mesh === poster);
-            if (entry)
-              entry.base = {
-                x: poster.position.x,
-                y: poster.position.y,
-                z: poster.position.z,
-                rotZ: poster.rotation.z,
-              };
-          }
-        }
+      postersConfig.forEach((cfg) => {
+        if (cfg.group !== g) return;
+        texLoader.load(encodeURI(cfg.url), (tex) => {
+          buildPosterMesh(tex, cfg, panel, uOffset);
+        });
       });
     });
   });
 
-  // ===== raycast / hover / click =====
+  // ===== raycast / hover / click (giữ nguyên) =====
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
   let hoveredPoster = null;
@@ -571,7 +501,10 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     raycaster.setFromCamera(mouse, camera);
     const hits = raycaster.intersectObjects(posters, false);
     const tipVisible = Boolean(
-      tooltip && tooltip.parentNode && tooltip.style.display !== "none" && parseFloat(tooltip.style.opacity || "0") > 0
+      tooltip &&
+        tooltip.parentNode &&
+        tooltip.style.display !== "none" &&
+        parseFloat(tooltip.style.opacity || "0") > 0
     );
     if (!tipVisible) return;
 
@@ -605,13 +538,10 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
   (domEl || window).addEventListener("pointermove", onPointerMove, { passive: true });
   (domEl || window).addEventListener("click", onClick);
 
-  // ================================
-  // 8. FLOAT + PANEL FACE CAMERA
-  // ================================
+  // ===== animation tick =====
   function tick() {
     const t = clock.getElapsedTime();
 
-    // float
     for (const entry of animated) {
       const { mesh, base, float } = entry;
       if (!float) continue;
@@ -620,29 +550,31 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       const dx = (float.ampX ?? 0) * Math.sin(t * s + ph);
       const dy = (float.ampY ?? 0) * Math.cos(t * s + ph);
       const dRot =
-        THREE.MathUtils.degToRad(float.ampRotDeg ?? 0) * Math.sin(t * s * 0.8 + ph * 1.3);
+        THREE.MathUtils.degToRad(float.ampRotDeg ?? 0) *
+        Math.sin(t * s * 0.8 + ph * 1.3);
 
-      const baseLift = 2.5;
-      const distX = Math.abs(base.x + dx);
-      const dynLift = Math.min(10, distX * 2);
-      const finalZ = base.z + baseLift + dynLift;
+      const baseLift = 9.5;
+      const finalZ = base.z + baseLift;
 
       mesh.rotation.z = base.rotZ + dRot;
       mesh.position.set(base.x + dx, base.y + dy, finalZ);
     }
 
-    // panels face camera (để panel bên hông vẫn thấy)
     for (const p of panels) {
       p.lookAt(camera.position.x, 0, camera.position.z);
+    }
+
+    // ===== auto rotate carousel =====
+    const now = performance.now();
+    if (!userInteracting && now - lastUserAction > AUTO_RESUME_DELAY) {
+      shadowCarousel.rotation.y += autoRotateSpeed;
     }
 
     raf = requestAnimationFrame(tick);
   }
   tick();
 
-  // ================================
-  // 9. ROTATE CAROUSEL
-  // ================================
+  // ===== rotate carousel (drag + wheel) =====
   let dragActive = false;
   let lastX = 0;
   let rotateEnabled = false;
@@ -657,6 +589,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     onDownRef = (e) => {
       dragActive = true;
       lastX = e.clientX;
+      userInteracting = true;
     };
 
     onMoveRef = (e) => {
@@ -664,10 +597,13 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       const dx = e.clientX - lastX;
       lastX = e.clientX;
       shadowCarousel.rotation.y += dx * SENS_X * -1;
+      lastUserAction = performance.now();
     };
 
     onUpRef = () => {
       dragActive = false;
+      userInteracting = false;
+      lastUserAction = performance.now();
     };
 
     targetEl.addEventListener("pointerdown", onDownRef);
@@ -690,9 +626,9 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     const dur = 0.4;
     const t0 = performance.now();
     function anim(now) {
-      const t = Math.min(1, (now - t0) / (dur * 1000));
-      shadowCarousel.rotation.y = THREE.MathUtils.lerp(start, targetAngle, t);
-      if (t < 1) requestAnimationFrame(anim);
+      const tt = Math.min(1, (now - t0) / (dur * 1000));
+      shadowCarousel.rotation.y = THREE.MathUtils.lerp(start, targetAngle, tt);
+      if (tt < 1) requestAnimationFrame(anim);
     }
     requestAnimationFrame(anim);
     currentPanel = n;
@@ -703,7 +639,6 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     else goToPanel(currentPanel - 1);
   });
 
-  // enable by default
   enablePointerRotate();
 
   return {
