@@ -39,7 +39,7 @@ export function mountLandingPage(canvas, navigate) {
   scene.add(back);
 
   const sceneGui = new GUI({ title: "Scene Controls" });
-  const ctl = Shadow(scene, room, WALL_Z, camera, renderer.domElement, navigate, sceneGui);
+  const ctl = Shadow(scene, room, WALL_Z, camera, renderer.domElement, navigate, null);
 
   const viewTarget = new THREE.Vector3(0, -0.95, WALL_Z * 0.65);
   const controls = new OrbitControls(camera, renderer.domElement);

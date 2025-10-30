@@ -1,4 +1,4 @@
-import VideoPages from "../VideoPages.jsx";
+import VideoPages from "../videopages.jsx";
 import "../videopages.css";
 
 export default function EmilyPage() {
