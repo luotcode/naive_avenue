@@ -1,0 +1,37 @@
+.mobile-warning-container {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 9999;
+  padding: 2rem;
+}
+
+.mobile-warning-text {
+  font-family: "Schroffer Mono", monospace;
+  color: rgba(247, 252, 197, 1);
+  font-size: 18px;
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 6px rgba(247, 252, 197, 0.8),
+               0 0 12px rgba(247, 252, 197, 0.4);
+  animation: ledGlow 2s ease-in-out infinite;
+}
+
+@keyframes ledGlow {
+  0%, 100% {
+    opacity: 0.8;
+    text-shadow: 0 0 4px rgba(247, 252, 197, 0.7),
+                 0 0 8px rgba(247, 252, 197, 0.3);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(247, 252, 197, 1),
+                 0 0 20px rgba(247, 252, 197, 0.6);
+  }
+}

@@ -20,11 +20,13 @@ export default function LandingPage() {
 
   // Idle detection
   useEffect(() => {
-    const resetIdleTimer = () => {
-      if (!hasInteracted) setHasInteracted(true); 
+    const resetIdleTimer = (e) => {
+      if (e?.key === "Shift") return;
+
+      if (!hasInteracted) setHasInteracted(true);
       clearTimeout(idleTimeout.current);
       if (idle) setIdle(false);
-      idleTimeout.current = setTimeout(() => setIdle(true), 2000); 
+      idleTimeout.current = setTimeout(() => setIdle(true), 2000);
     };
 
     const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
@@ -37,44 +39,65 @@ export default function LandingPage() {
   }, [idle, hasInteracted]);
 
 
+  // Key press rule when screensaver is active
+  useEffect(() => {
+    if (!idle) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Shift") {
+        navigate("/tais-koshino");
+      } else {
+        setIdle(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [idle, navigate]);
+
   return (
-    <div className="stage">
-      <canvas ref={canvasRef} className="webgl" />
-      <button
-        className="brand"
-        onClick={() => navigate("/")}
-        aria-label="Go to Home"
-        title="Home"
-      >
-        <img src={logoUrl} alt="Logo" />
-      </button>
+      <div className="stage">
+        <canvas ref={canvasRef} className="webgl" />
+        <button
+          className="brand"
+          onClick={() => navigate("/")}
+          aria-label="Go to Home"
+          title="Home"
+        >
+          <img src={logoUrl} alt="Logo" />
+        </button>
 
-      <div className="menu"> <MenuOverlay /> </div>
+        <div className="menu"> <MenuOverlay /> </div>
 
-      <div className="landing-corners">
-        <div className="corner left">
-          <div className="corner-line">WRONG BIANELLE</div>
-          <div className="corner-line">1 NOV 2025 - XX XX 2026</div>
+        <div className="landing-corners">
+          <div className="corner left">
+            <div className="corner-line">WRONG BIANELLE</div>
+            <div className="corner-line">1 NOV 2025 - XX XX 2026</div>
+          </div>
+
+          <div className="corner right">
+            <div className="corner-line">YOU ARE NOW</div>
+            <div className="corner-line">INSIDE OF THE PROJECTION</div>
+          </div>
         </div>
 
-        <div className="corner right">
-          <div className="corner-line">YOU ARE NOW</div>
-          <div className="corner-line">INSIDE OF THE PROJECTION</div>
-        </div>
+        {hasInteracted && idle && (
+          <>
+            <div className="screensaver" onClick={() => setIdle(false)}>
+              <video
+                src="/assets/EineKleine.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="screensaver-video"
+              />
+            </div>
+            <div className="screensaver-navigation">
+              <span>Press 'Shift' to Tais Koshino's realm</span>
+            </div>
+          </>
+        )}
       </div>
-
-      {hasInteracted && idle && (
-        <div className="screensaver" onClick={() => setIdle(false)}>
-          <video
-            src="/assets/EineKleine.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="screensaver-video"
-          />
-        </div>
-      )}
-    </div>
   );
 }

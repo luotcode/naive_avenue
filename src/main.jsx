@@ -5,6 +5,8 @@ import "./style.css";
 
 import LandingPage from "./pages/LandingPage.jsx";
 import AboutPage from "./pages/AboutPage.jsx";
+import MobilePage from "./pages/mobile.jsx";
+import RedirectMobile from "./components/mobileredirect.jsx";
 
 import EmilyPage from "./pages/artworkpages/EmilyPage.jsx";
 import IvyPage from "./pages/artworkpages/IvyPage.jsx";
@@ -28,6 +30,7 @@ import TaisKoshinoPage from "./pages/artworkpages/TaisKoshinoPage.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
+      <RedirectMobile />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/about" element={<AboutPage />} />
@@ -49,7 +52,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/le-thanh-thao" element={<LeThanhThaoPage />} />
         <Route path="/nguyen-hoang-gia-bao" element={<NguyenHoangGiaBaoPage />} />
         <Route path="/tais-koshino" element={<TaisKoshinoPage />} />
-        
+        <Route path="/mobile" element={<MobilePage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

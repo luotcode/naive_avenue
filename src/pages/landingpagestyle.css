@@ -78,7 +78,7 @@
   position: fixed;
   inset: 0;
   background: black;
-  z-index: 9999;
+  z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -108,6 +108,23 @@
   opacity: 0;
   animation: fadeInVideo 4s ease forwards;
 }
+
+.screensaver-navigation {
+  position: fixed;
+  bottom: 50px;
+  width: 100%;
+  text-align: center;
+  font-family: "Schroffer Mono", monospace;
+  font-weight: 500;
+  font-style: bold;
+  font-size: 48px;
+  line-height: 150%;
+  letter-spacing: -1.1%;
+  color: rgba(247,252,197,1);
+  z-index: 999999 !important; /* top of everything */
+  pointer-events: none; /* optional: makes sure it doesn't block clicks */
+}
+
 
 @keyframes fadeIn {
   from {
