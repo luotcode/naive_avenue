@@ -60,7 +60,6 @@ export default function LandingPage() {
   return (
       <div className="stage">
         <canvas ref={canvasRef} className="webgl" />
-        <FlyingVideo src={flyingVideoSrc} />
         <button
           className="brand"
           onClick={() => navigate("/")}

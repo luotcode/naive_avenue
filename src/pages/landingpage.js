@@ -38,8 +38,8 @@ export function mountLandingPage(canvas, navigate) {
   back.position.set(0, 0, WALL_Z);
   scene.add(back);
 
-  // const sceneGui = new GUI({ title: "Scene Controls" });
-  const ctl = Shadow(scene, room, WALL_Z, camera, renderer.domElement, navigate);
+  const sceneGui = new GUI({ title: "Scene Controls" });
+  const ctl = Shadow(scene, room, WALL_Z, camera, renderer.domElement, navigate, sceneGui);
 
   const viewTarget = new THREE.Vector3(0, -0.95, WALL_Z * 0.65);
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -257,7 +257,6 @@ export function mountLandingPage(canvas, navigate) {
   frF.add(params.frontRight, "decay", 0.1, 3, 0.1).onChange(updateLights);
   frF.addColor(params.frontRight, "color").onChange(updateLights);
   */
-
   let raf = 0;
   function render() {
     controls.update();
@@ -291,7 +290,7 @@ export function mountLandingPage(canvas, navigate) {
       cancelAnimationFrame(raf);
       removeEventListener("resize", onResize);
       // gui.destroy();
-      // sceneGui.destroy();
+      sceneGui.destroy();
       renderer.dispose();
     }
   };

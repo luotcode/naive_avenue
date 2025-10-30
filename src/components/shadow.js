@@ -1,19 +1,20 @@
 import * as THREE from "three";
 
-export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
+export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
   const texLoader = new THREE.TextureLoader();
   const posters = [];
   const animated = [];
   const clock = new THREE.Clock();
   let raf = 0;
 
+  // ===== tooltip =====
   const tooltip = document.createElement("div");
   tooltip.className = "shadow-tooltip";
   tooltip.style.position = "fixed";
   tooltip.style.pointerEvents = "none";
   tooltip.style.padding = "6px 8px";
   tooltip.style.background = "rgba(0,0,0,0.75)";
-  tooltip.style.color = "#f7fcc5"; 
+  tooltip.style.color = "#f7fcc5";
   tooltip.style.borderRadius = "4px";
   tooltip.style.fontSize = "13px";
   tooltip.style.fontFamily = "Schroffer Mono, monospace";
@@ -23,85 +24,229 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
   tooltip.style.whiteSpace = "nowrap";
   document.body.appendChild(tooltip);
 
-  const shadowRoot = new THREE.Group();
-  shadowRoot.position.z = 0;         
-  scene.add(shadowRoot);
+  // ================================
+  // 1. CAROUSEL ROOT
+  // ================================
+  const shadowCarousel = new THREE.Group();
+  scene.add(shadowCarousel);
 
+  const PANEL_COUNT = 4;
+  const PANEL_RADIUS = room.ROOM_D ? room.ROOM_D * 0.45 : 14;
+  const panels = [];
+
+  for (let i = 0; i < PANEL_COUNT; i++) {
+    const g = new THREE.Group();
+    const ang = (i / PANEL_COUNT) * Math.PI * 2;
+
+    const x = Math.sin(ang) * PANEL_RADIUS;
+    const z = -Math.cos(ang) * PANEL_RADIUS;
+    g.position.set(x, 0, z);
+
+    // ban đầu hướng vào tâm
+    g.lookAt(0, 0, 0);
+
+    shadowCarousel.add(g);
+    panels.push(g);
+  }
+
+  // ================================
+  // 2. 15 POSTERS
+  // ================================
   const postersConfig = [
-  {
-    id: "P1",
-    name: "Emily Sarten",
-    type: "video",
-    href: "/emily-sarten",
-    url: "/assets/Art & Leisure (Crying) - Emily Sarten.png",
-    type: "video",
-    width: 4.31,
-    opacity: 0.4,
-    blurPx: 3,
-    rotationDeg: 0,
-    margin: 5,
-    pos: { mode: "cornerOffset", corner: "tl", dx: 1.25, dy: 1.5 },
-    float: { ampX: 0.0, ampY: 0.538, ampRotDeg: 8.9, speed: 1.5, phase: 0.51 },
-  },
+    {
+      id: "P1",
+      name: "you are so exotic looking!",
+      href: "/you-are-so-exotic-looking",
+      url: "/assets/you are so exotic looking! - Hân Đào.png",
+      width: 2.63,
+      opacity: 0.6,
+      blurPx: 3,
+      rotationDeg: 0,
+      pos: { mode: "uv", u: 0.254, v: 0.389 },
+      float: { ampX: 0.01, ampY: 0.22, ampRotDeg: 3, speed: 1.3, phase: 0.3 },
+    },
+    {
+      id: "P2",
+      name: "Dan ong - Han Dao",
+      href: "/dan-ong-han-dao",
+      url: "/assets/Đàn ông - Hân Đào.png",
+      width: 5.01,
+      opacity: 0.3,
+      blurPx: 3.53,
+      rotationDeg: 2,
+      pos: { mode: "uv", u: 0.2, v: 0.44 },
+      float: { ampX: 0, ampY: 0.17, ampRotDeg: 2, speed: 0.9, phase: 1.1 },
+    },
+    {
+      id: "P3",
+      name: "Kinh chieu AI - Nguyen Hoang Gia Bao",
+      href: "/human-learning",
+      url: "/assets/Nguyễn Hoàng Gia Bảo_.png",
+      width: 3,
+      opacity: 0.7,
+      blurPx: 2.4,
+      rotationDeg: 0,
+      pos: { mode: "uv", u: 0.267, v: 0.646 },
+      float: { ampX: 0.03, ampY: 0.12, ampRotDeg: 3.5, speed: 1.25, phase: 0.6 },
+    },
+    {
+      id: "P4",
+      name: "Nighscape – Sismann 2",
+      href: "/nightscape-sismann",
+      url: "/assets/Nighscape - Sismann 2.png",
+      width: 1.5,
+      opacity: 0.5,
+      blurPx: 3.1,
+      rotationDeg: 3.9,
+      pos: { mode: "uv", u: 0.13, v: 0.6 },
+      float: { ampX: 0.02, ampY: 0.13, ampRotDeg: 3, speed: 1.1, phase: 0.4 },
+    },
+    {
+      id: "P5",
+      name: "G9 – Ivy Vo",
+      href: "/g9-ivy-vo",
+      url: "/assets/G9 - Ivy Vo.png",
+      width: 6,
+      opacity: 0.15,
+      blurPx: 4.86,
+      rotationDeg: -10,
+      pos: { mode: "uv", u: 0.578, v: 0.605 },
+      float: { ampX: 0.01, ampY: 0.16, ampRotDeg: 2, speed: 0.95, phase: 0.9 },
+    },
+    {
+      id: "P6",
+      name: "Art & Leisure (Crying) – Emily Sarten",
+      href: "/emily-sarten",
+      url: "/assets/Art & Leisure (Crying) - Emily Sarten.png",
+      width: 5.5,
+      opacity: 0.51,
+      blurPx: 2.4,
+      rotationDeg: -1,
+      pos: { mode: "uv", u: 0.43, v: 0.632 },
+      float: { ampX: 0, ampY: 0.1, ampRotDeg: 0.5, speed: 1, phase: 0.1 },
+    },
+    {
+      id: "P7",
+      name: "LHPG",
+      href: "/lhpg",
+      url: "/assets/LHPG.png",
+      width: 4.61,
+      opacity: 0.35,
+      blurPx: 3,
+      rotationDeg: -5.9,
+      pos: { mode: "uv", u: 0.403, v: 0.389 },
+      float: { ampX: 0.02, ampY: 0.14, ampRotDeg: 2.5, speed: 1.05, phase: 1.7 },
+    },
+    {
+      id: "P8",
+      name: "Giac mo Chapiti – Lê Thanh Thảo",
+      href: "/giac-mo-chapiti",
+      url: "/assets/Giac mo Chapiti - Le Thanh Thao.png",
+      width: 5.01,
+      opacity: 0.3,
+      blurPx: 2.8,
+      rotationDeg: -10.7,
+      pos: { mode: "uv", u: 0.592, v: 0.376 },
+      float: { ampX: 0.02, ampY: 0.15, ampRotDeg: 3, speed: 1, phase: 1.2 },
+    },
+    {
+      id: "P9",
+      name: "Eden AI – Dang Khang Ninh",
+      href: "/eden-ai",
+      url: "/assets/Eden AI - Dang Khang Ninh.png",
+      width: 3.8,
+      opacity: 0.4,
+      blurPx: 3.02,
+      rotationDeg: 0,
+      pos: { mode: "uv", u: 0.808, v: 0.403 },
+      float: { ampX: 0, ampY: 0.08, ampRotDeg: 0.2, speed: 0.7, phase: 0 },
+    },
+    {
+      id: "P10",
+      name: "Trust In AI",
+      href: "/derivative-of-trio-a",
+      url: "/assets/trustin_AI.png",
+      width: 4.51,
+      opacity: 0.2,
+      blurPx: 3,
+      rotationDeg: -2,
+      pos: { mode: "uv", u: 0.754, v: 0.578 },
+      float: { ampX: 0, ampY: 0.1, ampRotDeg: 1.3, speed: 0.7, phase: 0.4 },
+    },
+    {
+      id: "P11",
+      name: "Water lilies",
+      href: "/the-ai-dance-with-us",
+      url: "/assets/Water lilies.png",
+      width: 2.8,
+      opacity: 0.33,
+      blurPx: 3,
+      rotationDeg: 0,
+      pos: { mode: "uv", u: 0.889, v: 0.619 },
+      float: { ampX: 0.0, ampY: 0.11, ampRotDeg: 1, speed: 0.8, phase: 1.7 },
+    },
+    {
+      id: "P12",
+      name: "THE CHRONICLE OF ARTIFICIAL DIVINITY",
+      href: "/the-chronicle-of-artificial-divinity",
+      url: "/assets/THE CHRONICLE OF ARTIFICIAL DIVINITY - Thảo Hà.png",
+      width: 2.93,
+      opacity: 0.5,
+      blurPx: 3.2,
+      rotationDeg: -4,
+      pos: { mode: "uv", u: 0.727, v: 0.389 },
+      float: { ampX: 0.0, ampY: 0.09, ampRotDeg: 2, speed: 0.7, phase: 0.3 },
+    },
+    {
+      id: "P13",
+      name: "Derivative of Trio A - Lyon Nguyen",
+      href: "/derivative-of-trio-a-lyon-nguyen",
+      url: "/assets/Derivative of Trio A - Lyon Nguyễn.png",
+      width: 2.93,
+      opacity: 0.5,
+      blurPx: 3.2,
+      rotationDeg: -4,
+      pos: { mode: "uv", u: 0.21, v: 0.32 },
+      float: { ampX: 0.0, ampY: 0.09, ampRotDeg: 2, speed: 0.7, phase: 0.3 },
+    },
+    {
+      id: "P14",
+      name: "Picklespong - Valentin Sismann",
+      href: "/picklespong-valentin-sismann",
+      url: "/assets/Valentin Sismann - Picklesong (2025)_.png",
+      width: 2.93,
+      opacity: 0.5,
+      blurPx: 3.2,
+      rotationDeg: -4,
+      pos: { mode: "uv", u: 0.33, v: 0.52 },
+      float: { ampX: 0.0, ampY: 0.09, ampRotDeg: 2, speed: 0.7, phase: 0.3 },
+    },
+    {
+      id: "P15",
+      name: "Human Learning - Giang IT",
+      href: "/human-learning-giang-it",
+      url: "/assets/Human Learning - Giang IT.png",
+      width: 2.93,
+      opacity: 0.5,
+      blurPx: 3.2,
+      rotationDeg: -4,
+      pos: { mode: "uv", u: 0.6, v: 0.22 },
+      float: { ampX: 0.0, ampY: 0.09, ampRotDeg: 2, speed: 0.7, phase: 0.3 },
+    },
+  ];
 
-  {
-    id: "P2",
-    name: "Ivy Vo",
-    type: "embbed",
-    href: "/ivy-vo",
-    url: "/assets/G9 - Ivy Vo.png",
-    width: 5.01,
-    opacity: 0.3,
-    blurPx: 3,
-    rotationDeg: 0,
-    pos: { mode: "uv", u: 0.607, v: 0.578 },
-    x: 2.8,
-    y: 1.01,
-    z: -29.99,
-    float: { ampX: 0.12, ampY: 0.294, ampRotDeg: 8, speed: 0.9, phase: 1.1 },
-  },
-
-  {
-    id: "P3",
-    name: "LHPG",
-    href: "/lhpg",
-    type: "video",
-    url: "/assets/LHPG.png",
-    width: 3.82,
-    opacity: 0.3,
-    blurPx: 3,
-    rotationDeg: 0,
-    margin: 3.5,
-    pos: { mode: "cornerOffset", corner: "bl", dx: 2.56, dy: 1.05 },
-    float: { ampX: 0.08, ampY: 0.22, ampRotDeg: 1.8, speed: 1.0, phase: 2.2 },
-  },
-
-  {
-    id: "P4",
-    name: "Le Thanh Thao",
-    href: "/le-thanh-thao",
-    type: "video",
-    url: "/assets/Giac mo Chapiti - Le Thanh Thao.png",
-    width: 5.3,
-    opacity: 0.3,
-    blurPx: 3,
-    rotationDeg: -20.5,
-    pos: { mode: "uv", u: 0.578, v: 0.405 },
-    x: 2.43,
-    y: -1.91,
-    z: -29.98,
-    float: { ampX: 0.15, ampY: 0.15, ampRotDeg: 3.5, speed: 1.1, phase: 0.6 },
-  },];
-
+  // ================================
+  // 3. SHADER MAT
+  // ================================
   function makeBlurPosterMat(tex, blurPx = 2.0, opacity = 1.0) {
     const img = tex.image || tex.source?.data;
-    const tw = (img && img.width) ? img.width : 1024;
-    const th = (img && img.height) ? img.height : 1024;
+    const tw = img && img.width ? img.width : 1024;
+    const th = img && img.height ? img.height : 1024;
 
     return new THREE.ShaderMaterial({
       transparent: true,
       depthWrite: false,
-      side: THREE.DoubleSide,        
+      side: THREE.DoubleSide,
       uniforms: {
         map: { value: tex },
         uOpacity: { value: opacity },
@@ -120,7 +265,6 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
         uniform float uBlurPx;
         uniform float uOpacity;
         varying vec2 vUv;
-
         void main() {
           vec4 acc = vec4(0.0);
           float wSum = 0.0;
@@ -130,7 +274,6 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
           w[2] = 0.24477;
           w[3] = 0.24477;
           w[4] = 0.24477;
-
           for (int ix = -3; ix <= 3; ix++) {
             for (int iy = -3; iy <= 3; iy++) {
               float wx = w[abs(ix)];
@@ -141,61 +284,25 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
               wSum += ww;
             }
           }
-
           vec4 blurred = acc / wSum;
           gl_FragColor = vec4(blurred.rgb, blurred.a * uOpacity);
         }`,
     });
   }
 
-  function placeByConfig(mesh, cfg) {
-    const zLift = 5.5;
-    const zBack = (typeof cfg.z === "number") ? cfg.z : (WALL_Z + zLift);
-
-    const mode = cfg.pos?.mode || (
-      (typeof cfg.x === "number" && typeof cfg.y === "number") ? "world" : "cornerOffset"
-    );
-
-    if (mode === "world") {
-      const x = (typeof cfg.x === "number") ? cfg.x : 0;
-      const y = (typeof cfg.y === "number") ? cfg.y : 0;
-      const z = (typeof cfg.z === "number") ? cfg.z : zBack;
-      mesh.position.set(x, y, z);
-      return;
+  function placeOnPanel(mesh, cfg) {
+    let u = 0.5;
+    let v = 0.5;
+    if (cfg.pos && cfg.pos.mode === "uv") {
+      u = THREE.MathUtils.clamp(cfg.pos.u ?? 0.5, 0, 1);
+      v = THREE.MathUtils.clamp(cfg.pos.v ?? 0.5, 0, 1);
     }
-
-    if (mode === "uv") {
-      const u = THREE.MathUtils.clamp(cfg.pos?.u ?? 0.5, 0, 1);
-      const v = THREE.MathUtils.clamp(cfg.pos?.v ?? 0.5, 0, 1);
-      const x = (u - 0.5) * room.ROOM_W;
-      const y = (v - 0.5) * room.ROOM_H;
-      mesh.position.set(x, y, zBack);
-      return;
-    }
-
-    if (mode === "cornerOffset") {
-      const corner = cfg.pos?.corner || cfg.corner || "tl"; // tl/tr/bl/br
-      const dx = cfg.pos?.dx ?? 0;
-      const dy = cfg.pos?.dy ?? 0;
-      const margin = cfg.margin ?? 0;
-
-      const w = mesh.geometry.parameters.width;
-      const h = mesh.geometry.parameters.height;
-
-      const xSign = corner.includes("l") ? -1 : 1;
-      const ySign = corner.includes("t") ? 1 : -1;
-
-      const baseX = xSign * (room.ROOM_W * 0.5 - w * 0.5 - margin);
-      const baseY = ySign * (room.ROOM_H * 0.5 - h * 0.5 - margin);
-
-      mesh.position.set(baseX + dx, baseY + dy, zBack);
-      return;
-    }
-
-    mesh.position.set(0, 0, zBack);
+    const x = (u - 0.5) * room.ROOM_W;
+    const y = (v - 0.5) * room.ROOM_H;
+    mesh.position.set(x, y, 0);
   }
 
-  function buildPosterMesh(tex, cfg) {
+  function buildPosterMesh(tex, cfg, targetPanel) {
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.anisotropy = 8;
     tex.premultiplyAlpha = true;
@@ -212,48 +319,51 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
 
     const mat = makeBlurPosterMat(tex, cfg.blurPx ?? 2.0, cfg.opacity ?? 1.0);
     const poster = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
-    poster.frustumCulled = false;  
+    poster.frustumCulled = false;
     poster.renderOrder = 10;
     poster.userData.href = cfg.href;
     poster.userData.name = cfg.name;
 
-    // prepare an offscreen canvas to sample pixels from the source image
+    // alpha sampler
     try {
       const img = tex.image || tex.source?.data;
       if (img && img.width && img.height) {
-        const sCanvas = document.createElement('canvas');
+        const sCanvas = document.createElement("canvas");
         sCanvas.width = img.width;
         sCanvas.height = img.height;
-        const sCtx = sCanvas.getContext('2d');
-        // draw the image into the canvas for pixel sampling
+        const sCtx = sCanvas.getContext("2d");
         sCtx.drawImage(img, 0, 0, img.width, img.height);
         poster.userData.sampler = { canvas: sCanvas, ctx: sCtx, width: img.width, height: img.height };
       }
-    } catch (err) {
-      // sampling is optional; fail silently if cross-origin or other issues
-    }
+    } catch (err) {}
 
-    placeByConfig(poster, cfg);
+    placeOnPanel(poster, cfg);
     poster.rotation.set(0, 0, THREE.MathUtils.degToRad(cfg.rotationDeg ?? 0));
 
     const base = {
       x: poster.position.x,
       y: poster.position.y,
       z: poster.position.z,
-      rotZ: poster.rotation.z
+      rotZ: poster.rotation.z,
     };
     animated.push({ mesh: poster, base, float: cfg.float || null });
 
     posters.push(poster);
-    shadowRoot.add(poster); // <=== ADD TO SHADOW ROOT (only this group rotates)
+    targetPanel.add(poster);
     return poster;
   }
 
-  postersConfig.forEach((cfg) => {
-    texLoader.load(encodeURI(cfg.url), (tex) => {
-      const poster = buildPosterMesh(tex, cfg);
+  // 4-4-4-3 phân panel
+  postersConfig.forEach((cfg, index) => {
+    const panelIndex =
+      index < 4 ? 0 :
+      index < 8 ? 1 :
+      index < 12 ? 2 : 3;
+    const targetPanel = panels[panelIndex];
 
-      /*
+    texLoader.load(encodeURI(cfg.url), (tex) => {
+      const poster = buildPosterMesh(tex, cfg, targetPanel);
+
       if (gui) {
         const folder = gui.addFolder(`Shadow – ${cfg.id}`);
         const state = {
@@ -262,23 +372,13 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
           blur: cfg.blurPx ?? 2.0,
           width: cfg.width ?? 3.0,
           rotationDeg: cfg.rotationDeg ?? 0,
-
-          mode: cfg.pos?.mode || ((typeof cfg.x === "number" && typeof cfg.y === "number") ? "world" : "cornerOffset"),
-          x: poster.position.x,
-          y: poster.position.y,
-          z: poster.position.z,
           u: cfg.pos?.u ?? 0.5,
           v: cfg.pos?.v ?? 0.5,
-          corner: cfg.pos?.corner || cfg.corner || "tl",
-          dx: cfg.pos?.dx ?? 0,
-          dy: cfg.pos?.dy ?? 0,
-          margin: cfg.margin ?? 0,
-
           ampX: cfg.float?.ampX ?? 0,
           ampY: cfg.float?.ampY ?? 0.2,
           ampRotDeg: cfg.float?.ampRotDeg ?? 2,
           speed: cfg.float?.speed ?? 0.8,
-          phase: cfg.float?.phase ?? 0
+          phase: cfg.float?.phase ?? 0,
         };
 
         folder.add(state, "visible").onChange((v) => (poster.visible = v));
@@ -287,70 +387,64 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
         folder.add(state, "width", 0.2, 8, 0.01).onChange((v) => {
           const curW = poster.geometry.parameters.width;
           const curH = poster.geometry.parameters.height;
-          const aspect = curW / curH;
-          const hNew = v / aspect;
+          const aspect2 = curW / curH;
+          const hNew = v / aspect2;
           poster.geometry.dispose();
           poster.geometry = new THREE.PlaneGeometry(v, hNew);
           applyPosition();
         });
 
-        const posRoot = folder.addFolder("Positioning");
-        posRoot.add(state, "mode", ["world", "uv", "cornerOffset"]).onChange(applyPosition);
-
-        const worldF = posRoot.addFolder("World (x,y,z)");
-        worldF.add(state, "x", -room.ROOM_W, room.ROOM_W, 0.01).onChange((v) => { if (state.mode === "world") { poster.position.x = v; syncBase(); } });
-        worldF.add(state, "y", -room.ROOM_H/2, room.ROOM_H/2, 0.01).onChange((v) => { if (state.mode === "world") { poster.position.y = v; syncBase(); } });
-        worldF.add(state, "z", WALL_Z - 1, WALL_Z + 1, 0.001).onChange((v) => { if (state.mode === "world") { poster.position.z = v; syncBase(); } });
-
-        const uvF = posRoot.addFolder("UV (u,v on back wall)");
+        const uvF = folder.addFolder("UV Position (u, v)");
         uvF.add(state, "u", 0, 1, 0.001).onChange(applyPosition);
         uvF.add(state, "v", 0, 1, 0.001).onChange(applyPosition);
 
-        const cornerF = posRoot.addFolder("Corner Offset");
-        cornerF.add(state, "corner", ["tl", "tr", "bl", "br"]).onChange(applyPosition);
-        cornerF.add(state, "dx", -room.ROOM_W, room.ROOM_W, 0.01).onChange(applyPosition);
-        cornerF.add(state, "dy", -room.ROOM_H, room.ROOM_H, 0.01).onChange(applyPosition);
-        cornerF.add(state, "margin", 0, Math.max(room.ROOM_W, room.ROOM_H) * 0.25, 0.01).onChange(applyPosition);
-
         const rotF = folder.addFolder("Rotation");
-        rotF.add(state, "rotationDeg", -180, 180, 0.1).onChange((v) => {
-          poster.rotation.set(0, 0, THREE.MathUtils.degToRad(v));
-          const entry = animated.find(a => a.mesh === poster);
+        rotF.add(state, "rotationDeg", -180, 180, 0.1).onChange((val) => {
+          poster.rotation.set(0, 0, THREE.MathUtils.degToRad(val));
+          const entry = animated.find((a) => a.mesh === poster);
           if (entry) entry.base.rotZ = poster.rotation.z;
         });
 
         const floatF = folder.addFolder("Float");
-        floatF.add(state, "ampX", 0, 1, 0.001).onChange(v => { const e = animated.find(a => a.mesh === poster); if (e) (e.float = e.float || {}, e.float.ampX = v); });
-        floatF.add(state, "ampY", 0, 1, 0.001).onChange(v => { const e = animated.find(a => a.mesh === poster); if (e) (e.float = e.float || {}, e.float.ampY = v); });
-        floatF.add(state, "ampRotDeg", 0, 30, 0.1).onChange(v => { const e = animated.find(a => a.mesh === poster); if (e) (e.float = e.float || {}, e.float.ampRotDeg = v); });
-        floatF.add(state, "speed", 0, 3, 0.01).onChange(v => { const e = animated.find(a => a.mesh === poster); if (e) (e.float = e.float || {}, e.float.speed = v); });
-        floatF.add(state, "phase", 0, Math.PI * 2, 0.01).onChange(v => { const e = animated.find(a => a.mesh === poster); if (e) (e.float = e.float || {}, e.float.phase = v); });
+        floatF.add(state, "ampX", 0, 1, 0.001).onChange((v) => {
+          const e = animated.find((a) => a.mesh === poster);
+          if (e) (e.float = e.float || {}, e.float.ampX = v);
+        });
+        floatF.add(state, "ampY", 0, 1, 0.001).onChange((v) => {
+          const e = animated.find((a) => a.mesh === poster);
+          if (e) (e.float = e.float || {}, e.float.ampY = v);
+        });
+        floatF.add(state, "ampRotDeg", 0, 30, 0.1).onChange((v) => {
+          const e = animated.find((a) => a.mesh === poster);
+          if (e) (e.float = e.float || {}, e.float.ampRotDeg = v);
+        });
+        floatF.add(state, "speed", 0, 3, 0.01).onChange((v) => {
+          const e = animated.find((a) => a.mesh === poster);
+          if (e) (e.float = e.float || {}, e.float.speed = v);
+        });
+        floatF.add(state, "phase", 0, Math.PI * 2, 0.01).onChange((v) => {
+          const e = animated.find((a) => a.mesh === poster);
+          if (e) (e.float = e.float || {}, e.float.phase = v);
+        });
 
         function applyPosition() {
-          const localCfg = {
-            ...cfg,
-            x: state.x, y: state.y, z: state.z,
-            margin: state.margin,
-            zLift: cfg.zLift,
-            pos: { mode: state.mode, u: state.u, v: state.v, corner: state.corner, dx: state.dx, dy: state.dy }
+          const localCfg = { ...cfg, pos: { mode: "uv", u: state.u, v: state.v } };
+          placeOnPanel(poster, localCfg);
+          const entry = animated.find((a) => a.mesh === poster);
+          if (entry) entry.base = {
+            x: poster.position.x,
+            y: poster.position.y,
+            z: poster.position.z,
+            rotZ: poster.rotation.z,
           };
-          placeByConfig(poster, localCfg);
-          syncBase();
-        }
-
-        function syncBase() {
-          const entry = animated.find(a => a.mesh === poster);
-          if (entry) entry.base = { x: poster.position.x, y: poster.position.y, z: poster.position.z, rotZ: poster.rotation.z };
         }
       }
-      */
     });
   });
 
-  // ===== Interaction (hover + click) =====
+  // ===== raycast / hover / click giữ nguyên như trước =====
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
-
   let hoveredPoster = null;
   let didDrag = false;
   let lastMousePos = { x: 0, y: 0 };
@@ -362,9 +456,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
 
     const dx = e.clientX - lastMousePos.x;
     const dy = e.clientY - lastMousePos.y;
-    if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
-      didDrag = true;
-    }
+    if (Math.abs(dx) > 2 || Math.abs(dy) > 2) didDrag = true;
     lastMousePos.x = e.clientX;
     lastMousePos.y = e.clientY;
 
@@ -374,7 +466,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
 
     for (const h of hits) {
       const sampler = h.object.userData?.sampler;
-      let isShadowPixel = true; 
+      let isShadowPixel = true;
       if (sampler) {
         const uv = h.uv || h.uv2 || null;
         if (uv) {
@@ -384,23 +476,13 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
             const data = sampler.ctx.getImageData(px, py, 1, 1).data;
             const r = data[0], g = data[1], b = data[2], a = data[3];
             const brightness = (r + g + b) / 3;
-            if (a < 10) {
-              isShadowPixel = false;
-            } else if (brightness > 60) {
-              isShadowPixel = false;
-            } else {
-              isShadowPixel = true;
-            }
+            if (a < 10 || brightness > 60) isShadowPixel = false;
           } catch (err) {
             isShadowPixel = true;
           }
         }
       }
-
-      if (isShadowPixel) {
-        effectiveHit = h;
-        break;
-      }
+      if (isShadowPixel) { effectiveHit = h; break; }
     }
 
     if (effectiveHit) {
@@ -410,7 +492,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
       const name = obj.userData?.name || "";
       if (name) {
         tooltip.textContent = name;
-        const pad = 12;
+        const pad = 15;
         const vw = window.innerWidth;
         const vh = window.innerHeight;
         requestAnimationFrame(() => {
@@ -441,14 +523,12 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
     lastMousePos.y = e.clientY;
   }
 
-  function onClick(e) {
+  function onClick() {
     raycaster.setFromCamera(mouse, camera);
     const hits = raycaster.intersectObjects(posters, false);
-
     const tipVisible = Boolean(
       tooltip && tooltip.parentNode && tooltip.style.display !== "none" && parseFloat(tooltip.style.opacity || "0") > 0
     );
-
     if (!tipVisible) return;
 
     if (!didDrag && typeof navigate === "function") {
@@ -456,12 +536,10 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
       try {
         const tipName = tooltip?.textContent?.trim();
         if (tipName) {
-          const cfg = postersConfig.find(c => c.name === tipName);
+          const cfg = postersConfig.find((c) => c.name === tipName);
           if (cfg && cfg.href) destHref = cfg.href;
         }
-      } catch (err) {
-        // ignore
-      }
+      } catch (err) {}
 
       if (!destHref && hoveredPoster?.userData?.href) destHref = hoveredPoster.userData.href;
       if (!destHref && hits[0]?.object?.userData?.href) destHref = hits[0].object.userData.href;
@@ -470,15 +548,10 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
         try {
           (domEl || document.body).style.cursor = "default";
           hoveredPoster = null;
-          if (tooltip) {
-            tooltip.style.opacity = "0";
-            tooltip.style.display = "none";
-            if (tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
-          }
-        } catch (err) {
-          // ignore
-        }
-
+          tooltip.style.opacity = "0";
+          tooltip.style.display = "none";
+          if (tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
+        } catch (err) {}
         navigate(destHref);
       }
     }
@@ -488,9 +561,13 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
   (domEl || window).addEventListener("pointermove", onPointerMove, { passive: true });
   (domEl || window).addEventListener("click", onClick);
 
-  // ===== Float animation =====
+  // ================================
+  // 8. FLOAT + PANEL FACE CAMERA
+  // ================================
   function tick() {
     const t = clock.getElapsedTime();
+
+    // 1) float posters
     for (const entry of animated) {
       const { mesh, base, float } = entry;
       if (!float) continue;
@@ -499,59 +576,42 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
       const dx = (float.ampX ?? 0) * Math.sin(t * s + ph);
       const dy = (float.ampY ?? 0) * Math.cos(t * s + ph);
       const dRot = THREE.MathUtils.degToRad(float.ampRotDeg ?? 0) * Math.sin(t * s * 0.8 + ph * 1.3);
-
-      const distX = Math.abs(base.x + dx);
-      const zLift = Math.min(10, distX * 2); 
       mesh.rotation.z = base.rotZ + dRot;
-      mesh.position.set(base.x + dx, base.y + dy, base.z + zLift);
+      mesh.position.set(base.x + dx, base.y + dy, base.z);
     }
+
+    // 2) make panels always face camera -> so side panels stay visible
+    for (const p of panels) {
+      p.lookAt(camera.position.x, 0, camera.position.z);
+    }
+
     raf = requestAnimationFrame(tick);
   }
   tick();
 
-  // ===== Pointer rotate ONLY shadowRoot (camera/room stay) =====
+  // ================================
+  // 9. ROTATE CAROUSEL
+  // ================================
   let dragActive = false;
-  let lastX = 0, lastY = 0;
-  const rot = { x: 0, y: 0 };
+  let lastX = 0;
   let rotateEnabled = false;
   let onDownRef, onMoveRef, onUpRef;
-
-  function setRotation({ x = rot.x, y = rot.y, z = 0 } = {}) {
-    rot.x = x; rot.y = y;
-    shadowRoot.rotation.set(rot.x, rot.y, z);
-  }
 
   function enablePointerRotate(targetEl = domEl || window, opts = {}) {
     if (rotateEnabled) return;
     rotateEnabled = true;
-
     const SENS_X = opts.yawSens ?? 0.005;
-    const SENS_Y = opts.pitchSens ?? 0.004;
-    const PITCH_MIN = opts.pitchMin ?? -Math.PI / 6;
-    const PITCH_MAX = opts.pitchMax ??  Math.PI / 6;
 
     onDownRef = (e) => {
       dragActive = true;
       lastX = e.clientX;
-      lastY = e.clientY;
     };
 
     onMoveRef = (e) => {
       if (!dragActive) return;
       const dx = e.clientX - lastX;
-      const dy = e.clientY - lastY;
       lastX = e.clientX;
-      lastY = e.clientY;
-
-      rot.y += dx * SENS_X;
-      rot.x = THREE.MathUtils.clamp(rot.x + dy * SENS_Y, PITCH_MIN, PITCH_MAX);
-      shadowRoot.rotation.set(rot.x, rot.y, 0);
-
-      const parallaxScale = 2.5;
-      const MAX_X = room.ROOM_W * 0.35;
-      const MAX_Z = room.ROOM_D * 0.35;
-      shadowRoot.position.x += ((THREE.MathUtils.clamp(rot.y * parallaxScale, -MAX_X, MAX_X)) - shadowRoot.position.x) * 0.1;
-      shadowRoot.position.z += ((THREE.MathUtils.clamp(rot.x * parallaxScale, -MAX_Z, MAX_Z)) - shadowRoot.position.z) * 0.1;
+      shadowCarousel.rotation.y += dx * SENS_X * -1;
     };
 
     onUpRef = () => { dragActive = false; };
@@ -569,16 +629,43 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate) {
     window.removeEventListener("pointerup", onUpRef);
   }
 
+  // scroll to change panel
+  let currentPanel = 0;
+  function goToPanel(idx) {
+    const n = ((idx % PANEL_COUNT) + PANEL_COUNT) % PANEL_COUNT;
+    const targetAngle = -(n / PANEL_COUNT) * Math.PI * 2;
+    const start = shadowCarousel.rotation.y;
+    const dur = 0.4;
+    const t0 = performance.now();
+    function anim(now) {
+      const t = Math.min(1, (now - t0) / (dur * 1000));
+      shadowCarousel.rotation.y = THREE.MathUtils.lerp(start, targetAngle, t);
+      if (t < 1) requestAnimationFrame(anim);
+    }
+    requestAnimationFrame(anim);
+    currentPanel = n;
+  }
+
+  window.addEventListener("wheel", (e) => {
+    if (e.deltaY > 0) goToPanel(currentPanel + 1);
+    else goToPanel(currentPanel - 1);
+  });
+
+  // enable by default
+  enablePointerRotate();
+
   return {
     enablePointerRotate,
     disablePointerRotate,
-    setRotation,
+    setRotation: (r) => {
+      shadowCarousel.rotation.set(r.x ?? 0, r.y ?? 0, r.z ?? 0);
+    },
     dispose() {
       cancelAnimationFrame(raf);
       (domEl || window).removeEventListener("pointermove", onPointerMove);
       (domEl || window).removeEventListener("click", onClick);
       disablePointerRotate();
       if (tooltip && tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
-    }
+    },
   };
 }
