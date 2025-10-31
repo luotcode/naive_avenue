@@ -306,7 +306,12 @@ export function mountLandingPage(canvas, navigate) {
       try {
         if (arrows && typeof arrows.dispose === "function") arrows.dispose();
       } catch (err) {}
-      renderer.dispose();
+      try {
+        if (ctl && typeof ctl.dispose === "function") ctl.dispose();
+      } catch (err) {}
+      try {
+        renderer.dispose();
+      } catch (err) {}
     }
   };
 }

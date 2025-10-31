@@ -52,9 +52,9 @@ body {
 
 .video-mask-wrapper {
   position: relative;
-  width: 140vw;
-  transform: translateX(-15%) translateY(5%);
-  height: 150%;
+  width: 130vw;
+  transform: translateX(-12%) translateY(5%);
+  height: 130%;
   overflow: hidden;
   clip-path: ellipse(30% 46% at 50% 50%);
   transform-origin: center;

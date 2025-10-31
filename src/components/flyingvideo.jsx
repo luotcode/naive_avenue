@@ -147,12 +147,43 @@ export default function FlyingVideo({ src, size = 120, frequency = 15000, always
     } catch (err) {}
   };
 
+  useEffect(() => {
+    return () => {
+      try {
+        removeCustomTooltip();
+
+        try {
+          if (shadowTooltipRef.current && shadowTooltipRef.current.parentNode) {
+            shadowTooltipRef.current.parentNode.removeChild(shadowTooltipRef.current);
+          }
+        } catch (e) {}
+        shadowTooltipRef.current = null;
+
+        try {
+          const s = document.querySelector('.shadow-tooltip');
+          if (s && s.parentNode) s.parentNode.removeChild(s);
+        } catch (e) {}
+
+        try {
+          const f = document.querySelector('.shadow-floor-text');
+          if (f && f.parentNode) f.parentNode.removeChild(f);
+        } catch (e) {}
+
+        try {
+          const ss = document.getElementById('shadow-floor-text-style');
+          if (ss && ss.parentNode) ss.parentNode.removeChild(ss);
+        } catch (e) {}
+
+        try { (document.body || document).style.cursor = 'default'; } catch (e) {}
+      } catch (err) {}
+    };
+  }, []);
+
   const combinedStyle = { ...style };
   if (alwaysOnTop) {
     // use an extremely large z-index to ensure it's above everything on the landing page
     combinedStyle.zIndex = 2147483647;
     combinedStyle.position = combinedStyle.position || 'fixed';
-    // allow pointer interactions (the component already sets pointer-events in CSS)
   }
 
   return (
