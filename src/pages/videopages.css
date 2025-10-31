@@ -10,6 +10,7 @@ html, body {
   height: 100vh;
   background-color: black;
   overflow: auto;
+  overflow-y: auto;
 
   font-family: "Schroffer Mono", monospace;
   font-weight: 500;
@@ -50,6 +51,7 @@ html, body {
 }
 
 .oval-expanded {
+  position: absolute;
   top: 50%;
   width: 100vw;
   height: 100vh;

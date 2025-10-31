@@ -85,21 +85,13 @@ export default function LandingPage() {
 
         {hasInteracted && idle && (
           <>
-            <div className="screensaver" onClick={() => setIdle(false)}>
-              <video
-                src="/assets/EineKleine.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="screensaver-video"
-              />
-            </div>
             <div className="screensaver-navigation">
               <span>Press 'Shift' to Tais Koshino's realm</span>
             </div>
           </>
         )}
+        
+        <FlyingVideo src={flyingVideoSrc} />
       </div>
   );
 }

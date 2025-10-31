@@ -7,10 +7,13 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
   const clock = new THREE.Clock();
   let raf = 0;
 
-  let autoRotateSpeed = 0.0005; 
+  const BASE_AUTO_SPEED = 0.0005;
+  let autoRotateSpeed = BASE_AUTO_SPEED;
   let userInteracting = false;
   let lastUserAction = 0;
   const AUTO_RESUME_DELAY = 2000;
+  // -1 = left, 1 = right
+  let lastUserRotateDir = -1;
 
   // ===== tooltip =====
   const tooltip = document.createElement("div");
@@ -28,6 +31,111 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
   tooltip.style.transition = "opacity 0.08s ease, transform 0.08s ease";
   tooltip.style.whiteSpace = "nowrap";
   document.body.appendChild(tooltip);
+
+  function hideTooltip() {
+    try {
+      hoveredPoster = null;
+      (domEl || document.body).style.cursor = "default";
+      tooltip.style.opacity = "0";
+      tooltip.style.display = "none";
+    } catch (err) {}
+  }
+
+  // ===== floor text notification =====
+  const floorText = document.createElement("div");
+  floorText.className = "shadow-floor-text";
+  floorText.style.position = "fixed";
+  floorText.style.left = "50%";
+  floorText.style.transform = "perspective(800px) translateX(-50%) translateY(6px) translateZ(12px) rotateX(55deg)";
+  floorText.style.transformOrigin = "50% 100%"; // pivot around bottom center
+  floorText.style.transformStyle = "preserve-3d";
+  floorText.style.backfaceVisibility = "hidden";
+  floorText.style.bottom = "48px";
+  floorText.style.padding = "8px 12px";
+  floorText.style.background = "rgba(0,0,0,0.6)";
+  floorText.style.color = "#f7fcc5";
+  floorText.style.fontFamily = "Charmonman, Schroffer Mono, monospace";
+  floorText.style.fontSize = "25px";
+  floorText.style.borderRadius = "6px";
+  floorText.style.pointerEvents = "none";
+  floorText.style.opacity = "0";
+
+  floorText.style.transition = "none";
+  floorText.style.zIndex = "10001";
+  document.body.appendChild(floorText);
+  let lastShownGroup = null;
+  const FLOOR_LOCK_MS = 9000;
+  let floorLockUntil = 0;
+
+  const FLOOR_ANIM_NAME = "shadow-floor-text-fade";
+  (function ensureFloorAnim() {
+    if (document.getElementById("shadow-floor-text-style")) return;
+    try {
+      const style = document.createElement("style");
+      style.id = "shadow-floor-text-style";
+
+      style.textContent = `@keyframes ${FLOOR_ANIM_NAME} {
+        0% { opacity: 0; transform: perspective(800px) translateX(-50%) translateY(6px) translateZ(12px) rotateX(55deg); }
+        30.00% { opacity: 1; transform: perspective(800px) translateX(-50%) translateY(0) translateZ(12px) rotateX(55deg); }
+        70.00% { opacity: 1; transform: perspective(800px) translateX(-50%) translateY(0) translateZ(12px) rotateX(55deg); }
+        100% { opacity: 0; transform: perspective(800px) translateX(-50%) translateY(6px) translateZ(12px) rotateX(55deg); }
+      }
+      /* floor text: keep transform origin at bottom and preserve 3D so rotateX looks correct */
+      .shadow-floor-text { transform-origin: 50% 100%; transform-style: preserve-3d; backface-visibility: hidden; animation-fill-mode: forwards; display: inline-block; }
+      `;
+      document.head.appendChild(style);
+    } catch (err) {}
+  })();
+
+  function showFloorText(groupId) {
+    try {
+      lastShownGroup = groupId;
+      floorLockUntil = performance.now() + FLOOR_LOCK_MS;
+      floorText.innerHTML = `group ${groupId} enters.\nLorem ipsum dolor sit amet,\nconsectetur adipiscing elit.`.replace(/\n/g, '<br>');
+      try {
+        floorText.style.animation = "none";
+        floorText.offsetWidth;
+      } catch (e) {}
+      floorText.style.animation = `${FLOOR_ANIM_NAME} ${FLOOR_LOCK_MS / 1000}s linear forwards`;
+    } catch (err) {}
+  }
+
+  function hideFloorText() {
+    try {
+      lastShownGroup = null;
+      try {
+        floorText.style.animation = "none";
+      } catch (e) {}
+      floorText.style.opacity = "0";
+  floorText.style.transform = "perspective(800px) translateX(-50%) translateY(6px) translateZ(12px) rotateX(55deg)";
+    } catch (err) {}
+  }
+
+  function showTooltip(obj, clientX, clientY) {
+    try {
+      hoveredPoster = obj;
+      (domEl || document.body).style.cursor = "pointer";
+      const name = obj.userData?.name || "";
+      if (!name) return;
+      tooltip.textContent = name;
+      const pad = 15;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      requestAnimationFrame(() => {
+        const tw = tooltip.getBoundingClientRect().width;
+        const th = tooltip.getBoundingClientRect().height;
+        let tx = clientX + pad;
+        let ty = clientY + pad;
+        if (tx + tw + 8 > vw) tx = clientX - tw - pad;
+        if (ty + th + 8 > vh) ty = clientY - th - pad;
+        tooltip.style.left = tx + "px";
+        tooltip.style.top = ty + "px";
+        tooltip.style.transform = "none";
+        tooltip.style.opacity = "1";
+        tooltip.style.display = "block";
+      });
+    } catch (err) {}
+  }
 
   // ===== carousel root + 8 panels (45 deg) =====
   const shadowCarousel = new THREE.Group();
@@ -59,7 +167,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "you are so exotic looking!",
       href: "/han-dao-you-are-so-exotic-looking",
       url: "/assets/you are so exotic looking! - Hân Đào.png",
-      width: 4.5,
+      width: 5.0,
       opacity: 0.6,
       blurPx: 5,
       rotationDeg: 10,
@@ -72,7 +180,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "Dan ong - Han Dao",
       href: "/han-dao-dan-ong",
       url: "/assets/Đàn ông - Hân Đào.png",
-      width: 6.8,
+      width: 7.1,
       opacity: 0.3,
       blurPx: 3.53,
       rotationDeg: 10,
@@ -85,7 +193,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "Kinh chieu AI - Nguyen Hoang Gia Bao",
       href: "/nguyen-hoang-gia-bao",
       url: "/assets/Nguyễn Hoàng Gia Bảo_.png",
-      width: 3.8,
+      width: 4.0,
       opacity: 0.7,
       blurPx: 2.4,
       rotationDeg: 0,
@@ -98,7 +206,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "Nighscape – Sismann 2",
       href: "/valentin-sismann-nightscape",
       url: "/assets/Nighscape - Sismann 2.png",
-      width: 1.4,
+      width: 1.9,
       opacity: 0.5,
       blurPx: 3.1,
       rotationDeg: 18.9,
@@ -117,7 +225,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       opacity: 0.15,
       blurPx: 4.86,
       rotationDeg: -10,
-      pos: { mode: "uv", u: 0.205, v: 0.51 },
+      pos: { mode: "uv", u: 0.19, v: 0.51 },
       float: { ampX: 0.01, ampY: 0.16, ampRotDeg: 2, speed: 0.95, phase: 0.9 },
     },
     {
@@ -156,7 +264,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       opacity: 0.3,
       blurPx: 2.8,
       rotationDeg: -10.7,
-      pos: { mode: "uv", u: 0.24, v: 0.41 },
+      pos: { mode: "uv", u: 0.22, v: 0.41 },
       float: { ampX: 0.2, ampY: 0.19, ampRotDeg: 3, speed: 1, phase: 1.2 },
     },
 
@@ -167,11 +275,11 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "Eden AI – Dang Khang Ninh",
       href: "/dang-khang-ninh",
       url: "/assets/Eden AI - Dang Khang Ninh.png",
-      width: 7.18,
+      width: 6.88,
       opacity: 0.25,
       blurPx: 3.02,
       rotationDeg: 2,
-      pos: { mode: "uv", u: 0.271, v: 0.303 },
+      pos: { mode: "uv", u: 0.222, v: 0.303 },
       float: { ampX: 0.3, ampY: 0.08, ampRotDeg: 8, speed: 0.7, phase: 0 },
     },
     {
@@ -197,7 +305,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       opacity: 0.53,
       blurPx: 3,
       rotationDeg: 0,
-      pos: { mode: "uv", u: 0.322, v: 0.639 },
+      pos: { mode: "uv", u: 0.252, v: 0.639 },
       float: { ampX: 0.4, ampY: 0.11, ampRotDeg: 2.9, speed: 0.8, phase: 1.7 },
     },
     {
@@ -218,20 +326,20 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       id: "P13",
       group: 4,
       name: "Derivative of Trio A - Lyon Nguyen",
-      href: "/derivative-of-trio-a-lyon-nguyen",
+      href: "/lyon-nguyen",
       url: "/assets/Derivative of Trio A - Lyon Nguyễn.png",
-      width: 3.5,
+      width: 3.2,
       opacity: 0.5,
       blurPx: 3.2,
       rotationDeg: -4,
-      pos: { mode: "uv", u: 0.10, v: 0.47 },
+      pos: { mode: "uv", u: 0.12, v: 0.47 },
       float: { ampX: 0.1, ampY: 0.29, ampRotDeg: 5, speed: 0.7, phase: 0.2 },
     },
     {
       id: "P14",
       group: 4,
       name: "Picklespong - Valentin Sismann",
-      href: "/picklespong-valentin-sismann",
+      href: "/valentin-sismann-pickle-song",
       url: "/assets/Valentin Sismann - Picklesong (2025)_.png",
       width: 1.23,
       opacity: 0.5,
@@ -244,24 +352,17 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       id: "P15",
       group: 4,
       name: "Human Learning - Giang IT",
-      href: "/human-learning-giang-it",
+      href: "/nguyen-hoang-giang",
       url: "/assets/Human Learning - Giang IT.png",
-      width: 4.43,
+      width: 3.43,
       opacity: 0.5,
       blurPx: 3.2,
       rotationDeg: -4,
-      pos: { mode: "uv", u: 0.23, v: 0.37 },
+      pos: { mode: "uv", u: 0.21, v: 0.37 },
       float: { ampX: 0.0, ampY: 0.6, ampRotDeg: 1, speed: 0.9, phase: 0.3 },
     },
   ];
 
-  // ===== panel -> accepted groups (3 groups each) =====
-  // pattern 4 panel lặp lại:
-  // 0: [1,2,3]
-  // 1: [4,1,2]
-  // 2: [3,4,1]
-  // 3: [2,3,4]
-  // 4: [1,2,3] ...
   function getPanelGroups(panelIndex) {
     const mod = panelIndex % 2;
     if (mod === 0) return [1, 2];
@@ -331,7 +432,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     mesh.position.set(x, y, 0);
   }
 
-  function buildPosterMesh(tex, cfg, targetPanel, uOffset = 0) {
+  function buildPosterMesh(tex, cfg, targetPanel, uOffset = 0, panelIndex = 0, slotIdx = 0) {
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.anisotropy = 8;
     tex.premultiplyAlpha = true;
@@ -352,6 +453,9 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     poster.renderOrder = 10;
     poster.userData.href = cfg.href;
     poster.userData.name = cfg.name;
+    poster.userData.group = cfg.group;
+    poster.userData.panelIndex = panelIndex;
+    poster.userData.slotIdx = slotIdx;
 
     // sampler
     try {
@@ -376,6 +480,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     const uFinal = u0 + uOffset;
 
     placeByUV(poster, uFinal, v0);
+    poster.userData.pos = { u: uFinal, v: v0 };
     console.log("poster placed at uv:", cfg.name, uFinal, v0);
 
     poster.rotation.set(0, 0, THREE.MathUtils.degToRad(cfg.rotationDeg ?? 0));
@@ -404,13 +509,45 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       postersConfig.forEach((cfg) => {
         if (cfg.group !== g) return;
         texLoader.load(encodeURI(cfg.url), (tex) => {
-          buildPosterMesh(tex, cfg, panel, uOffset);
+          buildPosterMesh(tex, cfg, panel, uOffset, panelIndex, idxInPanel);
         });
       });
     });
   });
 
-  // ===== raycast / hover / click (giữ nguyên) =====
+  // public helper: recompute layout when room dimensions or config change
+  function refreshLayout() {
+    try {
+      const newR = room.ROOM_D ? room.ROOM_D * 0.45 : 14;
+      // reposition panels around circle
+      panels.forEach((g, i) => {
+        const ang = (i / PANEL_COUNT) * Math.PI * 2 + ANG_OFFSET;
+        const x = Math.sin(ang) * newR;
+        const z = -Math.cos(ang) * newR;
+        g.position.set(x, 0, z);
+        g.lookAt(0, 0, 0);
+      });
+
+      // reposition posters by UV and update animated base positions
+      for (const poster of posters) {
+        try {
+          const pos = poster.userData?.pos;
+          if (pos) placeByUV(poster, pos.u, pos.v);
+          // update base in animated array
+          for (const entry of animated) {
+            if (entry.mesh === poster) {
+              entry.base.x = poster.position.x;
+              entry.base.y = poster.position.y;
+              entry.base.z = poster.position.z;
+              break;
+            }
+          }
+        } catch (e) {}
+      }
+    } catch (err) {}
+  }
+
+  // ===== raycast / hover / click =====
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
   let hoveredPoster = null;
@@ -461,33 +598,9 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
 
     if (effectiveHit) {
       const obj = effectiveHit.object;
-      hoveredPoster = obj;
-      (domEl || document.body).style.cursor = "pointer";
-      const name = obj.userData?.name || "";
-      if (name) {
-        tooltip.textContent = name;
-        const pad = 15;
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-        requestAnimationFrame(() => {
-          const tw = tooltip.getBoundingClientRect().width;
-          const th = tooltip.getBoundingClientRect().height;
-          let tx = e.clientX + pad;
-          let ty = e.clientY + pad;
-          if (tx + tw + 8 > vw) tx = e.clientX - tw - pad;
-          if (ty + th + 8 > vh) ty = e.clientY - th - pad;
-          tooltip.style.left = tx + "px";
-          tooltip.style.top = ty + "px";
-          tooltip.style.transform = "none";
-          tooltip.style.opacity = "1";
-          tooltip.style.display = "block";
-        });
-      }
+      showTooltip(obj, e.clientX, e.clientY);
     } else {
-      hoveredPoster = null;
-      (domEl || document.body).style.cursor = "default";
-      tooltip.style.opacity = "0";
-      tooltip.style.display = "none";
+      hideTooltip();
     }
   }
 
@@ -529,6 +642,16 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
           tooltip.style.display = "none";
           if (tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
         } catch (err) {}
+        try {
+          try { hideFloorText(); } catch (e) {}
+          try {
+            if (floorText && floorText.parentNode) floorText.parentNode.removeChild(floorText);
+          } catch (e) {}
+          try {
+            const s = document.getElementById('shadow-floor-text-style');
+            if (s && s.parentNode) s.parentNode.removeChild(s);
+          } catch (e) {}
+        } catch (e) {}
         navigate(destHref);
       }
     }
@@ -537,6 +660,8 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
   (domEl || window).addEventListener("pointerdown", onPointerDown);
   (domEl || window).addEventListener("pointermove", onPointerMove, { passive: true });
   (domEl || window).addEventListener("click", onClick);
+  (domEl || window).addEventListener("pointerleave", hideTooltip);
+  (domEl || window).addEventListener("pointerout", hideTooltip);
 
   // ===== animation tick =====
   function tick() {
@@ -564,10 +689,166 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       p.lookAt(camera.position.x, 0, camera.position.z);
     }
 
+   if (hoveredPoster) {
+      try {
+        raycaster.setFromCamera(mouse, camera);
+        const hits = raycaster.intersectObjects(posters, false);
+        let stillHit = false;
+        for (const h of hits) {
+          if (h.object !== hoveredPoster) continue;
+          const sampler = h.object.userData?.sampler;
+          let isShadowPixel = true;
+          if (sampler) {
+            const uv = h.uv || h.uv2 || null;
+            if (uv) {
+              const px = Math.floor(uv.x * (sampler.width - 1));
+              const py = Math.floor((1 - uv.y) * (sampler.height - 1));
+              try {
+                const data = sampler.ctx.getImageData(px, py, 1, 1).data;
+                const r = data[0], g = data[1], b = data[2], a = data[3];
+                const brightness = (r + g + b) / 3;
+                if (a < 10 || brightness > 60) isShadowPixel = false;
+              } catch (err) {
+                isShadowPixel = true;
+              }
+            }
+          }
+          if (isShadowPixel) {
+            stillHit = true;
+            break;
+          }
+        }
+        if (!stillHit) hideTooltip();
+      } catch (err) {}
+    }
+
+    // If there's no hoveredPoster currently, but a poster has moved under the
+    // pointer (due to rotation/float), detect it and show the tooltip.
+    if (!hoveredPoster) {
+      try {
+        raycaster.setFromCamera(mouse, camera);
+        const hits = raycaster.intersectObjects(posters, false);
+        let effectiveHit = null;
+        for (const h of hits) {
+          const sampler = h.object.userData?.sampler;
+          let isShadowPixel = true;
+          if (sampler) {
+            const uv = h.uv || h.uv2 || null;
+            if (uv) {
+              const px = Math.floor(uv.x * (sampler.width - 1));
+              const py = Math.floor((1 - uv.y) * (sampler.height - 1));
+              try {
+                const data = sampler.ctx.getImageData(px, py, 1, 1).data;
+                const r = data[0], g = data[1], b = data[2], a = data[3];
+                const brightness = (r + g + b) / 3;
+                if (a < 10 || brightness > 60) isShadowPixel = false;
+              } catch (err) {
+                isShadowPixel = true;
+              }
+            }
+          }
+          if (isShadowPixel) {
+            effectiveHit = h;
+            break;
+          }
+        }
+        if (effectiveHit) {
+          // use lastMousePos for screen coords
+          showTooltip(effectiveHit.object, lastMousePos.x || 0, lastMousePos.y || 0);
+        }
+      } catch (err) {}
+    }
+
+    // periodically sample the center-third area to compute group dominance
+    // (u between ~0.333 and ~0.667 corresponds to center column). We'll run
+    // a coarse grid of rays and count shadow hits per group.
+    try {
+      // throttle sampling frequency (every N frames)
+      tick._sampleCounter = (tick._sampleCounter || 0) + 1;
+      const SAMPLE_EVERY = 6;
+      if (tick._sampleCounter % SAMPLE_EVERY === 0) {
+        const rect = (domEl || document.body).getBoundingClientRect();
+        const startX = rect.left + rect.width * 0.40;
+        const endX = rect.left + rect.width * 0.667;
+        const startY = rect.top + rect.height * 0.10;
+        const endY = rect.top + rect.height * 0.90;
+
+        const sx = 9; // grid samples horizontally
+        const sy = 7; // grid samples vertically
+        const counts = Object.create(null);
+        let totalHits = 0;
+
+        for (let iy = 0; iy < sy; iy++) {
+          for (let ix = 0; ix < sx; ix++) {
+            const fx = ix / (sx - 1);
+            const fy = iy / (sy - 1);
+            const clientX = startX + (endX - startX) * fx;
+            const clientY = startY + (endY - startY) * fy;
+
+            const mx = ((clientX - rect.left) / rect.width) * 2 - 1;
+            const my = -((clientY - rect.top) / rect.height) * 2 + 1;
+            raycaster.setFromCamera({ x: mx, y: my }, camera);
+            const hits = raycaster.intersectObjects(posters, false);
+            if (!hits || hits.length === 0) continue;
+            const h = hits[0];
+            const sampler = h.object.userData?.sampler;
+            let isShadowPixel = true;
+            if (sampler) {
+              const uv = h.uv || h.uv2 || null;
+              if (uv) {
+                const px = Math.floor(uv.x * (sampler.width - 1));
+                const py = Math.floor((1 - uv.y) * (sampler.height - 1));
+                try {
+                  const data = sampler.ctx.getImageData(px, py, 1, 1).data;
+                  const r = data[0], g = data[1], b = data[2], a = data[3];
+                  const brightness = (r + g + b) / 3;
+                  if (a < 10 || brightness > 60) isShadowPixel = false;
+                } catch (err) {
+                  isShadowPixel = true;
+                }
+              }
+            }
+            if (!isShadowPixel) continue;
+
+            const grp = h.object.userData?.group ?? "unknown";
+            counts[grp] = (counts[grp] || 0) + 1;
+            totalHits++;
+          }
+        }
+
+        if (totalHits > 0) {
+          // find top group
+          let bestGrp = null;
+          let bestCount = 0;
+          for (const k in counts) {
+            if (counts[k] > bestCount) {
+              bestCount = counts[k];
+              bestGrp = k;
+            }
+          }
+          const share = bestCount / totalHits;
+          const now = performance.now();
+          if (share >= 0.6) {
+            if (lastShownGroup !== null && now < floorLockUntil) {
+            } else {
+              if (String(lastShownGroup) !== String(bestGrp)) {
+                showFloorText(bestGrp);
+              }
+            }
+          } else {
+            if (lastShownGroup !== null && now >= floorLockUntil) hideFloorText();
+          }
+        } else {
+          const now = performance.now();
+          if (lastShownGroup !== null && now >= floorLockUntil) hideFloorText();
+        }
+      }
+    } catch (err) {}
+
     // ===== auto rotate carousel =====
     const now = performance.now();
     if (!userInteracting && now - lastUserAction > AUTO_RESUME_DELAY) {
-      shadowCarousel.rotation.y += autoRotateSpeed;
+      shadowCarousel.rotation.y += BASE_AUTO_SPEED * lastUserRotateDir;
     }
 
     raf = requestAnimationFrame(tick);
@@ -597,7 +878,14 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       const dx = e.clientX - lastX;
       lastX = e.clientX;
       shadowCarousel.rotation.y += dx * SENS_X * -1;
+      const dir = -Math.sign(dx) || lastUserRotateDir;
+      if (dir !== 0) lastUserRotateDir = dir;
       lastUserAction = performance.now();
+      try {
+        floorLockUntil = 0;
+        lastShownGroup = null;
+        try { hideFloorText(); } catch (e) {}
+      } catch (err) {}
     };
 
     onUpRef = () => {
@@ -647,12 +935,38 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     setRotation: (r) => {
       shadowCarousel.rotation.set(r.x ?? 0, r.y ?? 0, r.z ?? 0);
     },
+    // recompute layout (panels/posters) if room dimensions or config changed
+    refresh() {
+      try {
+        refreshLayout();
+      } catch (e) {}
+    },
+    //-1 = left, 1 = right
+    setAutoDirection(dir = 1) {
+      try {
+        const d = dir >= 0 ? 1 : -1;
+        lastUserRotateDir = d;
+        lastUserAction = performance.now() - AUTO_RESUME_DELAY - 1;
+        userInteracting = false;
+      } catch (err) {}
+    },
     dispose() {
       cancelAnimationFrame(raf);
       (domEl || window).removeEventListener("pointermove", onPointerMove);
       (domEl || window).removeEventListener("click", onClick);
+      try {
+        (domEl || window).removeEventListener("pointerleave", hideTooltip);
+        (domEl || window).removeEventListener("pointerout", hideTooltip);
+      } catch (err) {}
       disablePointerRotate();
       if (tooltip && tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
+      try {
+        if (floorText && floorText.parentNode) floorText.parentNode.removeChild(floorText);
+      } catch (e) {}
+      try {
+        const s = document.getElementById('shadow-floor-text-style');
+        if (s && s.parentNode) s.parentNode.removeChild(s);
+      } catch (e) {}
     },
   };
 }
