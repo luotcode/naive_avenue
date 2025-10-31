@@ -3,6 +3,7 @@ body {
   height: 100%;
   margin: 0;
   overflow: auto;
+  overflow-x: hidden;
 }
 
 .art-page {
@@ -10,7 +11,7 @@ body {
   width: 100vw;
   height: 100vh;
   background: #000;
-  overflow-y: auto;
+  overflow-x: hidden;
   font-family: "Schroffer Mono", monospace;
   color: rgba(247, 252, 197, 1);
 }
@@ -70,6 +71,8 @@ body {
   left: 0;
   clip-path: inset(0 0 0 0);
   transform: scale(1.0);
+  overflow-x: hidden;
+
 }
 
 .masked-video {
@@ -78,6 +81,9 @@ body {
   object-fit: cover;
   display: block;
   background: #000;
+  overflow: hidden;
+  overflow-x: hidden;
+
 }
 
 .description-section {
