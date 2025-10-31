@@ -64,7 +64,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
   floorText.style.zIndex = "10001";
   document.body.appendChild(floorText);
   let lastShownGroup = null;
-  const FLOOR_LOCK_MS = 9000;
+  const FLOOR_LOCK_MS = 8000;
   let floorLockUntil = 0;
 
   const FLOOR_ANIM_NAME = "shadow-floor-text-fade";
@@ -828,7 +828,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
           }
           const share = bestCount / totalHits;
           const now = performance.now();
-          if (share >= 0.6) {
+          if (share >= 0.8) {
             if (lastShownGroup !== null && now < floorLockUntil) {
             } else {
               if (String(lastShownGroup) !== String(bestGrp)) {

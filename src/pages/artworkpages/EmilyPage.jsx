@@ -1,10 +1,9 @@
-import VideoPages from "../videopages.jsx";
-import "../videopages.css";
+import VideoPages from "../videopages.jsx";import "../videopages.css";
 
 export default function EmilyPage() {
   return (
     <VideoPages
-      imageSrc="/assets/EineKleine.mp4"
+      imageSrc="https://www.youtube.com/watch?v=x14bn23DMVE&list=RDx14bn23DMVE&start_radio=1"
       title="WRONG BIANELLE"
       date="1 NOV 2025 - XX XX 2026"
       artistName="EMILY SARTEN"

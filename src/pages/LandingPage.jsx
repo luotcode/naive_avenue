@@ -90,8 +90,8 @@ export default function LandingPage() {
             </div>
           </>
         )}
-        
-        <FlyingVideo src={flyingVideoSrc} />
+
+        <FlyingVideo src={flyingVideoSrc} alwaysOnTop />
       </div>
   );
 }

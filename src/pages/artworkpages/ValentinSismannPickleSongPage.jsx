@@ -1,5 +1,4 @@
-import VideoPages from "../VideoPages.jsx";
-import "../videopages.css";
+import VideoPages from "../videopages.jsx";import "../videopages.css";
 
 export default function ValentinSismannPage() {
   return (

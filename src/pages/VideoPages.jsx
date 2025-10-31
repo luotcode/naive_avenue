@@ -25,65 +25,56 @@ export default function VideoPages({
     return m[1] || "";
   };
 
-  const [isExpanded, setExpanded] = useState(false);
+  const [isUnmasked, setUnmasked] = useState(false);
   const pageRef = useRef(null);
-  const ovalRef = useRef(null);
+  const maskTriggerRef = useRef(null);
   const videoRef = useRef(null);
-
-  const prevOvalTop = useRef(null);
+  const prevTopRef = useRef(null);
 
   useEffect(() => {
     const el = pageRef.current;
     if (!el) return;
 
     const handleScroll = () => {
-      if (!ovalRef.current) return;
-
-      const rect = ovalRef.current.getBoundingClientRect();
-      const currentTop = rect.top;         
+      if (!maskTriggerRef.current) return;
+      const rect = maskTriggerRef.current.getBoundingClientRect();
+      const currentTop = rect.top;
       const prevTop =
-        prevOvalTop.current !== null ? prevOvalTop.current : currentTop;
-
+        prevTopRef.current !== null ? prevTopRef.current : currentTop;
       const justReachedTop = prevTop > 0 && currentTop <= 0;
-
-      // console.log({ prevTop, currentTop, justReachedTop, isExpanded });
-
-      if (justReachedTop && !isExpanded) {
-        // expand
-        setExpanded(true);
-
+      if (justReachedTop && !isUnmasked) {
+        setUnmasked(true);
         el.scrollTop = el.scrollTop + currentTop;
       }
-
-      prevOvalTop.current = currentTop;
+      prevTopRef.current = currentTop;
     };
 
     el.addEventListener("scroll", handleScroll, { passive: false });
     return () => el.removeEventListener("scroll", handleScroll);
-  }, [isExpanded]);
+  }, [isUnmasked]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === "Escape" && isExpanded) {
-        setExpanded(false);
+      if (e.key === "Escape" && isUnmasked) {
+        setUnmasked(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isExpanded]);
+  }, [isUnmasked]);
 
   const handleToggleVideo = () => {
-    const video = videoRef.current;
-    if (video) {
-      if (video.paused) video.play();
-      else video.pause();
+    const vid = videoRef.current;
+    if (vid) {
+      if (vid.paused) vid.play();
+      else vid.pause();
     }
   };
 
   return (
     <div
       ref={pageRef}
-      className={`art-page ${isExpanded ? "expanded" : ""}`}
+      className={`art-page ${isUnmasked ? "unmasked" : ""}`}
     >
       <button className="brand" onClick={() => navigate("/")}>
         <img src={logoUrl} alt="Logo" />
@@ -94,14 +85,14 @@ export default function VideoPages({
       </div>
 
       <div
-        ref={ovalRef}
-        className={`oval-wrapper ${isExpanded ? "oval-expanded" : ""}`}
+        ref={maskTriggerRef}
+        className={`video-mask-wrapper ${isUnmasked ? "video-mask-open" : ""}`}
         onClick={handleToggleVideo}
       >
         {isVideoFile(pickSrc) ? (
           <video
             ref={videoRef}
-            className="oval-image"
+            className="masked-video"
             src={pickSrc}
             autoPlay
             loop
@@ -110,7 +101,7 @@ export default function VideoPages({
           />
         ) : isYouTube(pickSrc) ? (
           <iframe
-            className="oval-image"
+            className="masked-video"
             src={`https://www.youtube.com/embed/${ytId(
               pickSrc
             )}?autoplay=1&loop=1&controls=0&playsinline=1&modestbranding=1&rel=0&playlist=${ytId(
@@ -122,7 +113,7 @@ export default function VideoPages({
             frameBorder="0"
           />
         ) : (
-          <img src={pickSrc} alt={title || "artwork"} className="oval-image" />
+          <img src={pickSrc} alt={title || "artwork"} className="masked-video" />
         )}
       </div>
 
