@@ -4,7 +4,7 @@ export default function ValentinSismannPage() {
   return (
     <VideoPages
       imageSrc="https://www.youtube.com/watch?v=Va7qY0uxyVQ"
-      title="WRONG BIANELLE"
+        title="THE WRONG BIANELLE"
       date="1 NOV 2025 - XX XX 2026"
       artistName="VALENTIN SISMANN"
       projectName="PICKLE SONG"

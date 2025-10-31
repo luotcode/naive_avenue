@@ -10,7 +10,7 @@ export default function NguyenThaiBaoPage() {
   return (
     <EmbeddedPages
       mediaList={mediaList}
-      title="WRONG BIANELLE"
+        title="THE WRONG BIANELLE"
       date="1 NOV 2025 — XX XX 2026"
       artistName="NGUYEN THAI BAO"
       projectName="RE-IMPRESSION. WATER LILIES, WATER LILIES;"

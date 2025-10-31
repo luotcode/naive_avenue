@@ -4,7 +4,7 @@ export default function RicardoBodiniPage() {
   return (
     <VideoPages
       imageSrc="/assets/EineKleine.mp4"
-      title="WRONG BIANELLE"
+        title="THE WRONG BIANELLE"
       date="1 NOV 2025 - XX XX 2026"
       artistName="EMILY SARTEN"
       projectName="ARTS AND LEISURE (CRYING)"

@@ -4,7 +4,7 @@ export default function EmilyPage() {
   return (
     <VideoPages
       imageSrc="https://www.youtube.com/watch?v=5ftbs4_krzQ&list=RD5ftbs4_krzQ&start_radio=1"
-      title="WRONG BIANELLE"
+        title="THE WRONG BIANELLE"
       date="1 NOV 2025 - XX XX 2026"
       artistName="EMILY SARTEN"
       projectName="ARTS AND LEISURE (CRYING)"

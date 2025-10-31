@@ -4,7 +4,7 @@ export default function HanDaoDanOngPage() {
   return (
     <EmbeddedPages
       mediaSrc="https://player.vimeo.com/video/1097114712?h=92c877948f"
-      title="WRONG BIANELLE"
+        title="THE WRONG BIANELLE"
       date="1 NOV 2025 — XX XX 2026"
       artistName="HAN DAO"
       projectName="DAN-ONG.EXE"

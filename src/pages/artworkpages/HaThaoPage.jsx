@@ -1,13 +1,17 @@
-import VideoPages from "../videopages.jsx";import "../videopages.css";
+import EmbeddedPages from "../EmbeddedPages.jsx";
+
+const mediaList = ["https://drive.google.com/file/d/1Ypx3yhqP3lAUiOBW1HW2pRWG1Am7_aNt/view",
+                    "https://drive.google.com/file/d/14chRbrQVMoQj9V8zqfJxb-p8S3q15irI/view?usp=sharing",
+];
 
 export default function HaThaoPage() {
   return (
-    <VideoPages
-      imageSrc="/assets/EineKleine.mp4" 
-      title = "WRONG BIANELLE"
-      date = "1 NOV 2025 - XX XX 2026"
-      artistName = "EMILY SARTEN"
-      projectName = "AMAZING PROJECT TITLE"
+    <EmbeddedPages
+      mediaList={mediaList}
+      title="THE WRONG BIANELLE"
+      date="1 NOV 2025 — XX XX 2026"
+      artistName="HA THAO"
+      projectName="THE CHRONICLE OF ARTIFICIAL DIVINITY"
       description={
         <>
           <p>
