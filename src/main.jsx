@@ -30,6 +30,7 @@ import TaisKoshinoPage from "./pages/artworkpages/TaisKoshinoPage.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
+      /<RedirectMobile />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/about" element={<AboutPage />} />
