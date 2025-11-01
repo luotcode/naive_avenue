@@ -32,26 +32,21 @@ export default function VideoPages({
   const prevTopRef = useRef(null);
 
   useEffect(() => {
-    const el = pageRef.current;
-    if (!el) return;
+  const handleScroll = () => {
+    const triggerPoint = window.innerHeight * 0.35; // adjust threshold
+    const scrollY = window.scrollY;
 
-    const handleScroll = () => {
-      if (!maskTriggerRef.current) return;
-      const rect = maskTriggerRef.current.getBoundingClientRect();
-      const currentTop = rect.top;
-      const prevTop =
-        prevTopRef.current !== null ? prevTopRef.current : currentTop;
-      const justReachedTop = prevTop > 0 && currentTop <= 0;
-      if (justReachedTop && !isUnmasked) {
-        setUnmasked(true);
-        el.scrollTop = el.scrollTop + currentTop;
-      }
-      prevTopRef.current = currentTop;
-    };
+    if (scrollY > triggerPoint && !isUnmasked) {
+      setUnmasked(true);
+    } else if (scrollY <= triggerPoint && isUnmasked) {
+      setUnmasked(false);
+    }
+  };
 
-    el.addEventListener("scroll", handleScroll, { passive: false });
-    return () => el.removeEventListener("scroll", handleScroll);
-  }, [isUnmasked]);
+  window.addEventListener("scroll", handleScroll, { passive: true });
+  return () => window.removeEventListener("scroll", handleScroll);
+}, [isUnmasked]);
+
 
   useEffect(() => {
     const handleKeyDown = (e) => {
