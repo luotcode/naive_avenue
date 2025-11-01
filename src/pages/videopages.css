@@ -103,3 +103,21 @@ body {
 .art-page.unmasked .description-section {
   margin: 70px auto 70px;  
 }
+
+.esc-hint {
+  position: fixed;
+  left: 50%;
+  top: 10%;
+  z-index: 2147483647;
+  background: rgba(0,0,0,0.6);
+  color: rgba(247,252,197,1);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: "Inconsolata", monospace;
+  font-size: 25px;
+  opacity: 0;
+  transform: translate(-50%, 6px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+.esc-hint.show { opacity: 1; transform: translate(-50%, -50%); pointer-events: none; }

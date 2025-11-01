@@ -203,9 +203,9 @@ export default function AboutPage() {
                 <p>
                   Contact us via:
                   <br />
-                  n41ve.avenue.info@gmail.com
+                  <a href="mailto:n41ve.avenue.info@gmail.com" target="_blank" rel="noreferrer">n41ve.avenue.info@gmail.com</a>
                   <br />
-                  IG: @n41ve.avenue
+                  IG: <a href="https://instagram.com/n41ve.avenue" target="_blank" rel="noreferrer">@n41ve.avenue</a>
                 </p>
               </div>
             </div>

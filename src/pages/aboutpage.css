@@ -47,18 +47,18 @@
   padding-top: 10%;
   max-width: 900px;
   text-align: center;
-  font-family: "Inconsolata Condensed", monospace;
+  font-family: "Inconsolata", monospace;
   color: rgba(247, 252, 197, 1);
   font-weight: 400;
   font-style: normal;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 150%;
   letter-spacing: 0;
   z-index: 1;
 }
 
 .about-title {
-  font-size: 28px;
+  font-size: 26px;
   margin-bottom: 40px;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -72,9 +72,9 @@
 .section-header {
   margin-top: 60px;
   color: rgba(247, 252, 197, 1);
-  font-family: "Inconsolata Condensed", monospace;
+  font-family: "Inconsolata", monospace;
   font-weight: 400;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 150%;
   letter-spacing: 0%;
   text-align: center;
@@ -197,17 +197,16 @@ menu {
     line-height: 150%;
     color: rgba(247, 252, 197, 1);
     text-align: left;
-    font-family: "Inconsolata Condensed", monospace;
+    font-family: "Inconsolata", monospace;
     font-weight: 400;
     font-style: Regular;
-    font-size: 20px;
     line-height: 150%;
     letter-spacing: 0%;
 }
 
 .org-item a {
   color: #ffefb5;
-  font-family: "Inconsolata Condensed", monospace;
+  font-family: "Inconsolata", monospace;
   text-decoration: none;
 }
 

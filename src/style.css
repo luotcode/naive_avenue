@@ -13,11 +13,3 @@ html, body { height: 100%; margin: 0; background: var(--bg); color: var(--fg);  
   font-style: normal;
   font-display: swap;
 }
-
-@font-face {
-  font-family: 'Inconsolata Condensed';
-  src: url('/fonts/inconsolata-regular.ttf') format('truetype');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}

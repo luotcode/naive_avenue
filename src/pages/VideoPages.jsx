@@ -63,6 +63,20 @@ export default function VideoPages({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isUnmasked]);
 
+  const [showEscHint, setShowEscHint] = useState(false);
+  useEffect(() => {
+    let t = null;
+    if (isUnmasked) {
+      setShowEscHint(true);
+      t = setTimeout(() => setShowEscHint(false), 2000);
+    } else {
+      setShowEscHint(false);
+    }
+    return () => {
+      if (t) clearTimeout(t);
+    };
+  }, [isUnmasked]);
+
   const handleToggleVideo = () => {
     const vid = videoRef.current;
     if (vid) {
@@ -128,6 +142,11 @@ export default function VideoPages({
       </div>
 
       <div className="description-section">{description}</div>
+      {isUnmasked && (
+        <div className={`esc-hint ${showEscHint ? "show" : ""}`} role="status" aria-live="polite">
+            Press [ Esc ] to exit expanded view.
+        </div>
+      )}
     </div>
   );
 }
