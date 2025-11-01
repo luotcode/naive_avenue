@@ -536,7 +536,6 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
 
     placeByUV(poster, uFinal, v0);
     poster.userData.pos = { u: uFinal, v: v0 };
-    console.log("poster placed at uv:", cfg.name, uFinal, v0);
 
     poster.rotation.set(0, 0, THREE.MathUtils.degToRad(cfg.rotationDeg ?? 0));
 

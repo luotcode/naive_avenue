@@ -238,12 +238,13 @@ export function mountLandingPage(canvas, navigate) {
     inner.appendChild(text);
     nosignalOverlay.appendChild(inner);
 
+    const HIDE_REMOVE_DELAY = 1300;
     const hideOverlay = () => {
       if (!nosignalOverlay) return;
       nosignalOverlay.classList.add("nosignal-hide");
       setTimeout(() => {
         try { nosignalOverlay.remove(); } catch (e) {}
-      }, 500);
+      }, HIDE_REMOVE_DELAY);
     };
 
     nosignalOverlay.addEventListener("click", hideOverlay);

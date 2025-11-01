@@ -136,6 +136,8 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  transition: opacity 3.0s cubic-bezier(.2, .8, .2, 1);
+  opacity: 1;
 }
 
 .nosignal-overlay .nosignal-inner {
@@ -146,7 +148,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: nosignal-flicker 0.9s steps(8, end) infinite;
+  animation: nosignal-flicker 3.5s steps(8, end) infinite;
   z-index: 2; 
 }
 
@@ -178,7 +180,7 @@
   100% { opacity: 1; filter: brightness(1); }
 }
 
-.nosignal-overlay.nosignal-hide { opacity: 0; transition: opacity 0.5s ease; pointer-events: none; }
+.nosignal-overlay.nosignal-hide { opacity: 0; pointer-events: none; }
 
 .nosignal-canvas {
   position: absolute;
