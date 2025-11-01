@@ -883,7 +883,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
           }
           const share = bestCount / totalHits;
           const now = performance.now();
-          if (share >= 0.85) {
+          if (share >= 0.8) {
             if (lastShownGroup !== null && now < floorLockUntil) {
             } else {
               if (String(lastShownGroup) !== String(bestGrp)) {

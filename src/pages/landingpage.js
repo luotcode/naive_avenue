@@ -224,6 +224,39 @@ export function mountLandingPage(canvas, navigate) {
   const backAnimMin = params.back.minIntensity ?? 100;
   const backAnimMax = params.back.intensity;
 
+  // --- N/A overlay ---
+  let nosignalOverlay = null;
+  try {
+    nosignalOverlay = document.createElement("div");
+    nosignalOverlay.className = "nosignal-overlay";
+
+    const inner = document.createElement("div");
+    inner.className = "nosignal-inner";
+    const text = document.createElement("div");
+    text.className = "nosignal-text";
+    text.textContent = "#N/A";
+    inner.appendChild(text);
+    nosignalOverlay.appendChild(inner);
+
+    const hideOverlay = () => {
+      if (!nosignalOverlay) return;
+      nosignalOverlay.classList.add("nosignal-hide");
+      setTimeout(() => {
+        try { nosignalOverlay.remove(); } catch (e) {}
+      }, 500);
+    };
+
+    nosignalOverlay.addEventListener("click", hideOverlay);
+    document.body.appendChild(nosignalOverlay);
+
+    setTimeout(() => {
+      try { hideOverlay(); } catch (e) {}
+    }, 3000);
+  } catch (err) {
+    try { if (nosignalOverlay && nosignalOverlay.parentNode) nosignalOverlay.remove(); } catch (e) {}
+    nosignalOverlay = null;
+  }
+
   /*
   const gui = new GUI({ title: "Light Controls" });
   gui.add(params, "ambient", 0, 1, 0.01).onChange(updateLights);
@@ -311,6 +344,9 @@ export function mountLandingPage(canvas, navigate) {
       } catch (err) {}
       try {
         renderer.dispose();
+      } catch (err) {}
+      try {
+        if (nosignalOverlay && nosignalOverlay.parentNode) nosignalOverlay.remove();
       } catch (err) {}
     }
   };

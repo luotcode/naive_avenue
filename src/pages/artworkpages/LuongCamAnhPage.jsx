@@ -5,7 +5,7 @@ export default function LuongCamAnhPage() {
     <VideoPages
       imageSrc="/assets/EineKleine.mp4" 
       title = "WRONG BIANELLE"
-      date = "1 NOV 2025 - XX XX 2026"
+      date = "1 NOV 2025 - 31 MAR 2026"
       artistName = "EMILY SARTEN"
       projectName = "AMAZING PROJECT TITLE"
       description={

@@ -5,7 +5,7 @@ export default function LyonNguyenPage() {
     <EmbeddedPages
       mediaSrc="https://youre-so-exotic-looking.netlify.app/"
       title = "WRONG BIANELLE"
-      date="1 NOV 2025 — XX XX 2026"
+      date="1 NOV 2025 — 31 MAR 2026"
       artistName="HAN DAO"
       projectName="YOU'RE SO EXOTIC LOOKING!"
       description={
