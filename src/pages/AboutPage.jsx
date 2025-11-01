@@ -19,7 +19,7 @@ export default function AboutPage() {
       <div className="landing-corners">
         <div className="corner left">
           <div className="corner-line">WRONG BIANELLE</div>
-          <div className="corner-line">1 NOV 2025 - XX XX 2026</div>
+          <div className="corner-line">1 NOV 2025 - 31 MAR 2026</div>
         </div>
 
         <div className="corner right">
@@ -203,9 +203,9 @@ export default function AboutPage() {
                 <p>
                   Contact us via:
                   <br />
-                  n41ve.avenue.info@gmail.com
+                  <a href="mailto:n41ve.avenue.info@gmail.com" target="_blank" rel="noreferrer">n41ve.avenue.info@gmail.com</a>
                   <br />
-                  IG: @n41ve.avenue
+                  IG: <a href="https://instagram.com/n41ve.avenue" target="_blank" rel="noreferrer">@n41ve.avenue</a>
                 </p>
               </div>
             </div>

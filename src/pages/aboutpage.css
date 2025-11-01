@@ -45,10 +45,9 @@
 .about-content {
   position: relative;
   padding-top: 10%;
-  /* slightly narrower for web — feels more "vừa vặn" */
-  max-width: 760px;
+  max-width: 900px;
   text-align: center;
-  font-family: "Inconsolata Condensed", monospace;
+  font-family: "Inconsolata", monospace;
   color: rgba(247, 252, 197, 1);
   font-weight: 400;
   font-style: normal;
@@ -59,7 +58,7 @@
 }
 
 .about-title {
-  font-size: 28px;
+  font-size: 26px;
   margin-bottom: 40px;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -73,9 +72,9 @@
 .section-header {
   margin-top: 60px;
   color: rgba(247, 252, 197, 1);
-  font-family: "Inconsolata Condensed", monospace;
+  font-family: "Inconsolata", monospace;
   font-weight: 400;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 150%;
   letter-spacing: 0%;
   text-align: center;
@@ -179,54 +178,13 @@ menu {
 }
 
 .org-item img {
-  width: 140px;
-  height: 140px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   object-fit: cover;
   filter: blur(4px) brightness(1.3);
   opacity: 0.8;
   transition: all 0.4s ease;
-}
-
-/* new smaller, responsive wrapper for the light + logo composition */
-.org-logo-wrapper {
-  position: relative;
-  width: 260px; /* reduced from 391 */
-  height: 195px; /* same aspect ratio */
-  overflow: hidden;
-}
-
-.org-logo-wrapper img {
-  display: block;
-  pointer-events: none;
-}
-
-.org-logo-wrapper .org-light {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  transform: translate(-50%, -50%);
-}
-
-.org-logo-wrapper .org-logo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 48%; /* slightly smaller so it reads better on web */
-  height: auto;
-}
-
-@media (max-width: 800px) {
-  .org-logo-wrapper {
-    width: 44vw;
-    height: calc(44vw * 0.75);
-  }
-  .org-logo-wrapper .org-logo { width: 46%; }
-  .about-content { max-width: 92vw; font-size: 16px; }
 }
 
 .org-item img:hover {
@@ -239,17 +197,16 @@ menu {
     line-height: 150%;
     color: rgba(247, 252, 197, 1);
     text-align: left;
-    font-family: "Inconsolata Condensed", monospace;
+    font-family: "Inconsolata", monospace;
     font-weight: 400;
     font-style: Regular;
-    font-size: 20px;
     line-height: 150%;
     letter-spacing: 0%;
 }
 
 .org-item a {
   color: #ffefb5;
-  font-family: "Inconsolata Condensed", monospace;
+  font-family: "Inconsolata", monospace;
   text-decoration: none;
 }
 

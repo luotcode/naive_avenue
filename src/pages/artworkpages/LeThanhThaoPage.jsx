@@ -9,7 +9,7 @@ export default function LeThanhThaoPage() {
     <EmbeddedPages
       mediaList={mediaList}
         title="THE WRONG BIANELLE"
-      date="1 NOV 2025 — XX XX 2026"
+      date="1 NOV 2025 — 31 MAR 2026"
       artistName="LE THANH THAO"
       projectName="GIAC MO GI (CHA)PI TI"
       description={

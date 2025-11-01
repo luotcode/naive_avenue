@@ -13,7 +13,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
   let lastUserAction = 0;
   const AUTO_RESUME_DELAY = 2000;
   // -1 = left, 1 = right
-  let lastUserRotateDir = -1;
+  let lastUserRotateDir = 1;
 
   // ===== tooltip =====
   const tooltip = document.createElement("div");
@@ -42,30 +42,18 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
   }
 
   // ===== floor text notification =====
+  const floorWrap = document.createElement("div");
+  floorWrap.className = "shadow-floor-wrap";
+  document.body.appendChild(floorWrap);
+
   const floorText = document.createElement("div");
   floorText.className = "shadow-floor-text";
-  floorText.style.position = "fixed";
-  floorText.style.left = "50%";
-  floorText.style.transform = "perspective(800px) translateX(-50%) translateY(6px) translateZ(12px) rotateX(55deg)";
-  floorText.style.transformOrigin = "50% 100%"; // pivot around bottom center
-  floorText.style.transformStyle = "preserve-3d";
-  floorText.style.backfaceVisibility = "hidden";
-  floorText.style.bottom = "48px";
-  floorText.style.padding = "8px 12px";
-  floorText.style.background = "rgba(0,0,0,0.6)";
-  floorText.style.color = "#f7fcc5";
-  floorText.style.fontFamily = "Charmonman, Schroffer Mono, monospace";
-  floorText.style.fontSize = "25px";
-  floorText.style.borderRadius = "6px";
-  floorText.style.pointerEvents = "none";
-  floorText.style.opacity = "0";
+  floorWrap.appendChild(floorText);
 
-  floorText.style.transition = "none";
-  floorText.style.zIndex = "10001";
-  document.body.appendChild(floorText);
   let lastShownGroup = null;
-  const FLOOR_LOCK_MS = 8000;
+  const FLOOR_LOCK_MS = 9000;
   let floorLockUntil = 0;
+  let floorTextEnabled = false;
 
   const FLOOR_ANIM_NAME = "shadow-floor-text-fade";
   (function ensureFloorAnim() {
@@ -75,23 +63,92 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       style.id = "shadow-floor-text-style";
 
       style.textContent = `@keyframes ${FLOOR_ANIM_NAME} {
-        0% { opacity: 0; transform: perspective(800px) translateX(-50%) translateY(6px) translateZ(12px) rotateX(55deg); }
-        30.00% { opacity: 1; transform: perspective(800px) translateX(-50%) translateY(0) translateZ(12px) rotateX(55deg); }
-        70.00% { opacity: 1; transform: perspective(800px) translateX(-50%) translateY(0) translateZ(12px) rotateX(55deg); }
-        100% { opacity: 0; transform: perspective(800px) translateX(-50%) translateY(6px) translateZ(12px) rotateX(55deg); }
+        0% { opacity: 0; }
+        25.00% { opacity: 1; }
+        75.00% { opacity: 1; }
+        100% { opacity: 0; }
       }
-      /* floor text: keep transform origin at bottom and preserve 3D so rotateX looks correct */
-      .shadow-floor-text { transform-origin: 50% 100%; transform-style: preserve-3d; backface-visibility: hidden; animation-fill-mode: forwards; display: inline-block; }
+
+      .shadow-floor-wrap {
+        position: fixed;
+        left: 50%;
+        bottom: 48px;
+        transform: translateX(-50%);
+        pointer-events: none;
+        z-index: 10001;
+      }
+
+      .shadow-floor-text {
+        position: relative;       
+        font-size: 25px;    
+        transform-origin: 50% 100%;
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        animation-fill-mode: forwards;
+        display: inline-block;
+        text-align: center;
+        max-width: 460px;
+        line-height: 1.3;
+        color: #f7fcc5;
+        opacity: 0.7;
+        font-family: "Charmonman", "Schroffer Mono", monospace;
+        animation: ${FLOOR_ANIM_NAME} 7s linear forwards;
+        transform: perspective(850px)
+            translateX(-50%)
+            translateZ(55px)   
+            rotateX(52deg);     
+
+        .shadow-floor-text::before {
+          content: "";
+          position: absolute;
+          inset: -12px -28px  -18px -28px; 
+          background: rgba(0,0,0,0.65);
+          z-index: -1;                      
+          clip-path: polygon(10% 0, 90% 0, 100% 100%, 0 100%);
+          animation: inherit;
+          transform-origin: 50% 100%;
+        }
       `;
       document.head.appendChild(style);
     } catch (err) {}
   })();
 
+  const FLOOR_TEXT_BY_GROUP = {
+      1: `Act II: Seeing
+
+    Data dreams of light, or it seems.
+    Through it, 
+    whose eyes do we see?`,
+      2: `Act III: Dreaming
+
+    How much is enough?
+    Desire, hope, and fear 
+    - reflected endlessly through our encounters. `,
+      3: `Act IV: Believing
+
+    And yet, I still choose to believe.
+    But in what? 
+    And where will they lead me to?
+    `,
+      4: `Act I: Becoming
+
+    What is it to learn?
+    And what must be forgotten
+    to begin again?`,
+    }
+
   function showFloorText(groupId) {
+    if (!floorTextEnabled) return; 
     try {
       lastShownGroup = groupId;
       floorLockUntil = performance.now() + FLOOR_LOCK_MS;
-      floorText.innerHTML = `group ${groupId} enters.\nLorem ipsum dolor sit amet,\nconsectetur adipiscing elit.`.replace(/\n/g, '<br>');
+      floorText.style.left = "50%";
+      const raw = FLOOR_TEXT_BY_GROUP[groupId] || `group ${groupId} enters.
+      Lorem ipsum dolor sit amet,
+      consectetur adipiscing elit.`;
+
+      floorText.innerHTML = raw.replace(/\n/g, "<br>");
+
       try {
         floorText.style.animation = "none";
         floorText.offsetWidth;
@@ -164,10 +221,10 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P1",
       group: 1,
-      name: "you are so exotic looking!",
+      name: "YOU ARE SO EXOTIC LOOKING – HAN DAO",
       href: "/han-dao-you-are-so-exotic-looking",
       url: "/assets/you are so exotic looking! - Hân Đào.png",
-      width: 5.0,
+      width: 3.0,
       opacity: 0.6,
       blurPx: 5,
       rotationDeg: 10,
@@ -177,10 +234,10 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P2",
       group: 1,
-      name: "Dan ong - Han Dao",
+      name: "DAN ONG – HAN DAO",
       href: "/han-dao-dan-ong",
       url: "/assets/Đàn ông - Hân Đào.png",
-      width: 7.1,
+      width: 5.2,
       opacity: 0.3,
       blurPx: 3.53,
       rotationDeg: 10,
@@ -190,10 +247,10 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P3",
       group: 1,
-      name: "Kinh chieu AI - Nguyen Hoang Gia Bao",
+      name: "KINH CHIEU AI – NGUYEN HOANG GIA BAO",
       href: "/nguyen-hoang-gia-bao",
       url: "/assets/Nguyễn Hoàng Gia Bảo_.png",
-      width: 4.0,
+      width: 3.7,
       opacity: 0.7,
       blurPx: 2.4,
       rotationDeg: 0,
@@ -203,10 +260,10 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P4",
       group: 1,
-      name: "Nighscape – Sismann 2",
+      name: "NIGHTSCAPE – VALENTIN SISMAN",
       href: "/valentin-sismann-nightscape",
       url: "/assets/Nighscape - Sismann 2.png",
-      width: 1.9,
+      width: 1.5,
       opacity: 0.5,
       blurPx: 3.1,
       rotationDeg: 18.9,
@@ -218,53 +275,53 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P5",
       group: 2,
-      name: "G9 – Ivy Vo",
+      name: "G9 – IVY VO",
       href: "/ivy-vo",
       url: "/assets/G9 - Ivy Vo.png",
-      width: 7,
+      width: 6.5,
       opacity: 0.15,
       blurPx: 4.86,
       rotationDeg: -10,
-      pos: { mode: "uv", u: 0.19, v: 0.51 },
+      pos: { mode: "uv", u: 0.23, v: 0.51 },
       float: { ampX: 0.01, ampY: 0.16, ampRotDeg: 2, speed: 0.95, phase: 0.9 },
     },
     {
       id: "P6",
       group: 2,
-      name: "Art & Leisure (Crying) – Emily Sarten",
+      name: "ART & LEISURE (CRYING) – EMILY SARTEN",
       href: "/emily-sarten",
       url: "/assets/Art & Leisure (Crying) - Emily Sarten.png",
-      width: 4.5,
+      width: 5.5,
       opacity: 0.51,
       blurPx: 3.6,
-      rotationDeg: -1,
-      pos: { mode: "uv", u: 0.097, v: 0.592 },
+      rotationDeg: -10,
+      pos: { mode: "uv", u: 0.15, v: 0.592 },
       float: { ampX: 0.3, ampY: 0.1, ampRotDeg: 6.5, speed: 1, phase: 0.1 },
     },
     {
       id: "P7",
       group: 2,
-      name: "LHPG",
+      name: "DIARY OF A SELF PROCLAIMED SCHIZO – LHPG",
       href: "/lhpg",
       url: "/assets/LHPG.png",
-      width: 3.61,
+      width: 3.31,
       opacity: 0.35,
       blurPx: 3,
-      rotationDeg: -5.9,
-      pos: { mode: "uv", u: 0.10, v: 0.389 },
+      rotationDeg: -3,
+      pos: { mode: "uv", u: 0.15, v: 0.389 },
       float: { ampX: 0.02, ampY: 0.14, ampRotDeg: 2.5, speed: 1.05, phase: 1.7 },
     },
     {
       id: "P8",
       group: 2,
-      name: "Giac mo Chapiti – Lê Thanh Thảo",
+      name: "GIAC MO CHAPITI – LE THANH THAO",
       href: "/le-thanh-thao",
       url: "/assets/Giac mo Chapiti - Le Thanh Thao.png",
-      width: 5.01,
+      width: 4.651,
       opacity: 0.3,
       blurPx: 2.8,
       rotationDeg: -10.7,
-      pos: { mode: "uv", u: 0.22, v: 0.41 },
+      pos: { mode: "uv", u: 0.27, v: 0.41 },
       float: { ampX: 0.2, ampY: 0.19, ampRotDeg: 3, speed: 1, phase: 1.2 },
     },
 
@@ -272,10 +329,10 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P9",
       group: 3,
-      name: "Eden AI – Dang Khang Ninh",
+      name: "A WALK WITH AI INTO THE EDEN OF AMBIGUITY – DANG KHANG NINH",
       href: "/dang-khang-ninh",
       url: "/assets/Eden AI - Dang Khang Ninh.png",
-      width: 6.88,
+      width: 6.48,
       opacity: 0.25,
       blurPx: 3.02,
       rotationDeg: 2,
@@ -285,10 +342,10 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P10",
       group: 3,
-      name: "Trust In AI",
+      name: "TROTTIN AI – LUONG CAM ANH",
       href: "/luong-cam-anh",
       url: "/assets/trustin_AI.png",
-      width: 6.51,
+      width: 6.21,
       opacity: 0.22,
       blurPx: 3,
       rotationDeg: -2,
@@ -298,10 +355,10 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P11",
       group: 3,
-      name: "Water lilies",
-      href: "/the-ai-dance-with-us",
+      name: "RE IMPRESSION WATER LILIES – NGUYEN THAI BAO",
+      href: "/nguyen-thai-bao",
       url: "/assets/Water lilies.png",
-      width: 3.4,
+      width: 3.1,
       opacity: 0.53,
       blurPx: 3,
       rotationDeg: 0,
@@ -311,24 +368,25 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P12",
       group: 3,
-      name: "THE CHRONICLE OF ARTIFICIAL DIVINITY",
+      name: "ARTIFICIAL DIVINITIES – HA THAO",
       href: "/ha-thao",
       url: "/assets/THE CHRONICLE OF ARTIFICIAL DIVINITY - Thảo Hà.png",
-      width: 3.23,
+      width: 3.03,
       opacity: 0.5,
       blurPx: 3.8,
       rotationDeg: -4,
       pos: { mode: "uv", u: 0.11, v: 0.349 },
       float: { ampX: 0.2, ampY: 0.5, ampRotDeg: 4.5, speed: 1.2, phase: 0.3 },
     },
-      // group 4
+
+    // group 4
     {
       id: "P13",
       group: 4,
-      name: "Derivative of Trio A - Lyon Nguyen",
+      name: "DERIVATIVE OF TRIO A – LYON NGUYEN",
       href: "/lyon-nguyen",
       url: "/assets/Derivative of Trio A - Lyon Nguyễn.png",
-      width: 3.2,
+      width: 4.4,
       opacity: 0.5,
       blurPx: 3.2,
       rotationDeg: -4,
@@ -338,23 +396,23 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P14",
       group: 4,
-      name: "Picklespong - Valentin Sismann",
+      name: "PICKLESONG – VALENTIN SISMAN",
       href: "/valentin-sismann-pickle-song",
       url: "/assets/Valentin Sismann - Picklesong (2025)_.png",
-      width: 1.23,
+      width: 1.73,
       opacity: 0.5,
       blurPx: 5.2,
       rotationDeg: -20,
-      pos: { mode: "uv", u: 0.19, v: 0.68 },
+      pos: { mode: "uv", u: 0.23, v: 0.68 },
       float: { ampX: 0.1, ampY: 0.25, ampRotDeg: 3, speed: 0.7, phase: 0.6 },
     },
     {
       id: "P15",
       group: 4,
-      name: "Human Learning - Giang IT",
+      name: "HUMAN LEARNING – NGUYEN HOANG GIANG",
       href: "/nguyen-hoang-giang",
       url: "/assets/Human Learning - Giang IT.png",
-      width: 3.43,
+      width: 3.83,
       opacity: 0.5,
       blurPx: 3.2,
       rotationDeg: -4,
@@ -365,8 +423,8 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
 
   function getPanelGroups(panelIndex) {
     const mod = panelIndex % 2;
-    if (mod === 0) return [1, 2];
-    if (mod === 1) return [3, 4];
+    if (mod === 0) return [2, 3];
+    if (mod === 1) return [4, 1];
     // if (mod === 2) return [3, 4, 1];
     // return [2, 3, 4];
   }
@@ -481,7 +539,6 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
 
     placeByUV(poster, uFinal, v0);
     poster.userData.pos = { u: uFinal, v: v0 };
-    console.log("poster placed at uv:", cfg.name, uFinal, v0);
 
     poster.rotation.set(0, 0, THREE.MathUtils.degToRad(cfg.rotationDeg ?? 0));
 
@@ -678,7 +735,13 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
         THREE.MathUtils.degToRad(float.ampRotDeg ?? 0) *
         Math.sin(t * s * 0.8 + ph * 1.3);
 
-      const baseLift = 9.5;
+      let baseLift = 9.5;
+      try {
+        const grp = entry.mesh?.userData?.group;
+        if (Number(grp) === 2) {
+          baseLift = 12.5; 
+        }
+      } catch (e) {}
       const finalZ = base.z + baseLift;
 
       mesh.rotation.z = base.rotZ + dRot;
@@ -949,6 +1012,9 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
         lastUserAction = performance.now() - AUTO_RESUME_DELAY - 1;
         userInteracting = false;
       } catch (err) {}
+    },
+    enableFloorText() {
+      try { floorTextEnabled = true; } catch (err) {}
     },
     dispose() {
       cancelAnimationFrame(raf);

@@ -74,7 +74,7 @@ export default function LandingPage() {
         <div className="landing-corners">
           <div className="corner left">
             <div className="corner-line">WRONG BIANELLE</div>
-            <div className="corner-line">1 NOV 2025 - XX XX 2026</div>
+            <div className="corner-line">1 NOV 2025 - 31 MAR 2026</div>
           </div>
 
           <div className="corner right">

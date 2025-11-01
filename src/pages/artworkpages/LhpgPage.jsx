@@ -24,7 +24,7 @@ export default function LhpgPage() {
 
       <div className="sk-bl">
         <div>{"THE WRONG BIANELLE"}</div>
-        <div>{"1 NOV 2025 — XX XX 2026"}</div>
+        <div>{"1 NOV 2025 — 31 MAR 2026"}</div>
       </div>
 
       <div className="sk-br">
