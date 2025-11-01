@@ -64,7 +64,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
   floorText.style.zIndex = "10001";
   document.body.appendChild(floorText);
   let lastShownGroup = null;
-  const FLOOR_LOCK_MS = 8000;
+  const FLOOR_LOCK_MS = 7000;
   let floorLockUntil = 0;
 
   const FLOOR_ANIM_NAME = "shadow-floor-text-fade";
@@ -76,8 +76,8 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
 
       style.textContent = `@keyframes ${FLOOR_ANIM_NAME} {
         0% { opacity: 0; transform: perspective(800px) translateX(-50%) translateY(6px) translateZ(12px) rotateX(55deg); }
-        30.00% { opacity: 1; transform: perspective(800px) translateX(-50%) translateY(0) translateZ(12px) rotateX(55deg); }
-        70.00% { opacity: 1; transform: perspective(800px) translateX(-50%) translateY(0) translateZ(12px) rotateX(55deg); }
+        15.00% { opacity: 1; transform: perspective(800px) translateX(-50%) translateY(0) translateZ(12px) rotateX(55deg); }
+        85.00% { opacity: 1; transform: perspective(800px) translateX(-50%) translateY(0) translateZ(12px) rotateX(55deg); }
         100% { opacity: 0; transform: perspective(800px) translateX(-50%) translateY(6px) translateZ(12px) rotateX(55deg); }
       }
       /* floor text: keep transform origin at bottom and preserve 3D so rotateX looks correct */
@@ -164,10 +164,10 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P1",
       group: 1,
-      name: "you are so exotic looking!",
+      name: "YOU ARE SO EXOTIC LOOKING – HAN DAO",
       href: "/han-dao-you-are-so-exotic-looking",
       url: "/assets/you are so exotic looking! - Hân Đào.png",
-      width: 5.0,
+      width: 4.2,
       opacity: 0.6,
       blurPx: 5,
       rotationDeg: 10,
@@ -177,10 +177,10 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P2",
       group: 1,
-      name: "Dan ong - Han Dao",
+      name: "DAN ONG – HAN DAO",
       href: "/han-dao-dan-ong",
       url: "/assets/Đàn ông - Hân Đào.png",
-      width: 7.1,
+      width: 6.8,
       opacity: 0.3,
       blurPx: 3.53,
       rotationDeg: 10,
@@ -190,7 +190,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P3",
       group: 1,
-      name: "Kinh chieu AI - Nguyen Hoang Gia Bao",
+      name: "KINH CHIEU AI – NGUYEN HOANG GIA BAO",
       href: "/nguyen-hoang-gia-bao",
       url: "/assets/Nguyễn Hoàng Gia Bảo_.png",
       width: 4.0,
@@ -203,7 +203,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P4",
       group: 1,
-      name: "Nighscape – Sismann 2",
+      name: "NIGHTSCAPE – VALENTIN SISMAN",
       href: "/valentin-sismann-nightscape",
       url: "/assets/Nighscape - Sismann 2.png",
       width: 1.9,
@@ -218,7 +218,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P5",
       group: 2,
-      name: "G9 – Ivy Vo",
+      name: "G9 – IVY VO",
       href: "/ivy-vo",
       url: "/assets/G9 - Ivy Vo.png",
       width: 7,
@@ -231,7 +231,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P6",
       group: 2,
-      name: "Art & Leisure (Crying) – Emily Sarten",
+      name: "ART & LEISURE (CRYING) – EMILY SARTEN",
       href: "/emily-sarten",
       url: "/assets/Art & Leisure (Crying) - Emily Sarten.png",
       width: 4.5,
@@ -244,7 +244,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P7",
       group: 2,
-      name: "LHPG",
+      name: "DIARY OF A SELF PROCLAIMED SCHIZO – LHPG",
       href: "/lhpg",
       url: "/assets/LHPG.png",
       width: 3.61,
@@ -257,7 +257,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P8",
       group: 2,
-      name: "Giac mo Chapiti – Lê Thanh Thảo",
+      name: "GIAC MO CHAPITI – LE THANH THAO",
       href: "/le-thanh-thao",
       url: "/assets/Giac mo Chapiti - Le Thanh Thao.png",
       width: 5.01,
@@ -272,7 +272,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P9",
       group: 3,
-      name: "Eden AI – Dang Khang Ninh",
+      name: "A WALK WITH AI INTO THE EDEN OF AMBIGUITY – DANG KHANG NINH",
       href: "/dang-khang-ninh",
       url: "/assets/Eden AI - Dang Khang Ninh.png",
       width: 6.88,
@@ -285,7 +285,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P10",
       group: 3,
-      name: "Trust In AI",
+      name: "TROTTIN AI – LUONG CAM ANH",
       href: "/luong-cam-anh",
       url: "/assets/trustin_AI.png",
       width: 6.51,
@@ -298,8 +298,8 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P11",
       group: 3,
-      name: "Water lilies",
-      href: "/the-ai-dance-with-us",
+      name: "RE IMPRESSION WATER LILIES – NGUYEN THAI BAO",
+      href: "/nguyen-thai-bao",
       url: "/assets/Water lilies.png",
       width: 3.4,
       opacity: 0.53,
@@ -311,7 +311,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P12",
       group: 3,
-      name: "THE CHRONICLE OF ARTIFICIAL DIVINITY",
+      name: "ARTIFICIAL DIVINITIES – HA THAO",
       href: "/ha-thao",
       url: "/assets/THE CHRONICLE OF ARTIFICIAL DIVINITY - Thảo Hà.png",
       width: 3.23,
@@ -321,14 +321,15 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       pos: { mode: "uv", u: 0.11, v: 0.349 },
       float: { ampX: 0.2, ampY: 0.5, ampRotDeg: 4.5, speed: 1.2, phase: 0.3 },
     },
-      // group 4
+
+    // group 4
     {
       id: "P13",
       group: 4,
-      name: "Derivative of Trio A - Lyon Nguyen",
+      name: "DERIVATIVE OF TRIO A – LYON NGUYEN",
       href: "/lyon-nguyen",
       url: "/assets/Derivative of Trio A - Lyon Nguyễn.png",
-      width: 3.2,
+      width: 3.6,
       opacity: 0.5,
       blurPx: 3.2,
       rotationDeg: -4,
@@ -338,10 +339,10 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P14",
       group: 4,
-      name: "Picklespong - Valentin Sismann",
+      name: "PICKLESONG – VALENTIN SISMAN",
       href: "/valentin-sismann-pickle-song",
       url: "/assets/Valentin Sismann - Picklesong (2025)_.png",
-      width: 1.23,
+      width: 1.63,
       opacity: 0.5,
       blurPx: 5.2,
       rotationDeg: -20,
@@ -351,7 +352,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P15",
       group: 4,
-      name: "Human Learning - Giang IT",
+      name: "HUMAN LEARNING – NGUYEN HOANG GIANG",
       href: "/nguyen-hoang-giang",
       url: "/assets/Human Learning - Giang IT.png",
       width: 3.43,
@@ -828,7 +829,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
           }
           const share = bestCount / totalHits;
           const now = performance.now();
-          if (share >= 0.8) {
+          if (share >= 0.9) {
             if (lastShownGroup !== null && now < floorLockUntil) {
             } else {
               if (String(lastShownGroup) !== String(bestGrp)) {
