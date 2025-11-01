@@ -253,6 +253,27 @@ export function mountLandingPage(canvas, navigate) {
     setTimeout(() => {
       try { hideOverlay(); } catch (e) {}
     }, 3000);
+
+    let floorEnabledScheduled = false;
+    function enableFloorTextNow() {
+      if (floorEnabledScheduled) return;
+      floorEnabledScheduled = true;
+      try {
+        if (ctl && typeof ctl.enableFloorText === "function") ctl.enableFloorText();
+      } catch (err) {}
+    }
+
+    if (nosignalOverlay) {
+      const onTrans = (ev) => {
+        if (ev.propertyName === "opacity") {
+          try { enableFloorTextNow(); } catch (e) {}
+          nosignalOverlay.removeEventListener("transitionend", onTrans);
+        }
+      };
+      nosignalOverlay.addEventListener("transitionend", onTrans);
+    }
+
+    setTimeout(() => enableFloorTextNow(), 5000);
   } catch (err) {
     try { if (nosignalOverlay && nosignalOverlay.parentNode) nosignalOverlay.remove(); } catch (e) {}
     nosignalOverlay = null;

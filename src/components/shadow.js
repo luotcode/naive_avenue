@@ -51,8 +51,9 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
   floorWrap.appendChild(floorText);
 
   let lastShownGroup = null;
-  const FLOOR_LOCK_MS = 8500;
+  const FLOOR_LOCK_MS = 9000;
   let floorLockUntil = 0;
+  let floorTextEnabled = false;
 
   const FLOOR_ANIM_NAME = "shadow-floor-text-fade";
   (function ensureFloorAnim() {
@@ -89,6 +90,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
         max-width: 460px;
         line-height: 1.3;
         color: #f7fcc5;
+        opacity: 0.7;
         font-family: "Charmonman", "Schroffer Mono", monospace;
         animation: ${FLOOR_ANIM_NAME} 7s linear forwards;
         transform: perspective(850px)
@@ -136,6 +138,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     }
 
   function showFloorText(groupId) {
+    if (!floorTextEnabled) return; 
     try {
       lastShownGroup = groupId;
       floorLockUntil = performance.now() + FLOOR_LOCK_MS;
@@ -221,7 +224,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "YOU ARE SO EXOTIC LOOKING – HAN DAO",
       href: "/han-dao-you-are-so-exotic-looking",
       url: "/assets/you are so exotic looking! - Hân Đào.png",
-      width: 4.2,
+      width: 3.0,
       opacity: 0.6,
       blurPx: 5,
       rotationDeg: 10,
@@ -234,7 +237,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "DAN ONG – HAN DAO",
       href: "/han-dao-dan-ong",
       url: "/assets/Đàn ông - Hân Đào.png",
-      width: 6.8,
+      width: 5.2,
       opacity: 0.3,
       blurPx: 3.53,
       rotationDeg: 10,
@@ -247,7 +250,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "KINH CHIEU AI – NGUYEN HOANG GIA BAO",
       href: "/nguyen-hoang-gia-bao",
       url: "/assets/Nguyễn Hoàng Gia Bảo_.png",
-      width: 4.0,
+      width: 3.7,
       opacity: 0.7,
       blurPx: 2.4,
       rotationDeg: 0,
@@ -260,7 +263,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "NIGHTSCAPE – VALENTIN SISMAN",
       href: "/valentin-sismann-nightscape",
       url: "/assets/Nighscape - Sismann 2.png",
-      width: 1.9,
+      width: 1.5,
       opacity: 0.5,
       blurPx: 3.1,
       rotationDeg: 18.9,
@@ -275,11 +278,11 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "G9 – IVY VO",
       href: "/ivy-vo",
       url: "/assets/G9 - Ivy Vo.png",
-      width: 7,
+      width: 6.5,
       opacity: 0.15,
       blurPx: 4.86,
       rotationDeg: -10,
-      pos: { mode: "uv", u: 0.19, v: 0.51 },
+      pos: { mode: "uv", u: 0.23, v: 0.51 },
       float: { ampX: 0.01, ampY: 0.16, ampRotDeg: 2, speed: 0.95, phase: 0.9 },
     },
     {
@@ -288,11 +291,11 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "ART & LEISURE (CRYING) – EMILY SARTEN",
       href: "/emily-sarten",
       url: "/assets/Art & Leisure (Crying) - Emily Sarten.png",
-      width: 4.5,
+      width: 5.5,
       opacity: 0.51,
       blurPx: 3.6,
-      rotationDeg: -1,
-      pos: { mode: "uv", u: 0.097, v: 0.592 },
+      rotationDeg: -10,
+      pos: { mode: "uv", u: 0.15, v: 0.592 },
       float: { ampX: 0.3, ampY: 0.1, ampRotDeg: 6.5, speed: 1, phase: 0.1 },
     },
     {
@@ -301,11 +304,11 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "DIARY OF A SELF PROCLAIMED SCHIZO – LHPG",
       href: "/lhpg",
       url: "/assets/LHPG.png",
-      width: 3.61,
+      width: 3.31,
       opacity: 0.35,
       blurPx: 3,
-      rotationDeg: -5.9,
-      pos: { mode: "uv", u: 0.10, v: 0.389 },
+      rotationDeg: -3,
+      pos: { mode: "uv", u: 0.15, v: 0.389 },
       float: { ampX: 0.02, ampY: 0.14, ampRotDeg: 2.5, speed: 1.05, phase: 1.7 },
     },
     {
@@ -314,11 +317,11 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "GIAC MO CHAPITI – LE THANH THAO",
       href: "/le-thanh-thao",
       url: "/assets/Giac mo Chapiti - Le Thanh Thao.png",
-      width: 5.01,
+      width: 4.651,
       opacity: 0.3,
       blurPx: 2.8,
       rotationDeg: -10.7,
-      pos: { mode: "uv", u: 0.22, v: 0.41 },
+      pos: { mode: "uv", u: 0.27, v: 0.41 },
       float: { ampX: 0.2, ampY: 0.19, ampRotDeg: 3, speed: 1, phase: 1.2 },
     },
 
@@ -329,7 +332,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "A WALK WITH AI INTO THE EDEN OF AMBIGUITY – DANG KHANG NINH",
       href: "/dang-khang-ninh",
       url: "/assets/Eden AI - Dang Khang Ninh.png",
-      width: 6.88,
+      width: 6.48,
       opacity: 0.25,
       blurPx: 3.02,
       rotationDeg: 2,
@@ -342,7 +345,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "TROTTIN AI – LUONG CAM ANH",
       href: "/luong-cam-anh",
       url: "/assets/trustin_AI.png",
-      width: 6.51,
+      width: 6.21,
       opacity: 0.22,
       blurPx: 3,
       rotationDeg: -2,
@@ -355,7 +358,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "RE IMPRESSION WATER LILIES – NGUYEN THAI BAO",
       href: "/nguyen-thai-bao",
       url: "/assets/Water lilies.png",
-      width: 3.4,
+      width: 3.1,
       opacity: 0.53,
       blurPx: 3,
       rotationDeg: 0,
@@ -368,7 +371,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "ARTIFICIAL DIVINITIES – HA THAO",
       href: "/ha-thao",
       url: "/assets/THE CHRONICLE OF ARTIFICIAL DIVINITY - Thảo Hà.png",
-      width: 3.23,
+      width: 3.03,
       opacity: 0.5,
       blurPx: 3.8,
       rotationDeg: -4,
@@ -383,7 +386,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "DERIVATIVE OF TRIO A – LYON NGUYEN",
       href: "/lyon-nguyen",
       url: "/assets/Derivative of Trio A - Lyon Nguyễn.png",
-      width: 3.6,
+      width: 4.4,
       opacity: 0.5,
       blurPx: 3.2,
       rotationDeg: -4,
@@ -396,11 +399,11 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "PICKLESONG – VALENTIN SISMAN",
       href: "/valentin-sismann-pickle-song",
       url: "/assets/Valentin Sismann - Picklesong (2025)_.png",
-      width: 1.63,
+      width: 1.73,
       opacity: 0.5,
       blurPx: 5.2,
       rotationDeg: -20,
-      pos: { mode: "uv", u: 0.19, v: 0.68 },
+      pos: { mode: "uv", u: 0.23, v: 0.68 },
       float: { ampX: 0.1, ampY: 0.25, ampRotDeg: 3, speed: 0.7, phase: 0.6 },
     },
     {
@@ -409,7 +412,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "HUMAN LEARNING – NGUYEN HOANG GIANG",
       href: "/nguyen-hoang-giang",
       url: "/assets/Human Learning - Giang IT.png",
-      width: 3.43,
+      width: 3.83,
       opacity: 0.5,
       blurPx: 3.2,
       rotationDeg: -4,
@@ -420,8 +423,8 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
 
   function getPanelGroups(panelIndex) {
     const mod = panelIndex % 2;
-    if (mod === 0) return [3, 4];
-    if (mod === 1) return [1, 2];
+    if (mod === 0) return [2, 3];
+    if (mod === 1) return [4, 1];
     // if (mod === 2) return [3, 4, 1];
     // return [2, 3, 4];
   }
@@ -732,7 +735,13 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
         THREE.MathUtils.degToRad(float.ampRotDeg ?? 0) *
         Math.sin(t * s * 0.8 + ph * 1.3);
 
-      const baseLift = 9.5;
+      let baseLift = 9.5;
+      try {
+        const grp = entry.mesh?.userData?.group;
+        if (Number(grp) === 2) {
+          baseLift = 12.5; 
+        }
+      } catch (e) {}
       const finalZ = base.z + baseLift;
 
       mesh.rotation.z = base.rotZ + dRot;
@@ -1003,6 +1012,9 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
         lastUserAction = performance.now() - AUTO_RESUME_DELAY - 1;
         userInteracting = false;
       } catch (err) {}
+    },
+    enableFloorText() {
+      try { floorTextEnabled = true; } catch (err) {}
     },
     dispose() {
       cancelAnimationFrame(raf);
