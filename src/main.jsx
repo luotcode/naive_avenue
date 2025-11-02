@@ -30,6 +30,7 @@ import TaisKoshinoPage from "./pages/artworkpages/TaisKoshinoPage.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
+      <link rel="icon" type="image/gif" href="/assets/monster-icon-1.gif" />
       <RedirectMobile />
       <Routes>
         <Route path="/" element={<LandingPage />} />

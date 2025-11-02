@@ -1,47 +1,43 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./menuoverlay.css";
 
 export default function MenuOverlay() {
-  const [open, setOpen] = useState(false);
   const nav = useNavigate();
-  const loc = useLocation();
-  const ref = useRef(null);
-
-  useEffect(() => setOpen(false), [loc.pathname]);
+  const location = useLocation();
+  const [gif, setGif] = useState("");
 
   useEffect(() => {
-    const onClick = (e) => {
-      if (!ref.current) return;
-      if (!ref.current.contains(e.target)) setOpen(false);
-    };
-    document.addEventListener("mousedown", onClick);
-    return () => document.removeEventListener("mousedown", onClick);
+    const gifs = [
+      "/assets/monster-icon-1.gif",
+      "/assets/monster-icon-2.gif",
+      "/assets/monster-icon-3.gif",
+      "/assets/monster-icon-4.gif",
+    ];
+    const randomIndex = Math.floor(Math.random() * gifs.length);
+    setGif(gifs[randomIndex]);
   }, []);
 
-  return (
-    <div className="menu-wrap" ref={ref}>
-    <button
-        className={`menu-btn ${open ? "is-open" : ""}`}
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-        aria-haspopup="true"
-    >
-        MENU
-    </button>
+  const isAboutPage = location.pathname === "/about";
 
-    <div className={`menu-panel ${open ? "show" : ""}`} role="menu">
-        <button className="menu-item" role="menuitem" onClick={() => nav("/")}>
-        HOME
-        </button>
-        <button
-        className="menu-item"
-        role="menuitem"
-        onClick={() => nav("/about")}
+  return (
+    <div className="menu-wrap">
+      <button
+        className="menu-btn"
+        onClick={() => nav(isAboutPage ? "/" : "/about")}
+      >
+        {isAboutPage ? "BACK" : "ABOUT"}
+      </button>
+
+      {gif && (
+        <div
+          className="menu-gif"
+          title="BOO! IT'S RICARDO."
+          onClick={() => nav("/ricardo-bodini")}
         >
-        ABOUT
-        </button>
-    </div>
+          <img src={gif} alt="Random monster icon" />
+        </div>
+      )}
     </div>
   );
 }

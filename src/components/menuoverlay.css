@@ -1,7 +1,9 @@
-
 .menu-wrap {
   position: relative;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px; /* spacing between ABOUT and gif */
 }
 
 .menu-btn {
@@ -15,7 +17,6 @@
   letter-spacing: 0.1em;
   padding: 6px 10px;
   transition: transform 0.3s ease, opacity 0.3s ease;
-  pointer-events: auto;
 }
 
 .menu-btn:hover {
@@ -23,61 +24,19 @@
   transform: scale(1.05);
 }
 
-.menu-panel {
-  position: absolute;
-  top: 20px;
-  right: -10px;
-  border-radius: 12px;
-  padding: 16px 20px;
-  min-width: 80px;
-  opacity: 0;
-  transform: translateY(-10px);
-  pointer-events: none;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.menu-panel.show {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-.menu-item {
-  position: relative;
-  width: 100%;
-  text-align: right;
-  background: none;
-  border: none;
-  font-family: "Schroffer Mono", monospace;
-  color: rgba(247, 252, 197, 1);
-  font-size: 18px;
-  letter-spacing: 0.15em;
-  padding: 10px 0;
+.menu-gif {
   cursor: pointer;
 }
 
-.menu-item:hover {
-  opacity: 1;
-  filter: drop-shadow(0 0 6px rgba(247, 252, 197, 0.6));
+.menu-gif img {
+  width: 120px;  /* adjust as needed */
+  height: auto;
+  border-radius: 4px;
+  filter: invert(1);
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
-.menu-panel.show .menu-item {
-  animation: fadeInUp 0.5s ease both;
-}
-.menu-panel.show .menu-item:nth-child(2) {
-  animation-delay: 0.1s;
-}
-.menu-panel.show .menu-item:nth-child(3) {
-  animation-delay: 0.2s;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.menu-gif:hover img {
+  transform: scale(1.1);
+  filter: invert(1) drop-shadow(0 0 6px rgba(247, 252, 197, 0.7));
 }
