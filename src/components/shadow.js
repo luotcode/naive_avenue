@@ -301,8 +301,8 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P7",
       group: 2,
-      name: "DIARY OF A SELF PROCLAIMED SCHIZO...  – LHPG",
-      href: "/lhpg",
+      name: "DIARY OF A SELF PROCLAIMED SCHIZO...  – LPHG",
+      href: "/lphg",
       url: "/assets/LHPG.png",
       width: 3.31,
       opacity: 0.35,
