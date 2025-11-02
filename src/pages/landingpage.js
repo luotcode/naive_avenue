@@ -41,18 +41,18 @@ export function mountLandingPage(canvas, navigate) {
 
   const ctl = Shadow(scene, room, WALL_Z, camera, renderer.domElement, navigate, null);
 
-  const arrows = Arrows(renderer.domElement, {
-    onLeft: () => {
-      try {
-        if (ctl && typeof ctl.setAutoDirection === "function") ctl.setAutoDirection(1);
-      } catch (err) {}
-    },
-    onRight: () => {
-      try {
-        if (ctl && typeof ctl.setAutoDirection === "function") ctl.setAutoDirection(-1);
-      } catch (err) {}
-    },
-  });
+  // const arrows = Arrows(renderer.domElement, {
+  //   onLeft: () => {
+  //     try {
+  //       if (ctl && typeof ctl.setAutoDirection === "function") ctl.setAutoDirection(1);
+  //     } catch (err) {}
+  //   },
+  //   onRight: () => {
+  //     try {
+  //       if (ctl && typeof ctl.setAutoDirection === "function") ctl.setAutoDirection(-1);
+  //     } catch (err) {}
+  //   },
+  // });
 
   const viewTarget = new THREE.Vector3(0, -0.95, WALL_Z * 0.65);
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -359,7 +359,7 @@ export function mountLandingPage(canvas, navigate) {
       removeEventListener("resize", onResize);
       // gui.destroy();
       try {
-        if (arrows && typeof arrows.dispose === "function") arrows.dispose();
+        // if (arrows && typeof arrows.dispose === "function") arrows.dispose();
       } catch (err) {}
       try {
         if (ctl && typeof ctl.dispose === "function") ctl.dispose();

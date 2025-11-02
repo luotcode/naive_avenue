@@ -81,7 +81,7 @@
   inset: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 2000; /* above everything, except the text */
+  z-index: 2005; /* above everything, except the text */
   pointer-events: none;
   background: black; /* ensures full cover before Vimeo loads */
   opacity: 1;
@@ -98,16 +98,17 @@
 /* --- NAV TEXT ON TOP --- */
 .screensaver-navigation {
   position: fixed;
-  bottom: 50px;
-  width: 100%;
-  text-align: center;
+  bottom: 18px;
+  right: 18px;
+  text-align: right;
   font-family: "Schroffer Mono", monospace;
   font-weight: 500;
   font-style: bold;
-  font-size: 36px;
+  font-size: 16px;
   line-height: 150%;
   letter-spacing: -1.1%;
   color: rgba(247,252,197,1);
+  -webkit-font-smoothing: antialiased;
   z-index: 3000; /* stays above video */
   pointer-events: none;
 }

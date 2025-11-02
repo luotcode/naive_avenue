@@ -28,7 +28,7 @@ export default function LandingPage() {
       if (!hasInteracted) setHasInteracted(true);
       clearTimeout(idleTimeout.current);
       if (idle) setIdle(false);
-      idleTimeout.current = setTimeout(() => setIdle(true), 2000); // Set idle time!!!
+      idleTimeout.current = setTimeout(() => setIdle(true), 10000); // Set idle time!!!
     };
 
     const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
@@ -73,7 +73,7 @@ export default function LandingPage() {
 
       <div className="landing-corners">
         <div className="corner left">
-          <div className="corner-line">WRONG BIANELLE</div>
+          <div className="corner-line">THE WRONG BIENNALE</div>
           <div className="corner-line">1 NOV 2025 - 31 MAR 2026</div>
         </div>
 
@@ -86,7 +86,7 @@ export default function LandingPage() {
       {hasInteracted && idle && (
         <>
           <div className="screensaver-navigation">
-            <span>Press 'Shift' to Tais Koshino's realm</span>
+            <span>PRESS 'SHIFT' <br/> TO TAIS KOSHINO'S REALM</span>
           </div>
 
           <div className="screensaver-video">

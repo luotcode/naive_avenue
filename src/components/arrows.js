@@ -21,7 +21,7 @@ export function Arrows(containerEl, opts = {}) {
   wrapper.style.width = "100%";
   wrapper.style.height = "100%";
   wrapper.style.pointerEvents = "none"; 
-  wrapper.style.zIndex = "9999";
+  wrapper.style.zIndex = "1999";
 
   const makeImg = (src, pos) => {
     const img = document.createElement("img");

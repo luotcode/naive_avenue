@@ -182,7 +182,7 @@ export default function FlyingVideo({ src, size = 120, frequency = 15000, always
   const combinedStyle = { ...style };
   if (alwaysOnTop) {
     // use an extremely large z-index to ensure it's above everything on the landing page
-    combinedStyle.zIndex = 2147483647;
+    // combinedStyle.zIndex = 2147483647;
     combinedStyle.position = combinedStyle.position || 'fixed';
   }
 

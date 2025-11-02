@@ -97,8 +97,9 @@
   position: relative;
   width: 100%;
   max-width: 900px;
+  min-height: 100vh;
   margin: calc(15vh + 80px) auto 50vh; 
-  padding: 0 40px;
+  padding: 0;
   font-size: 18px;
   line-height: 1.7;
   font-family: "Charmonman", cursive;
@@ -108,6 +109,8 @@
   line-height: 150%;
   letter-spacing: -1.1%;
   text-align: center;
+  align-items: center;       
+  justify-content: center;   
   transition: margin 1.2s ease, opacity 0.8s ease;
   z-index: 2;
 }

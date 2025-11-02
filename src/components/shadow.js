@@ -26,7 +26,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
   tooltip.style.borderRadius = "4px";
   tooltip.style.fontSize = "13px";
   tooltip.style.fontFamily = "Schroffer Mono, monospace";
-  tooltip.style.zIndex = "10000";
+  tooltip.style.zIndex = "1999";
   tooltip.style.opacity = "0";
   tooltip.style.transition = "opacity 0.08s ease, transform 0.08s ease";
   tooltip.style.whiteSpace = "nowrap";
@@ -71,23 +71,23 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
 
       .shadow-floor-wrap {
         position: fixed;
-        left: 50%;
-        bottom: 48px;
+        left: 48%;
+        bottom: 50px;
         transform: translateX(-50%);
         pointer-events: none;
-        z-index: 10001;
+        z-index: 1999;
       }
 
       .shadow-floor-text {
         position: relative;       
-        font-size: 25px;    
+        font-size: 36px;    
         transform-origin: 50% 100%;
         transform-style: preserve-3d;
         backface-visibility: hidden;
         animation-fill-mode: forwards;
         display: inline-block;
         text-align: center;
-        max-width: 460px;
+        max-width: 500px;
         line-height: 1.3;
         color: #f7fcc5;
         opacity: 0.7;
