@@ -114,12 +114,12 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
   })();
 
   const FLOOR_TEXT_BY_GROUP = {
-      1: `Act II: Seeing
+      1: `Act 2: Seeing
 
     Data dreams of light, or it seems.
     Through it, 
     whose eyes do we see?`,
-      2: `Act III: Dreaming
+      2: `Act 3: Dreaming
 
     How much is enough?
     Desire, hope, and fear 
@@ -130,7 +130,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     But in what? 
     And where will they lead me to?
     `,
-      4: `Act I: Becoming
+      4: `Act 4: Becoming
 
     What is it to learn?
     And what must be forgotten
