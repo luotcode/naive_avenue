@@ -53,7 +53,7 @@ body {
 }
 
 .buffer {
-  height: 10vh;
+  height: 20vh;
 }
 
 
@@ -70,7 +70,6 @@ body {
   display: block;
 }
 
-/* ✅ FIXED OVERLAY CENTERED + SCALING */
 .video-overlay {
   position: absolute;
   top: 50%;
@@ -92,15 +91,15 @@ body {
   max-width: 800px;
   margin: 0 auto;
   display: flex;
-  align-items: center;       /* vertical centering */
-  justify-content: center;   /* horizontal centering */
+  align-items: center;       
+  justify-content: center;   
   text-align: center;
   font-size: 25px;
   line-height: 1.7;
   color: rgba(247, 252, 197, 0.9);
   transition: margin 0.8s ease;
   z-index: 2;
-  padding: 40px 20px; /* keeps some breathing space on mobile */
+  padding: 40px 20px; 
 }
 
 

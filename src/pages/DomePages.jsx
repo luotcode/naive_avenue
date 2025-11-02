@@ -35,11 +35,9 @@ export default function DomePages({
   const handleScroll = () => {
     const scrollY = window.scrollY;
     const windowHeight = window.innerHeight;
-    const maxScroll = windowHeight; // one viewport worth
+    const maxScroll = windowHeight;
     const progress = Math.min(scrollY / maxScroll, 1);
-
-    // Start small (hole barely visible), end at ~2.6x for full reveal
-    const scale = 1 + progress * 2; 
+    const scale = 1 + progress * 4; 
     setOverlayScale(scale);
   };
 
