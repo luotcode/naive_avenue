@@ -22,7 +22,7 @@ export default function ValentinSismannPage() {
             <iframe
               width="100%"
               height="100vh"
-              src="https://www.youtube.com/embed/Q27kUZwy4is?si=MmfYFm3jPwFTZULT?autoplay=1&mute=1&controls=1&loop=1"
+              src="https://www.youtube.com/embed/Q27kUZwy4is?autoplay=1&mute=1&controls=1&loop=1"
               title="YouTube video player"
               frameborder="0"
               allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
