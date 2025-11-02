@@ -30,7 +30,6 @@ export default function DomePages({
   const [overlayScale, setOverlayScale] = useState(1);
   const [muted, setMuted] = useState(true);
   const [playing, setPlaying] = useState(true);
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const videoRef = useRef(null);
 
   // 📏 Overlay scaling
@@ -46,53 +45,6 @@ export default function DomePages({
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  // ▶️ Toggle play/pause
-  const handleToggleVideo = () => {
-    const vid = videoRef.current;
-    if (vid) {
-      if (vid.paused) {
-        vid.play();
-        setPlaying(true);
-      } else {
-        vid.pause();
-        setPlaying(false);
-      }
-    }
-  };
-
-  // 🔇 Toggle mute
-  const handleMuteToggle = () => {
-    const vid = videoRef.current;
-    if (vid) {
-      vid.muted = !vid.muted;
-      setMuted(vid.muted);
-    }
-  };
-
-  // 🔁 Restart
-  const handleRestart = () => {
-    const vid = videoRef.current;
-    if (vid) {
-      vid.currentTime = 0;
-      vid.play();
-      setPlaying(true);
-    }
-  };
-
-  // 🖥️ Fullscreen toggle
-  const handleFullscreen = () => {
-    const vid = videoRef.current;
-    if (!vid) return;
-
-    if (!document.fullscreenElement) {
-      vid.requestFullscreen?.();
-      setIsFullscreen(true);
-    } else {
-      document.exitFullscreen?.();
-      setIsFullscreen(false);
-    }
-  };
 
   return (
     <div className="art-page dome-scroll">
@@ -117,7 +69,7 @@ export default function DomePages({
             loop
             muted={muted}
             playsInline
-            controls={false}
+            controls={true}
           />
         ) : isYouTube(pickSrc) ? (
           <iframe
@@ -153,22 +105,6 @@ export default function DomePages({
           style={{ transform: `translate(-50%, -50%) scale(${overlayScale})` }}
         />
       </div>
-
-      {/* ✅ Control panel below video */}
-      {isVideoFile(pickSrc) && (
-        <div className="video-controls-below">
-          <button onClick={handleToggleVideo}>
-            {playing ? "Pause" : "Play"}
-          </button>
-          <button onClick={handleMuteToggle}>
-            {muted ? "Unmute" : "Mute"}
-          </button>
-          <button onClick={handleRestart}>Restart</button>
-          <button onClick={handleFullscreen}>
-            {isFullscreen ? "Fullscreen" : "Fullscreen"}
-          </button>
-        </div>
-      )}
 
       {/* --- text metadata --- */}
       <div className="bottom-left">
