@@ -13,9 +13,6 @@ export default function LuongCamAnhPage() {
       projectName = "TROTTIN_AI / TRUSTIN_AI"
       description={
         <>
-          <p>
-            TrótTin_AI / TrustIn_AI
-          </p>
         </>
       }
     />

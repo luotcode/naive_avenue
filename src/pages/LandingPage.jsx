@@ -28,7 +28,7 @@ export default function LandingPage() {
       if (!hasInteracted) setHasInteracted(true);
       clearTimeout(idleTimeout.current);
       if (idle) setIdle(false);
-      idleTimeout.current = setTimeout(() => setIdle(true), 10000); // Set idle time!!!
+      idleTimeout.current = setTimeout(() => setIdle(true), 2000); // Set idle time!!!
     };
 
     const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
@@ -58,40 +58,50 @@ export default function LandingPage() {
   }, [idle, navigate]);
 
   return (
-      <div className="stage">
-        <canvas ref={canvasRef} className="webgl" />
-        <button
-          className="brand"
-          onClick={() => navigate("/")}
-          aria-label="Go to Home"
-          title="Home"
-        >
-          <img src={logoUrl} alt="Logo" />
-        </button>
+    <div className="stage">
+      <canvas ref={canvasRef} className="webgl" />
+      <button
+        className="brand"
+        onClick={() => navigate("/")}
+        aria-label="Go to Home"
+        title="Home"
+      >
+        <img src={logoUrl} alt="Logo" />
+      </button>
 
-        <div className="menu"> <MenuOverlay /> </div>
+      <div className="menu"> <MenuOverlay /> </div>
 
-        <div className="landing-corners">
-          <div className="corner left">
-            <div className="corner-line">WRONG BIANELLE</div>
-            <div className="corner-line">1 NOV 2025 - 31 MAR 2026</div>
-          </div>
-
-          <div className="corner right">
-            <div className="corner-line">YOU ARE NOW</div>
-            <div className="corner-line">INSIDE OF THE PROJECTION</div>
-          </div>
+      <div className="landing-corners">
+        <div className="corner left">
+          <div className="corner-line">WRONG BIANELLE</div>
+          <div className="corner-line">1 NOV 2025 - 31 MAR 2026</div>
         </div>
 
-        {hasInteracted && idle && (
-          <>
-            <div className="screensaver-navigation">
-              <span>Press 'Shift' to Tais Koshino's realm</span>
-            </div>
-          </>
-        )}
-
-        <FlyingVideo src={flyingVideoSrc} alwaysOnTop />
+        <div className="corner right">
+          <div className="corner-line">YOU ARE NOW</div>
+          <div className="corner-line">INSIDE OF THE PROJECTION</div>
+        </div>
       </div>
+
+      {hasInteracted && idle && (
+        <>
+          <div className="screensaver-navigation">
+            <span>Press 'Shift' to Tais Koshino's realm</span>
+          </div>
+
+          <div className="screensaver-video">
+            <iframe
+              src="https://player.vimeo.com/video/865681389?autoplay=1&muted=1&loop=1&background=1"
+              frameBorder="0"
+              allow="autoplay; fullscreen"
+              allowFullScreen
+              title="Screensaver"
+            ></iframe>
+          </div>
+        </>
+      )}
+
+      <FlyingVideo src={flyingVideoSrc} alwaysOnTop />
+    </div>
   );
 }

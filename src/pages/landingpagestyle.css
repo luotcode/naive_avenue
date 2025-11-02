@@ -75,41 +75,27 @@
   -webkit-font-smoothing: antialiased;
 }
 
-.screensaver {
+/* --- SCREENSAVER --- */
+.screensaver-video {
   position: fixed;
   inset: 0;
-  background: black;
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: fadeIn 3.5s ease forwards;
-}
-
-.screensaver::before {
-  content: "";
-  position: absolute;
-  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000; /* above everything, except the text */
   pointer-events: none;
-  background: radial-gradient(
-    circle at center,
-    transparent 45%,
-    rgba(255, 255, 255, 0.6) 70%,
-    rgba(255, 255, 255, 1) 100%
-  );
-  mix-blend-mode: screen;
-  animation: fadeIn 2s ease forwards;
-}
-
-
-.screensaver-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
+  background: black; /* ensures full cover before Vimeo loads */
+  opacity: 1;
   animation: fadeInVideo 4s ease forwards;
 }
 
+.screensaver-video iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  object-fit: cover;
+}
+
+/* --- NAV TEXT ON TOP --- */
 .screensaver-navigation {
   position: fixed;
   bottom: 50px;
@@ -122,9 +108,10 @@
   line-height: 150%;
   letter-spacing: -1.1%;
   color: rgba(247,252,197,1);
-  z-index: 999999 !important; 
-  pointer-events: none; 
+  z-index: 3000; /* stays above video */
+  pointer-events: none;
 }
+
 
 /* N/A overlay */
 .nosignal-overlay {
