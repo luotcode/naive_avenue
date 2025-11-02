@@ -4,7 +4,7 @@ export default function IvyPage() {
   return (
     <DomePages
       mediaSrc="https://player.vimeo.com/video/1029792275" 
-      title = "WRONG BIANELLE"
+      title = "THE WRONG BIENNALE"
       date = "1 NOV 2025 - 31 MAR 2026"
       artistName = "IVY VO"
       projectName = "G9"

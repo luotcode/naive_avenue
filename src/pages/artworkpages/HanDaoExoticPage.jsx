@@ -4,7 +4,7 @@ export default function HanDaoDanOngPage() {
   return (
     <EmbeddedPages
       mediaList = {mediaList}
-      title = "WRONG BIANELLE"
+      title = "THE WRONG BIENNALE"
       date="1 NOV 2025 — 31 MAR 2026"
       artistName="HAN DAO"
       projectName="YOU'RE SO EXOTIC LOOKING!"

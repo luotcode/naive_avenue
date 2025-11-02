@@ -6,7 +6,7 @@ export default function RicardoBodiniPage() {
     <>
       <DomePages
         imageSrc="/assets/artworks/little_monster.mp4"
-        title="THE WRONG BIANELLE"
+        title="THE WRONG BIENNALE"
         date="1 NOV 2025 - 31 MAR 2026"
         artistName="RICARDO BODINI"
         projectName="LITTLE MONSTER DANCING"

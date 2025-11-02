@@ -30,7 +30,7 @@ export default function NguyenHoangGiaBaoPage() {
       </div>
 
       <div className="sk-bl">
-        <div>WRONG BIANELLE</div>
+        <div>THE WRONG BIENNALE</div>
         <div>1 NOV 2025 — 31 MAR 2026</div>
       </div>
 

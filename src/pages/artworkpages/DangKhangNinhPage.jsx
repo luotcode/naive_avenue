@@ -8,7 +8,7 @@ export default function DangKhangNinhPage() {
   return (
     <EmbeddedPages
       mediaList={mediaList}
-      title = "WRONG BIANELLE"
+      title = "THE WRONG BIENNALE"
       date="1 NOV 2025 — 31 MAR 2026"
       artistName="DANG KHANG NINH"
       projectName="INTO THE EDEN OF AMBIGUITIES: A WALK WITH AI"

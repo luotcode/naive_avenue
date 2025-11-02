@@ -5,7 +5,7 @@ export default function LeThanhThaoPage() {
   return (
     <DomePages
       imageSrc="https://youtu.be/hXeXnsAHoPE"
-      title="THE WRONG BIANELLE"
+      title="THE WRONG BIENNALE"
       date="1 NOV 2025 - 31 MAR 2026"
       artistName="LE THANH THAO"
       projectName="GIAC MO GI (CHA)PI TI"

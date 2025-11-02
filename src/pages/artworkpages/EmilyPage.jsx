@@ -5,7 +5,7 @@ export default function EmilyPage() {
   return (
     <DomePages
       imageSrc="https://player.vimeo.com/video/1130930037"
-      title="THE WRONG BIANELLE"
+      title="THE WRONG BIENNALE"
       date="1 NOV 2025 - 31 MAR 2026"
       artistName="EMILY SARTEN"
       projectName="ARTS AND LEISURE (CRYING)"

@@ -4,7 +4,7 @@ export default function ValentinSismannPage() {
   return (
     <DomePages
       imageSrc="https://www.youtube.com/watch?v=Va7qY0uxyVQ"
-        title="THE WRONG BIANELLE"
+        title="THE WRONG BIENNALE"
       date="1 NOV 2025 - 31 MAR 2026"
       artistName="VALENTIN SISMANN"
       projectName="PICKLE SONG"

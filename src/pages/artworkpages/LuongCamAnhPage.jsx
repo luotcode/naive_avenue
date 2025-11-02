@@ -7,7 +7,7 @@ export default function LuongCamAnhPage() {
     <>
     <DomePages
       imageSrc="https://player.vimeo.com/video/890839977" 
-      title = "WRONG BIANELLE"
+      title = "THE WRONG BIENNALE"
       date = "1 NOV 2025 - 31 MAR 2026"
       artistName = "CAM-ANH LUONG"
       projectName = "TROTTIN_AI / TRUSTIN_AI"

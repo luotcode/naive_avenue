@@ -5,7 +5,7 @@ export default function TaisKoshinoPage() {
   return (
     <DomePages
           imageSrc="https://player.vimeo.com/video/865681389"
-          title="THE WRONG BIANELLE"
+          title="THE WRONG BIENNALE"
           date="1 NOV 2025 - 31 MAR 2026"
           artistName="TAIS KOSHINO"
           projectName="LATE SUMMER DREAMS"

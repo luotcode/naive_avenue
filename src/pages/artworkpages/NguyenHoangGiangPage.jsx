@@ -7,7 +7,7 @@ export default function NguyenHoangGiangPage() {
   return (
     <EmbeddedPages
       mediaList={mediaList}
-      title = "WRONG BIANELLE"
+      title = "THE WRONG BIENNALE"
       date="1 NOV 2025 — 31 MAR 2026"
       artistName="NGUYEN HOANG GIANG"
       projectName="HUMAN-LEARNING (2021)"

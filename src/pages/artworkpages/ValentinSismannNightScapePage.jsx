@@ -4,7 +4,7 @@ export default function ValentinSismannPage() {
   return (
     <DomePages
       mediaSrc="https://youtu.be/Q27kUZwy4is" 
-      title = "WRONG BIANELLE"
+      title = "THE WRONG BIENNALE"
       date = "1 NOV 2025 - 31 MAR 2026"
       artistName = "VALENTIN SISMANN"
       projectName = "NIGHTSCAPE"
