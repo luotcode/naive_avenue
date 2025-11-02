@@ -221,7 +221,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P1",
       group: 1,
-      name: "YOU ARE SO EXOTIC LOOKING – HAN DAO",
+      name: "YOU ARE SO EXOTIC LOOKING! – HAN DAO",
       href: "/han-dao-you-are-so-exotic-looking",
       url: "/assets/you are so exotic looking! - Hân Đào.png",
       width: 3.0,
@@ -234,7 +234,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P2",
       group: 1,
-      name: "DAN ONG – HAN DAO",
+      name: "DAN ONG.EXE – HAN DAO",
       href: "/han-dao-dan-ong",
       url: "/assets/Đàn ông - Hân Đào.png",
       width: 5.2,
@@ -260,7 +260,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P4",
       group: 1,
-      name: "NIGHTSCAPE – VALENTIN SISMAN",
+      name: "NIGHT SCAPE – VALENTIN SISMANN",
       href: "/valentin-sismann-nightscape",
       url: "/assets/Nighscape - Sismann 2.png",
       width: 1.5,
@@ -301,7 +301,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P7",
       group: 2,
-      name: "DIARY OF A SELF PROCLAIMED SCHIZO – LHPG",
+      name: "DIARY OF A SELF PROCLAIMED SCHIZO...  – LHPG",
       href: "/lhpg",
       url: "/assets/LHPG.png",
       width: 3.31,
@@ -314,7 +314,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P8",
       group: 2,
-      name: "GIAC MO CHAPITI – LE THANH THAO",
+      name: "GIAC MO GI (CHA)PITI – LE THANH THAO",
       href: "/le-thanh-thao",
       url: "/assets/Giac mo Chapiti - Le Thanh Thao.png",
       width: 4.651,
@@ -342,7 +342,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P10",
       group: 3,
-      name: "TROTTIN AI – LUONG CAM ANH",
+      name: "TROTTIN_AI / TRUSTIN_AI – LUONG CAM ANH",
       href: "/luong-cam-anh",
       url: "/assets/trustin_AI.png",
       width: 6.21,
@@ -355,7 +355,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P11",
       group: 3,
-      name: "RE IMPRESSION WATER LILIES – NGUYEN THAI BAO",
+      name: "RE-IMPRESSION. WATER LILIES, WATER LILIES; – NGUYEN THAI BAO",
       href: "/nguyen-thai-bao",
       url: "/assets/Water lilies.png",
       width: 3.1,
@@ -396,7 +396,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P14",
       group: 4,
-      name: "PICKLESONG – VALENTIN SISMAN",
+      name: "PICKLESONG – VALENTIN SISMANN",
       href: "/valentin-sismann-pickle-song",
       url: "/assets/Valentin Sismann - Picklesong (2025)_.png",
       width: 1.73,
@@ -409,7 +409,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P15",
       group: 4,
-      name: "HUMAN LEARNING – NGUYEN HOANG GIANG",
+      name: "HUMAN LEARNING (2021) – NGUYEN HOANG GIANG",
       href: "/nguyen-hoang-giang",
       url: "/assets/Human Learning - Giang IT.png",
       width: 3.83,
