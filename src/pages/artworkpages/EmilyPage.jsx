@@ -1,8 +1,9 @@
-import VideoPages from "../VideoPages.jsx";import "../videopages.css";
+import DomePages from "../DomePages.jsx";
+import "../domepages.css";
 
 export default function EmilyPage() {
   return (
-    <VideoPages
+    <DomePages
       imageSrc="https://www.youtube.com/watch?v=5ftbs4_krzQ&list=RD5ftbs4_krzQ&start_radio=1"
         title="THE WRONG BIANELLE"
       date="1 NOV 2025 - 31 MAR 2026"
