@@ -93,6 +93,10 @@
   height: 100%;
   border: none;
   object-fit: cover;
+  clip-path: circle(40vmin at center); /* adjust radius as you like */
+  -webkit-clip-path: circle(40vmin at center);
+  mask-image: radial-gradient(circle 40vmin at center, black 100%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle 40vmin at center, black 100%, transparent 100%);
 }
 
 /* --- NAV TEXT ON TOP --- */
