@@ -76,7 +76,7 @@ export default function DomePages({
             className="masked-video"
             src={`https://www.youtube.com/embed/${ytId(
               pickSrc
-            )}?autoplay=1&mute=1&loop=1&controls=0&playsinline=1&modestbranding=1&rel=0&playlist=${ytId(
+            )}?autoplay=1&mute=1&loop=1&controls=1&playsinline=1&modestbranding=1&rel=0&playlist=${ytId(
               pickSrc
             )}`}
             title={title || "YouTube video"}

@@ -1,8 +1,8 @@
-import VideoPages from "../VideoPages.jsx";import "../videopages.css";
+import DomePages from "../DomePages.jsx";import "../domepages.css";
 
 export default function TaisKoshinoPage() {
   return (
-    <VideoPages
+    <DomePages
       imageSrc="/assets/EineKleine.mp4"
         title="THE WRONG BIANELLE"
       date="1 NOV 2025 - 31 MAR 2026"

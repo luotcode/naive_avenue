@@ -87,7 +87,7 @@ body {
 .description-section {
   font-family: "Charmonman", monospace;
   position: relative;
-  min-height: 100vh;
+  min-height: 100vh !important;
   width: 100%;
   max-width: 800px;
   margin: 0 auto;

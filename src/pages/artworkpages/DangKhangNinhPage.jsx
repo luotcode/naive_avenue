@@ -1,6 +1,8 @@
 import EmbeddedPages from "../EmbeddedPages.jsx";
 
-const mediaList = ["https://drive.google.com/file/d/1xUJ5Kfz-A1HYASfI3vdm7TM9GCu9AfQL/preview"];
+const mediaList = ["https://drive.google.com/file/d/1xUJ5Kfz-A1HYASfI3vdm7TM9GCu9AfQL/preview",
+  "https://drive.google.com/file/d/1toMCXlDZoj2KcjfQySJw5Z7enw6ydvYf/preview"
+];
 
 export default function DangKhangNinhPage() {
   return (

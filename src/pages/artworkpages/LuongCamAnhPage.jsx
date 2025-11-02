@@ -1,4 +1,4 @@
-import VideoPages from "../VideoPages.jsx";import "../videopages.css";
+import DomePages from "../DomePages.jsx";import "../domepages.css";
 
 export default function LuongCamAnhPage() {
   return (

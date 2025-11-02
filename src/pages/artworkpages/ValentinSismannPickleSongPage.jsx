@@ -1,8 +1,8 @@
-import VideoPages from "../VideoPages.jsx";import "../videopages.css";
+import DomePages from "../DomePages.jsx";import "../domepages.css";
 
 export default function ValentinSismannPage() {
   return (
-    <VideoPages
+    <DomePages
       imageSrc="https://www.youtube.com/watch?v=Va7qY0uxyVQ"
         title="THE WRONG BIANELLE"
       date="1 NOV 2025 - 31 MAR 2026"
