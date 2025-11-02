@@ -1,9 +1,9 @@
 import EmbeddedPages from "../EmbeddedPages.jsx";
-
+const mediaList = ["https://youre-so-exotic-looking.netlify.app/"]
 export default function HanDaoDanOngPage() {
   return (
     <EmbeddedPages
-      mediaSrc="https://youre-so-exotic-looking.netlify.app/"
+      mediaList = {mediaList}
       title = "WRONG BIANELLE"
       date="1 NOV 2025 — 31 MAR 2026"
       artistName="HAN DAO"

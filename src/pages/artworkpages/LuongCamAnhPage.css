@@ -1,0 +1,12 @@
+.camanhsection {
+    background: black;
+    margin: 0 30% 30% 30%;
+    font-family: "Inconsolata", monospace;
+  color: rgba(247, 252, 197, 1);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 150%;
+  letter-spacing: 0;
+  z-index: 1;
+}

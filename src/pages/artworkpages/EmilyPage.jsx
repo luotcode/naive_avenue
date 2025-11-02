@@ -4,8 +4,7 @@ import "../domepages.css";
 export default function EmilyPage() {
   return (
     <DomePages
-      // imageSrc="https://drive.google.com/file/d/1iluC6sFLHBiCxs8JLLoNdo1IheNoHydY/preview"
-      imageSrc="/assets/EineKleine.mp4"
+      imageSrc="https://player.vimeo.com/video/1130930037"
       title="THE WRONG BIANELLE"
       date="1 NOV 2025 - 31 MAR 2026"
       artistName="EMILY SARTEN"

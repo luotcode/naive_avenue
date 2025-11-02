@@ -131,4 +131,5 @@ html, body, .art-page {
   min-height: 200vh !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
+  background: black;
 }

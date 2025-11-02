@@ -19,6 +19,8 @@ export default function EmbeddedPages({
   const ytId = (s) => (s?.match(/(?:youtu\.be\/|v=|embed\/)([A-Za-z0-9_-]{6,})/) || [])[1] || "";
   const isYouTubePlaylist = (s) => /(youtube\.com.*videoseries|list=)/i.test(s || "");
   const isHttpUrl = (s) => /^https?:\/\//i.test(s || "");
+  const isVimeo = (s) => /vimeo\.com\/(?:video\/)?(\d+)/i.test(s || "");
+  const vimeoId = (s) => (s?.match(/vimeo\.com\/(?:video\/)?(\d+)/i) || [])[1] || "";
 
   return (
     <div className="sk-page">
@@ -65,26 +67,34 @@ export default function EmbeddedPages({
                 allowFullScreen
                 frameBorder="0"
               />
-            )
+            ) : isVimeo(src) ? (
+                <iframe
+                  src={`https://player.vimeo.com/video/${vimeoId(src)}?autoplay=1&loop=1&muted=1`}
+                  style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+                  frameBorder="0"
+                  allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
+                  allowFullScreen
+                  title={`${title || "vimeo"}-${i}`}
+                />
+            ) : isHttpUrl(src) ? (
+              <div className="web-wrapper">
+                <iframe
+                  src={src}
+                  title={`${title || "embedded website"}-${i}`}
+                  sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-presentation"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                />
+              </div>
+            ) : (
+              !!src && (
+                <img
+                  className="sk-media"
+                  src={src}
+                  alt={`${title || "artwork"}-${i}`}
+                />
+              )
+            )}
 
-              : isHttpUrl(src) ? (
-                <div className="web-wrapper">
-                  <iframe
-                    src={src}
-                    title={`${title || "embedded website"}-${i}`}
-                    sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-presentation"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  />
-                </div>
-              ) : (
-                !!src && (
-                  <img
-                    className="sk-media"
-                    src={src}
-                    alt={`${title || "artwork"}-${i}`}
-                  />
-                )
-              )}
           </div>
         ))}
       </div>

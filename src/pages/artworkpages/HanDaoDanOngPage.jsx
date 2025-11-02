@@ -1,9 +1,11 @@
 import EmbeddedPages from "../EmbeddedPages.jsx";
 
+const mediaList = ["https://player.vimeo.com/video/1097114712?"]
+
 export default function HanDaoDanOngPage() {
   return (
     <EmbeddedPages
-      mediaSrc="https://player.vimeo.com/video/1097114712?h=92c877948f"
+      mediaList= {mediaList}
         title="THE WRONG BIANELLE"
       date="1 NOV 2025 — 31 MAR 2026"
       artistName="HAN DAO"

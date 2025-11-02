@@ -20,10 +20,17 @@ export default function DomePages({
   const isVideoFile = (src) => /\.(mp4|webm|ogg)(\?.*)?$/i.test(src || "");
   const isYouTube = (src) => /(youtube\.com|youtu\.be)/i.test(src || "");
   const isGoogleDrive = (src) => /drive\.google\.com\/file\/d\//i.test(src || "");
+  const isVimeo = (src) => /vimeo\.com\/(?:video\/)?(\d+)/i.test(src || "");
 
   const ytId = (src) => {
     if (!src) return "";
     const m = src.match(/(?:youtu\.be\/|v=|embed\/)([A-Za-z0-9_-]{6,})/) || [];
+    return m[1] || "";
+  };
+
+  const vimeoId = (src) => {
+    if (!src) return "";
+    const m = src.match(/vimeo\.com\/(?:video\/)?(\d+)/i) || [];
     return m[1] || "";
   };
 
@@ -84,6 +91,19 @@ export default function DomePages({
             allowFullScreen
             frameBorder="0"
           />
+        ) : isVimeo(pickSrc) ? (
+          <div style={{ position: "relative", paddingTop: "56.25%" }}>
+            <iframe
+              src={`https://player.vimeo.com/video/${vimeoId(
+                pickSrc
+              )}?autoplay=1&loop=1&muted=1`}
+              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+              frameBorder="0"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
+              allowFullScreen
+              title={title || "Vimeo video"}
+            />
+          </div>
         ) : isGoogleDrive(pickSrc) ? (
           <iframe
             className="masked-video"
