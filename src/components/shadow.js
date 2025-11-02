@@ -124,13 +124,13 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     How much is enough?
     Desire, hope, and fear 
     - reflected endlessly through our encounters. `,
-      3: `Act IV: Believing
+      3: `Act 4: Believing
 
     And yet, I still choose to believe.
     But in what? 
     And where will they lead me to?
     `,
-      4: `Act 4: Becoming
+      4: `Act 1: Becoming
 
     What is it to learn?
     And what must be forgotten
