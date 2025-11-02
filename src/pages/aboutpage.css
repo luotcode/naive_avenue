@@ -130,13 +130,13 @@ menu {
 }
 
 .landing-corners {
-  position: absolute;
+  position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 1;;
 }
 .landing-corners .corner {
-  position: absolute;
+  position: fixed;
   bottom: 18px;
   pointer-events: auto;
   display: flex;

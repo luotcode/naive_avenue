@@ -7,7 +7,7 @@ export default function LyonNguyenPage() {
       title = "THE WRONG BIENNALE"
       date = "1 NOV 2025 - 31 MAR 2026"
       artistName = "LYON NGUYEN"
-      projectName = "DERIVATIVE OF TRIAL A"
+      projectName = "DERIVATIVE OF TRIO A"
       description={
         <>
           <p>

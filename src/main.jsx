@@ -49,7 +49,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/valentin-sismann-pickle-song" element={<ValentinSismannPickleSongPage />} />
         <Route path="/emily-sarten" element={<EmilyPage />} />
         <Route path="/ivy-vo" element={<IvyPage />} />
-        <Route path="/lhpg" element={<LhpgPage />} />
+        <Route path="/lphg" element={<LhpgPage />} />
         <Route path="/le-thanh-thao" element={<LeThanhThaoPage />} />
         <Route path="/nguyen-hoang-gia-bao" element={<NguyenHoangGiaBaoPage />} />
         <Route path="/tais-koshino" element={<TaisKoshinoPage />} />

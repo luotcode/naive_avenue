@@ -28,7 +28,7 @@ export default function LhpgPage() {
       </div>
 
       <div className="sk-br">
-        <div>{"lhpg"}</div>
+        <div>{"lphg"}</div>
         <div>
           {
             "Diary of a self-proclaimed Schizo-approximating person or just another casual conversation with her muses"

@@ -5,9 +5,21 @@ import { Shadow } from "../components/shadow.js";
 import { Arrows } from "../components/arrows.js";
 
 export function mountLandingPage(canvas, navigate) {
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.setSize(innerWidth, innerHeight);
+  // detect mobile / low-power devices
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+  // turn off antialiasing for mobile or low-end
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    antialias: !isMobile, // false on mobile
+    powerPreference: "high-performance",
+  });
+
+  // clamp pixel ratio to avoid over-rendering
+  const maxPR = isMobile ? 1 : Math.min(window.devicePixelRatio, 2);
+  renderer.setPixelRatio(maxPR);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
   renderer.outputColorSpace = THREE.SRGBColorSpace;
 
   const scene = new THREE.Scene();
@@ -67,17 +79,32 @@ export function mountLandingPage(canvas, navigate) {
   controls.minDistance = 5.5;
   controls.maxDistance = 14.0;
 
-  controls.enableRotate = false; 
+  controls.enableRotate = false;
+  const angle = Math.PI * 2 / 3;
 
-  const angle = Math.PI * 2 / 3; 
+  let isInteracting = false;
+
+  // mark as interacting when pointer down or touch
+  renderer.domElement.addEventListener("pointerdown", () => {
+    isInteracting = true;
+  });
+  renderer.domElement.addEventListener("pointerup", () => {
+    isInteracting = false;
+  });
+  renderer.domElement.addEventListener("touchstart", () => {
+    isInteracting = true;
+  });
+  renderer.domElement.addEventListener("touchend", () => {
+    isInteracting = false;
+  });
 
   const leftWall = new THREE.Mesh(
     new THREE.PlaneGeometry(SIDE_LEN, room.ROOM_H),
     wallMat
   );
-  leftWall.rotation.y = -angle; 
+  leftWall.rotation.y = -angle;
   leftWall.position.set(
-    -(room.ROOM_W / 2), 
+    -(room.ROOM_W / 2),
     0,
     WALL_Z + Math.sin(Math.PI / 6) * (room.ROOM_W / 2)
   );
@@ -87,7 +114,7 @@ export function mountLandingPage(canvas, navigate) {
     new THREE.PlaneGeometry(SIDE_LEN, room.ROOM_H),
     wallMat
   );
-  rightWall.rotation.y = angle; 
+  rightWall.rotation.y = angle;
   rightWall.position.set(
     room.ROOM_W / 2,
     0,
@@ -121,45 +148,45 @@ export function mountLandingPage(canvas, navigate) {
   const params = {
     ambient: 0,
     back: {
-        posX: 0,
-        y: 0,
-        d: 8,
-        aimX: 0,
-        aimY: 0,
-        angleDeg: 43.2,
-        margin: 0.04,
-        color: "#ffffff",
-        intensity: 300,
-        minIntensity: 100,
-        pulseSpeed: 90.0,
-        penumbra: 1,
-        decay: 0.9,
-        haloMul: 5,
-        haloIntensity: 200
+      posX: 0,
+      y: 0,
+      d: 8,
+      aimX: 0,
+      aimY: 0,
+      angleDeg: 43.2,
+      margin: 0.04,
+      color: "#ffffff",
+      intensity: 300,
+      minIntensity: 100,
+      pulseSpeed: 90.0,
+      penumbra: 1,
+      decay: 0.9,
+      haloMul: 5,
+      haloIntensity: 200
     },
     frontLeft: {
-        color: "#ffffff",
-        intensity: 5,
-        penumbra: 0.07,
-        decay: 0.1,
-        angleDeg: 31.8,
-        posX: -6.34,
-        y: -1.35,
-        z: -18.6,
-        aimX: -18,
-        aimY: -2.17
+      color: "#ffffff",
+      intensity: 5,
+      penumbra: 0.07,
+      decay: 0.1,
+      angleDeg: 31.8,
+      posX: -6.34,
+      y: -1.35,
+      z: -18.6,
+      aimX: -18,
+      aimY: -2.17
     },
     frontRight: {
-        color: "#ffffff",
-        intensity: 5,
-        penumbra: 0.07,
-        decay: 0.1,
-        angleDeg: 30,
-        posX: 6.34,
-        y: -1.35,
-        z: -18.6,
-        aimX: 18,
-        aimY: -2.17
+      color: "#ffffff",
+      intensity: 5,
+      penumbra: 0.07,
+      decay: 0.1,
+      angleDeg: 30,
+      posX: 6.34,
+      y: -1.35,
+      z: -18.6,
+      aimX: 18,
+      aimY: -2.17
     }
   };
 
@@ -220,7 +247,7 @@ export function mountLandingPage(canvas, navigate) {
   backSpot.intensity = params.back.minIntensity ?? 100;
 
   const clock = new THREE.Clock();
-  let backAnimDir = 1; 
+  let backAnimDir = 1;
   const backAnimMin = params.back.minIntensity ?? 100;
   const backAnimMax = params.back.intensity;
 
@@ -243,7 +270,7 @@ export function mountLandingPage(canvas, navigate) {
       if (!nosignalOverlay) return;
       nosignalOverlay.classList.add("nosignal-hide");
       setTimeout(() => {
-        try { nosignalOverlay.remove(); } catch (e) {}
+        try { nosignalOverlay.remove(); } catch (e) { }
       }, HIDE_REMOVE_DELAY);
     };
 
@@ -251,7 +278,7 @@ export function mountLandingPage(canvas, navigate) {
     document.body.appendChild(nosignalOverlay);
 
     setTimeout(() => {
-      try { hideOverlay(); } catch (e) {}
+      try { hideOverlay(); } catch (e) { }
     }, 3000);
 
     let floorEnabledScheduled = false;
@@ -260,13 +287,13 @@ export function mountLandingPage(canvas, navigate) {
       floorEnabledScheduled = true;
       try {
         if (ctl && typeof ctl.enableFloorText === "function") ctl.enableFloorText();
-      } catch (err) {}
+      } catch (err) { }
     }
 
     if (nosignalOverlay) {
       const onTrans = (ev) => {
         if (ev.propertyName === "opacity") {
-          try { enableFloorTextNow(); } catch (e) {}
+          try { enableFloorTextNow(); } catch (e) { }
           nosignalOverlay.removeEventListener("transitionend", onTrans);
         }
       };
@@ -275,7 +302,7 @@ export function mountLandingPage(canvas, navigate) {
 
     setTimeout(() => enableFloorTextNow(), 5000);
   } catch (err) {
-    try { if (nosignalOverlay && nosignalOverlay.parentNode) nosignalOverlay.remove(); } catch (e) {}
+    try { if (nosignalOverlay && nosignalOverlay.parentNode) nosignalOverlay.remove(); } catch (e) { }
     nosignalOverlay = null;
   }
 
@@ -327,22 +354,42 @@ export function mountLandingPage(canvas, navigate) {
 
   let raf = 0;
   function render() {
-    controls.update();
+    // --- render loop with FPS cap ---
+    let raf = 0;
+    let lastRenderTime = 0;
+    const TARGET_FPS = 30;
+    const FRAME_DURATION = 1000 / TARGET_FPS;
 
-    const dt = clock.getDelta();
-    const speed = params.back.pulseSpeed ?? 2.0;
-    backSpot.intensity += backAnimDir * speed * dt;
+    function render(now) {
+      raf = requestAnimationFrame(render);
 
-    if (backAnimDir > 0 && backSpot.intensity >= backAnimMax) {
-      backSpot.intensity = backAnimMax;
-      backAnimDir = -1;
-    } else if (backAnimDir < 0 && backSpot.intensity <= backAnimMin) {
-      backSpot.intensity = backAnimMin;
-      backAnimDir = 1;
+      // skip frames to cap FPS
+      if (!lastRenderTime) lastRenderTime = now;
+      const elapsed = now - lastRenderTime;
+      if (elapsed < FRAME_DURATION) return;
+      lastRenderTime = now - (elapsed % FRAME_DURATION);
+
+      // update controls if you still want damping / rotation
+      if (isInteracting || controls.enableDamping) {
+        controls.update();
+      }
+
+      const dt = clock.getDelta();
+      const speed = params.back.pulseSpeed ?? 2.0;
+      backSpot.intensity += backAnimDir * speed * dt;
+
+      if (backAnimDir > 0 && backSpot.intensity >= backAnimMax) {
+        backSpot.intensity = backAnimMax;
+        backAnimDir = -1;
+      } else if (backAnimDir < 0 && backSpot.intensity <= backAnimMin) {
+        backSpot.intensity = backAnimMin;
+        backAnimDir = 1;
+      }
+
+      renderer.render(scene, camera);
     }
-
-    renderer.render(scene, camera);
     raf = requestAnimationFrame(render);
+
   }
   render();
 
@@ -360,16 +407,16 @@ export function mountLandingPage(canvas, navigate) {
       // gui.destroy();
       try {
         // if (arrows && typeof arrows.dispose === "function") arrows.dispose();
-      } catch (err) {}
+      } catch (err) { }
       try {
         if (ctl && typeof ctl.dispose === "function") ctl.dispose();
-      } catch (err) {}
+      } catch (err) { }
       try {
         renderer.dispose();
-      } catch (err) {}
+      } catch (err) { }
       try {
         if (nosignalOverlay && nosignalOverlay.parentNode) nosignalOverlay.remove();
-      } catch (err) {}
+      } catch (err) { }
     }
   };
 }
