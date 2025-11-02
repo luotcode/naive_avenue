@@ -16,21 +16,21 @@ export default function HaThaoPage() {
         <MenuOverlay />
       </div>
 
-      <div className="sk-stage" style={{height: "100vh"}}>
+      <div className="sk-stage" style={{ height: "100vh" }}>
         <div>
-            <div className="web-wrapper">
-              <iframe
-  width="100%"
-  height="100vh"
-  src="https://www.youtube.com/embed/YUIo4IJ8zRg?autoplay=1&mute=1&controls=1&loop=1&playlist=YUIo4IJ8zRg"
-  title="YouTube video player"
-  frameborder="0"
-  allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-  referrerpolicy="strict-origin-when-cross-origin"
-  allowfullscreen
-></iframe>
+          <div className="web-wrapper">
+            <iframe
+              width="100%"
+              height="100vh"
+              src="https://www.youtube.com/embed/YUIo4IJ8zRg?autoplay=1&mute=1&controls=1&loop=1"
+              title="YouTube video player"
+              frameborder="0"
+              allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
 
-            </div>
+          </div>
         </div>
       </div>
 
@@ -45,25 +45,25 @@ export default function HaThaoPage() {
       </div>
 
       <div className="sk-desc"><>
-          <p>
-            My question: Will mothers protect me from AI?
+        <p>
+          My question: Will mothers protect me from AI?
 
-<br /><br />Artificial Divinity imagines a parallel timeline where an almighty Mother Goddess rises to shield humanity from technological determinism. She embodies a counterforce to artificial intelligence — a reminder of the sacredness of creation.
-<br /><br />Her form emerges from 3D scans of mother figures (all carrying their sons) found on urban streets, combined with self-drying clay. Her myth begins when the sons whisper their fears of an unnatural being with a vision of data. In response, the mothers gather and are resurrected at Tràng Thi Park, standing as guardians against the encroaching force of technology.
-          </p>
+          <br /><br />Artificial Divinity imagines a parallel timeline where an almighty Mother Goddess rises to shield humanity from technological determinism. She embodies a counterforce to artificial intelligence — a reminder of the sacredness of creation.
+          <br /><br />Her form emerges from 3D scans of mother figures (all carrying their sons) found on urban streets, combined with self-drying clay. Her myth begins when the sons whisper their fears of an unnatural being with a vision of data. In response, the mothers gather and are resurrected at Tràng Thi Park, standing as guardians against the encroaching force of technology.
+        </p>
 
-          <br /><br />
-           <div className="sk-mediaFrame" style={{ marginTop: "20vh" }}>
+        <br /><br />
+        <div className="sk-mediaFrame" style={{ marginTop: "20vh" }}>
 
-            <div className="web-wrapper">
-                  <iframe
-                    src="https://drive.google.com/file/d/1o8u05oNPFWbQwZ5gJ8FJI7uzDF8RrY0d/preview"                    sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-presentation"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  />
-                </div>          </div>
-        </></div>
+          <div className="web-wrapper">
+            <iframe
+              src="https://drive.google.com/file/d/1o8u05oNPFWbQwZ5gJ8FJI7uzDF8RrY0d/preview" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-presentation"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            />
+          </div>          </div>
+      </></div>
 
-       
+
     </div>
   );
 }
