@@ -44,7 +44,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/nicola-bertoglio" element={<NicolaBertoglioPage />} />
         <Route path="/lyon-nguyen" element={<LyonNguyenPage />} />
         <Route path="/ha-thao" element={<HaThaoPage />} />
-        <Route path="/luong-cam-anh" element={<LuongCamAnhPage />} />
+        <Route path="/cam-anh-luong" element={<LuongCamAnhPage />} />
         <Route path="/valentin-sismann-nightscape" element={<ValentinSismannNightScapePage />} />
         <Route path="/valentin-sismann-pickle-song" element={<ValentinSismannPickleSongPage />} />
         <Route path="/emily-sarten" element={<EmilyPage />} />

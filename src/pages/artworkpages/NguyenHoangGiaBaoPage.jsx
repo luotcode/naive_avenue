@@ -7,7 +7,7 @@ export default function NguyenHoangGiaBaoPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="sk-page">
+    <div className="sk-page" style={{height: "100vh"}}>
       <button className="sk-brand" onClick={() => navigate("/")}>
         <img src={logoUrl} alt="Logo" />
       </button>
