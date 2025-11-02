@@ -3,7 +3,7 @@ import logoUrl from "/logo.png";
 import { useNavigate } from "react-router-dom";
 import MenuOverlay from "../../components/menuoverlay";
 
-export default function NguyenHoangGiaBaoPage() {
+export default function HaThaoPage() {
   const navigate = useNavigate();
 
   return (
