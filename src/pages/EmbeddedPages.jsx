@@ -35,39 +35,41 @@ export default function EmbeddedPages({
       <div className="sk-stage"
         style={{ height: `${mediaList.length * 100}vh` }}
       >
-        {mediaList.map((src, i) => (
-          <div
-            key={i}
-            className={`sk-mediaFrame ${frameSize === "small" ? "is-small" : ""}`}
-          >
-            {isVideoFile(src) ? (
-              <video
-                className="sk-media"
-                src={src}
-                autoPlay
-                loop
-                playsInline
-                controls={false}
-              />
-            ) : isYouTube(src) ? (
-              <iframe
-                className="sk-media"
-                src={`https://www.youtube.com/embed/${ytId(src)}?autoplay=1&loop=1&controls=0&playsinline=1&modestbranding=1&rel=0&playlist=${ytId(src)}`}
-                title={`${title || "video"}-${i}`}
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowFullScreen
-                frameBorder="0"
-              />
-            ) : isYouTubePlaylist(src) ? (
-              <iframe
-                className="sk-media"
-                src={`${src}&rel=0`}
-                title={`${title || "playlist"}-${i}`}
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowFullScreen
-                frameBorder="0"
-              />
-            ) : isVimeo(src) ? (
+        {mediaList.map((src, i) => {
+          const isEven = i % 2 === 0; // true for 0, 2, 4... (media 1,3,5 visually)
+          const frameClass = `sk-mediaFrame ${frameSize === "small" ? "is-small" : ""} ${isEven ? "is-angleA" : "is-angleB"
+            }`;
+
+          return (
+            <div key={i} className={frameClass}>
+              {isVideoFile(src) ? (
+                <video
+                  className="sk-media"
+                  src={src}
+                  autoPlay
+                  loop
+                  playsInline
+                  controls={false}
+                />
+              ) : isYouTube(src) ? (
+                <iframe
+                  className="sk-media"
+                  src={`https://www.youtube.com/embed/${ytId(src)}?autoplay=1&loop=1&controls=0&playsinline=1&modestbranding=1&rel=0&playlist=${ytId(src)}`}
+                  title={`${title || "video"}-${i}`}
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  allowFullScreen
+                  frameBorder="0"
+                />
+              ) : isYouTubePlaylist(src) ? (
+                <iframe
+                  className="sk-media"
+                  src={`${src}&rel=0`}
+                  title={`${title || "playlist"}-${i}`}
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  allowFullScreen
+                  frameBorder="0"
+                />
+              ) : isVimeo(src) ? (
                 <iframe
                   src={`https://player.vimeo.com/video/${vimeoId(src)}?autoplay=1&loop=1&muted=1`}
                   style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
@@ -76,27 +78,28 @@ export default function EmbeddedPages({
                   allowFullScreen
                   title={`${title || "vimeo"}-${i}`}
                 />
-            ) : isHttpUrl(src) ? (
-              <div className="web-wrapper">
-                <iframe
-                  src={src}
-                  title={`${title || "embedded website"}-${i}`}
-                  sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-presentation"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                />
-              </div>
-            ) : (
-              !!src && (
-                <img
-                  className="sk-media"
-                  src={src}
-                  alt={`${title || "artwork"}-${i}`}
-                />
-              )
-            )}
+              ) : isHttpUrl(src) ? (
+                <div className="web-wrapper">
+                  <iframe
+                    src={src}
+                    title={`${title || "embedded website"}-${i}`}
+                    sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-presentation"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  />
+                </div>
+              ) : (
+                !!src && (
+                  <img
+                    className="sk-media"
+                    src={src}
+                    alt={`${title || "artwork"}-${i}`}
+                  />
+                )
+              )}
+            </div>
+          );
+        })}
 
-          </div>
-        ))}
       </div>
 
       <div className="sk-bl">

@@ -84,6 +84,24 @@
   z-index: 2;
 }
 
+.sk-mediaFrame.is-angleA {
+  transform:
+    translate(2vw, -4vh)
+    rotateX(12deg)
+    rotateY(-18deg)
+    rotateZ(-10deg);
+}
+
+.sk-mediaFrame.is-angleB {
+  transform:
+    translate(-2vw, 4vh)
+    translateZ(-180px)
+    rotateX(18deg)
+    rotateY(12deg)
+    rotateZ(4deg);
+}
+
+
 .sk-media {
   position: absolute;
   inset: 26px 0 0 0;   
