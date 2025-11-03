@@ -8,7 +8,7 @@ export default function TaisKoshinoPage() {
           title="THE WRONG BIENNALE"
           date="1 NOV 2025 - 31 MAR 2026"
           artistName="TAIS KOSHINO"
-          projectName="LATE SUMMER DREAMS"
+          projectName="LATE SUMMER DAYS"
           description={
             <>
               <p>
