@@ -7,7 +7,8 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
   const clock = new THREE.Clock();
   let raf = 0;
 
-  const BASE_AUTO_SPEED = 0.0005;
+  // disable automatic rotation by default
+  const BASE_AUTO_SPEED = 0.0;
   let autoRotateSpeed = BASE_AUTO_SPEED;
   let userInteracting = false;
   let lastUserAction = 0;
@@ -199,7 +200,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
   scene.add(shadowCarousel);
 
   const panels = [];
-  const PANEL_COUNT = 10;
+  const PANEL_COUNT = 4;
   const R = room.ROOM_D ? room.ROOM_D * 0.45 : 14;
   const ANG_OFFSET = 0;
 
@@ -228,8 +229,8 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       opacity: 0.6,
       blurPx: 5,
       rotationDeg: 10,
-      pos: { mode: "uv", u: 0.204, v: 0.40 },
-      float: { ampX: 0.01, ampY: 0.22, ampRotDeg: 5.9, speed: 2.3, phase: 0.3 },
+      pos: { mode: "uv", u: 0.14, v: 0.48 },
+      float: { ampX: 0.01, ampY: 0.02, ampRotDeg: 5.9, speed: 2.3, phase: 0.3 },
     },
     {
       id: "P2",
@@ -237,12 +238,12 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "DAN ONG.EXE – HAN DAO",
       href: "/han-dao-dan-ong",
       url: "/assets/Đàn ông - Hân Đào.png",
-      width: 5.2,
+      width: 4.2,
       opacity: 0.3,
       blurPx: 3.53,
       rotationDeg: 10,
-      pos: { mode: "uv", u: 0.1, v: 0.45 },
-      float: { ampX: 0.2, ampY: 0.37, ampRotDeg: 2, speed: 0.9, phase: 1.1 },
+      pos: { mode: "uv", u: 0.10, v: 0.51 },
+      float: { ampX: 0.2, ampY: 0.07, ampRotDeg: 2, speed: 0.9, phase: 1.1 },
     },
     {
       id: "P3",
@@ -254,7 +255,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       opacity: 0.7,
       blurPx: 2.4,
       rotationDeg: 0,
-      pos: { mode: "uv", u: 0.15, v: 0.686 },
+      pos: { mode: "uv", u: 0.15, v: 0.626 },
       float: { ampX: 0.03, ampY: 0.12, ampRotDeg: 3.5, speed: 1.25, phase: 0.6 },
     },
     {
@@ -263,11 +264,11 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "NIGHT SCAPE – VALENTIN SISMANN",
       href: "/valentin-sismann-nightscape",
       url: "/assets/Nighscape - Sismann 2.png",
-      width: 1.5,
+      width: 1.1,
       opacity: 0.5,
       blurPx: 3.1,
       rotationDeg: 18.9,
-      pos: { mode: "uv", u: 0.00, v: 0.62 },
+      pos: { mode: "uv", u: 0.07, v: 0.62 },
       float: { ampX: 0.02, ampY: 0.13, ampRotDeg: 3, speed: 1.1, phase: 0.4 },
     },
 
@@ -278,11 +279,11 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "G9 – IVY VO",
       href: "/ivy-vo",
       url: "/assets/G9 - Ivy Vo.png",
-      width: 6.5,
+      width: 5.5,
       opacity: 0.15,
       blurPx: 4.86,
       rotationDeg: -10,
-      pos: { mode: "uv", u: 0.23, v: 0.51 },
+      pos: { mode: "uv", u: 0.33, v: 0.41 },
       float: { ampX: 0.01, ampY: 0.16, ampRotDeg: 2, speed: 0.95, phase: 0.9 },
     },
     {
@@ -291,11 +292,11 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "ART & LEISURE (CRYING) – EMILY SARTEN",
       href: "/emily-sarten",
       url: "/assets/Art & Leisure (Crying) - Emily Sarten.png",
-      width: 5.5,
+      width: 4.5,
       opacity: 0.51,
       blurPx: 3.6,
-      rotationDeg: -10,
-      pos: { mode: "uv", u: 0.15, v: 0.592 },
+      rotationDeg: 30,
+      pos: { mode: "uv", u: 0.25, v: 0.392 },
       float: { ampX: 0.3, ampY: 0.1, ampRotDeg: 6.5, speed: 1, phase: 0.1 },
     },
     {
@@ -304,11 +305,11 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "DIARY OF A SELF PROCLAIMED SCHIZO...  – LPHG",
       href: "/lphg",
       url: "/assets/LHPG.png",
-      width: 3.31,
+      width: 2.41,
       opacity: 0.35,
       blurPx: 3,
-      rotationDeg: -3,
-      pos: { mode: "uv", u: 0.15, v: 0.389 },
+      rotationDeg: 60,
+      pos: { mode: "uv", u: 0.30, v: 0.209 },
       float: { ampX: 0.02, ampY: 0.14, ampRotDeg: 2.5, speed: 1.05, phase: 1.7 },
     },
     {
@@ -317,12 +318,12 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "GIAC MO GI (CHA)PITI – LE THANH THAO",
       href: "/le-thanh-thao",
       url: "/assets/Giac mo Chapiti - Le Thanh Thao.png",
-      width: 4.651,
+      width: 4.151,
       opacity: 0.3,
       blurPx: 2.8,
-      rotationDeg: -10.7,
-      pos: { mode: "uv", u: 0.27, v: 0.41 },
-      float: { ampX: 0.2, ampY: 0.19, ampRotDeg: 3, speed: 1, phase: 1.2 },
+      rotationDeg: 20.7,
+      pos: { mode: "uv", u: 0.33, v: 0.31 },
+      float: { ampX: 0.0, ampY: 0.0, ampRotDeg: 3, speed: 1, phase: 1.2 },
     },
 
     // group 3
@@ -332,11 +333,11 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "A WALK WITH AI INTO THE EDEN OF AMBIGUITY – DANG KHANG NINH",
       href: "/dang-khang-ninh",
       url: "/assets/Eden AI - Dang Khang Ninh.png",
-      width: 6.48,
+      width: 5.88,
       opacity: 0.25,
       blurPx: 3.02,
       rotationDeg: 2,
-      pos: { mode: "uv", u: 0.222, v: 0.303 },
+      pos: { mode: "uv", u: 0.152, v: 0.403 },
       float: { ampX: 0.3, ampY: 0.08, ampRotDeg: 8, speed: 0.7, phase: 0 },
     },
     {
@@ -349,7 +350,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       opacity: 0.22,
       blurPx: 3,
       rotationDeg: -2,
-      pos: { mode: "uv", u: 0.17, v: 0.618 },
+      pos: { mode: "uv", u: 0.03, v: 0.598 },
       float: { ampX: 0.1, ampY: 0.1, ampRotDeg: 5.3, speed: 0.7, phase: 0.4 },
     },
     {
@@ -358,12 +359,12 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "RE-IMPRESSION. WATER LILIES, WATER LILIES; – NGUYEN THAI BAO",
       href: "/nguyen-thai-bao",
       url: "/assets/Water lilies.png",
-      width: 3.1,
+      width: 2.8,
       opacity: 0.53,
       blurPx: 3,
       rotationDeg: 0,
-      pos: { mode: "uv", u: 0.252, v: 0.639 },
-      float: { ampX: 0.4, ampY: 0.11, ampRotDeg: 2.9, speed: 0.8, phase: 1.7 },
+      pos: { mode: "uv", u: 0.152, v: 0.559 },
+      float: { ampX: 0.2, ampY: 0.11, ampRotDeg: 2.9, speed: 0.8, phase: 1.7 },
     },
     {
       id: "P12",
@@ -371,12 +372,12 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "ARTIFICIAL DIVINITIES – HA THAO",
       href: "/ha-thao",
       url: "/assets/THE CHRONICLE OF ARTIFICIAL DIVINITY - Thảo Hà.png",
-      width: 3.03,
+      width: 2.73,
       opacity: 0.5,
       blurPx: 3.8,
-      rotationDeg: -4,
-      pos: { mode: "uv", u: 0.11, v: 0.349 },
-      float: { ampX: 0.2, ampY: 0.5, ampRotDeg: 4.5, speed: 1.2, phase: 0.3 },
+      rotationDeg: 44,
+      pos: { mode: "uv", u: 0.03, v: 0.489 },
+      float: { ampX: 0.0, ampY: 0.0, ampRotDeg: 4.5, speed: 1.2, phase: 0.3 },
     },
 
     // group 4
@@ -386,11 +387,11 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "DERIVATIVE OF TRIO A – LYON NGUYEN",
       href: "/lyon-nguyen",
       url: "/assets/Derivative of Trio A - Lyon Nguyễn.png",
-      width: 4.4,
+      width: 3.0,
       opacity: 0.5,
       blurPx: 3.2,
       rotationDeg: -4,
-      pos: { mode: "uv", u: 0.12, v: 0.47 },
+      pos: { mode: "uv", u: 0.26, v: 0.47 },
       float: { ampX: 0.1, ampY: 0.29, ampRotDeg: 5, speed: 0.7, phase: 0.2 },
     },
     {
@@ -399,12 +400,12 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "PICKLESONG – VALENTIN SISMANN",
       href: "/valentin-sismann-pickle-song",
       url: "/assets/Valentin Sismann - Picklesong (2025)_.png",
-      width: 1.73,
+      width: 1.23,
       opacity: 0.5,
       blurPx: 5.2,
       rotationDeg: -20,
-      pos: { mode: "uv", u: 0.23, v: 0.68 },
-      float: { ampX: 0.1, ampY: 0.25, ampRotDeg: 3, speed: 0.7, phase: 0.6 },
+      pos: { mode: "uv", u: 0.33, v: 0.58 },
+      float: { ampX: 0.1, ampY: 0.1, ampRotDeg: 3, speed: 0.7, phase: 0.6 },
     },
     {
       id: "P15",
@@ -412,12 +413,12 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
       name: "HUMAN LEARNING (2021) – NGUYEN HOANG GIANG",
       href: "/nguyen-hoang-giang",
       url: "/assets/Human Learning - Giang IT.png",
-      width: 3.83,
+      width: 2.93,
       opacity: 0.5,
       blurPx: 3.2,
       rotationDeg: -4,
-      pos: { mode: "uv", u: 0.21, v: 0.37 },
-      float: { ampX: 0.0, ampY: 0.6, ampRotDeg: 1, speed: 0.9, phase: 0.3 },
+      pos: { mode: "uv", u: 0.31, v: 0.49 },
+      float: { ampX: 0.0, ampY: 0.0, ampRotDeg: 1, speed: 0.9, phase: 0.3 },
     },
   ];
 
@@ -507,6 +508,8 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
 
     const mat = makeBlurPosterMat(tex, cfg.blurPx ?? 2.0, cfg.opacity ?? 1.0);
     const poster = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
+    // scale down posters (shadows) to 0.7 as requested
+    try { poster.scale.set(0.5, 0.5, 0.5); } catch (e) {}
     poster.frustumCulled = false;
     poster.renderOrder = 10;
     poster.userData.href = cfg.href;
@@ -749,7 +752,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     }
 
     for (const p of panels) {
-      p.lookAt(camera.position.x, 0, camera.position.z);
+      p.lookAt(camera.position.x, camera.position.y, camera.position.z);
     }
 
    if (hoveredPoster) {

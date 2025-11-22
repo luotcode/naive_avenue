@@ -25,11 +25,14 @@ export function mountLandingPage(canvas, navigate) {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x0b0c0d);
 
-  const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 200);
-  camera.position.set(0, 2.0, 5.0);
+  // use a tighter FOV for a cleaner top-down overview
+  const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 200);
+  // position camera high above the center to view the whole hexagon
+  camera.position.set(0, 25.0, 0.1);
+  camera.lookAt(0, 0, 0);
   scene.add(camera);
 
-  const room = { ROOM_W: 20, ROOM_H: 15, ROOM_D: 70 };
+  const room = { ROOM_W: 20, ROOM_H: 10, ROOM_D: 20 };
   const SIDE_LEN = room.ROOM_D;
   const FLOOR_Y = -room.ROOM_H / 2 + 0.01;
   const WALL_Z = -room.ROOM_D / 2;
@@ -47,26 +50,12 @@ export function mountLandingPage(canvas, navigate) {
     side: THREE.DoubleSide
   });
 
-  const back = new THREE.Mesh(new THREE.PlaneGeometry(room.ROOM_W, room.ROOM_H), wallMat);
-  back.position.set(0, 0, WALL_Z);
-  scene.add(back);
+  // back wall removed: we'll construct a closed hexagonal room below
 
   const ctl = Shadow(scene, room, WALL_Z, camera, renderer.domElement, navigate, null);
 
-  // const arrows = Arrows(renderer.domElement, {
-  //   onLeft: () => {
-  //     try {
-  //       if (ctl && typeof ctl.setAutoDirection === "function") ctl.setAutoDirection(1);
-  //     } catch (err) {}
-  //   },
-  //   onRight: () => {
-  //     try {
-  //       if (ctl && typeof ctl.setAutoDirection === "function") ctl.setAutoDirection(-1);
-  //     } catch (err) {}
-  //   },
-  // });
-
-  const viewTarget = new THREE.Vector3(0, -0.95, WALL_Z * 0.65);
+  // initialize orbit controls and view target (center of room for top-down view)
+  const viewTarget = new THREE.Vector3(0, 0, 0);
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.enablePan = false;
@@ -74,13 +63,50 @@ export function mountLandingPage(canvas, navigate) {
   const AZI = THREE.MathUtils.degToRad(22);
   controls.minAzimuthAngle = -AZI;
   controls.maxAzimuthAngle = AZI;
+  // allow looking straight down if needed (but rotation is disabled by default)
+  controls.minPolarAngle = 0;
+  controls.maxPolarAngle = Math.PI;
+  controls.minDistance = 5.5;
+  controls.maxDistance = 14.0;
+  controls.enableRotate = false;
+
+  // create a closed octagonal room by building 8 wall panels from the polygon sides
+    const walls = [];
+    // apothem (distance from center to wall center) - keep previous back wall distance
+    const apothem = room.ROOM_D / 2;
+    // circumradius for the regular polygon (distance to vertices)
+    const POLY_R = apothem / Math.cos(Math.PI / 8); // for octagon use pi/8
+    const VERT_COUNT = 8;
+
+    // compute hexagon vertices (using same coordinate convention as earlier)
+    const verts = [];
+    for (let i = 0; i < VERT_COUNT; i++) {
+      const ang = (i / VERT_COUNT) * Math.PI * 2; // 0, 60, 120, ...
+      const vx = Math.sin(ang) * POLY_R;
+      const vz = -Math.cos(ang) * POLY_R;
+      verts.push(new THREE.Vector3(vx, 0, vz));
+    }
+
+    // build walls from side midpoints between consecutive vertices
+    for (let i = 0; i < VERT_COUNT; i++) {
+      const a = verts[i];
+      const b = verts[(i + 1) % VERT_COUNT];
+      const sideCenter = new THREE.Vector3().addVectors(a, b).multiplyScalar(0.5);
+      const sideLen = a.distanceTo(b);
+      const wallMesh = new THREE.Mesh(new THREE.PlaneGeometry(sideLen, room.ROOM_H), wallMat);
+      wallMesh.position.copy(sideCenter);
+      // orient the wall so its normal faces the center
+      wallMesh.lookAt(0, 0, 0);
+      scene.add(wallMesh);
+      walls.push(wallMesh);
+    }
+  controls.maxAzimuthAngle = AZI;
   controls.minPolarAngle = THREE.MathUtils.degToRad(25);
   controls.maxPolarAngle = THREE.MathUtils.degToRad(95);
   controls.minDistance = 5.5;
   controls.maxDistance = 14.0;
 
   controls.enableRotate = false;
-  const angle = Math.PI * 2 / 3;
 
   let isInteracting = false;
 
@@ -98,29 +124,7 @@ export function mountLandingPage(canvas, navigate) {
     isInteracting = false;
   });
 
-  const leftWall = new THREE.Mesh(
-    new THREE.PlaneGeometry(SIDE_LEN, room.ROOM_H),
-    wallMat
-  );
-  leftWall.rotation.y = -angle;
-  leftWall.position.set(
-    -(room.ROOM_W / 2),
-    0,
-    WALL_Z + Math.sin(Math.PI / 6) * (room.ROOM_W / 2)
-  );
-  scene.add(leftWall);
-
-  const rightWall = new THREE.Mesh(
-    new THREE.PlaneGeometry(SIDE_LEN, room.ROOM_H),
-    wallMat
-  );
-  rightWall.rotation.y = angle;
-  rightWall.position.set(
-    room.ROOM_W / 2,
-    0,
-    WALL_Z + Math.sin(Math.PI / 6) * (room.ROOM_W / 2)
-  );
-  scene.add(rightWall);
+  // individual left/right walls removed — using hexagon walls instead
 
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(room.ROOM_W, SIDE_LEN), floorMat);
   floor.rotation.x = -Math.PI / 2;
@@ -146,7 +150,7 @@ export function mountLandingPage(canvas, navigate) {
   const frontRight = makeSpot(0xffffff);
 
   const params = {
-    ambient: 0,
+    ambient: 100,
     back: {
       posX: 0,
       y: 0,
@@ -251,32 +255,6 @@ export function mountLandingPage(canvas, navigate) {
   const backAnimMin = params.back.minIntensity ?? 100;
   const backAnimMax = params.back.intensity;
 
-  // --- N/A overlay ---
-  let nosignalOverlay = null;
-  try {
-    nosignalOverlay = document.createElement("div");
-    nosignalOverlay.className = "nosignal-overlay";
-
-    const inner = document.createElement("div");
-    inner.className = "nosignal-inner";
-    const text = document.createElement("div");
-    text.className = "nosignal-text";
-    text.textContent = "#N/A";
-    inner.appendChild(text);
-    nosignalOverlay.appendChild(inner);
-
-    const HIDE_REMOVE_DELAY = 1300;
-    const hideOverlay = () => {
-      if (!nosignalOverlay) return;
-      nosignalOverlay.classList.add("nosignal-hide");
-      setTimeout(() => {
-        try { nosignalOverlay.remove(); } catch (e) { }
-      }, HIDE_REMOVE_DELAY);
-    };
-
-    nosignalOverlay.addEventListener("click", hideOverlay);
-    document.body.appendChild(nosignalOverlay);
-
     setTimeout(() => {
       try { hideOverlay(); } catch (e) { }
     }, 3000);
@@ -289,22 +267,6 @@ export function mountLandingPage(canvas, navigate) {
         if (ctl && typeof ctl.enableFloorText === "function") ctl.enableFloorText();
       } catch (err) { }
     }
-
-    if (nosignalOverlay) {
-      const onTrans = (ev) => {
-        if (ev.propertyName === "opacity") {
-          try { enableFloorTextNow(); } catch (e) { }
-          nosignalOverlay.removeEventListener("transitionend", onTrans);
-        }
-      };
-      nosignalOverlay.addEventListener("transitionend", onTrans);
-    }
-
-    setTimeout(() => enableFloorTextNow(), 5000);
-  } catch (err) {
-    try { if (nosignalOverlay && nosignalOverlay.parentNode) nosignalOverlay.remove(); } catch (e) { }
-    nosignalOverlay = null;
-  }
 
   /*
   const gui = new GUI({ title: "Light Controls" });
@@ -413,9 +375,6 @@ export function mountLandingPage(canvas, navigate) {
       } catch (err) { }
       try {
         renderer.dispose();
-      } catch (err) { }
-      try {
-        if (nosignalOverlay && nosignalOverlay.parentNode) nosignalOverlay.remove();
       } catch (err) { }
     }
   };
