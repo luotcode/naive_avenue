@@ -16,22 +16,12 @@ export default function HaThaoPage() {
         <MenuOverlay />
       </div>
 
-      <div className="sk-stage" style={{ height: "100vh" }}>
-        <div>
-          <div className="web-wrapper">
-            <iframe
-              width="100%"
-              height="100vh"
-              src="https://www.youtube.com/embed/YUIo4IJ8zRg?autoplay=1&mute=1&controls=1&loop=1"
-              title="YouTube video player"
-              frameborder="0"
-              allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allowfullscreen
-            ></iframe>
-
-          </div>
-        </div>
+      <div className="yt-9x16">
+        <iframe
+          src="https://www.youtube.com/embed/YUIo4IJ8zRg?autoplay=1&mute=1&controls=1&loop=1&playsinline=1"
+          title="YouTube video player"
+          allow="autoplay; fullscreen"
+        />
       </div>
 
       <div className="sk-bl">
