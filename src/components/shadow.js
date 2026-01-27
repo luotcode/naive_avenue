@@ -342,7 +342,7 @@ export function Shadow(scene, room, WALL_Z, camera, domEl, navigate, gui) {
     {
       id: "P10",
       group: 3,
-      name: "TROTTIN_AI / TRUSTIN_AI – LUONG CAM ANH",
+      name: "TROTTIN_AI / TRUSTIN_AI – CAM-ANH LUONG",
       href: "/luong-cam-anh",
       url: "/assets/trustin_AI.png",
       width: 6.21,

@@ -7,6 +7,7 @@ import LandingPage from "./pages/LandingPage.jsx";
 import AboutPage from "./pages/AboutPage.jsx";
 import MobilePage from "./pages/mobile.jsx";
 import RedirectMobile from "./components/mobileredirect.jsx";
+import DirectoryPage from "./pages/directoryPage.jsx";
 
 import EmilyPage from "./pages/artworkpages/EmilyPage.jsx";
 import IvyPage from "./pages/artworkpages/IvyPage.jsx";
@@ -35,6 +36,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/directory" element={<DirectoryPage />} />
         <Route path="/nguyen-thai-bao" element={<NguyenThaiBaoPage />} />
         <Route path="/dang-khang-ninh" element={<DangKhangNinhPage />} />
         <Route path="/han-dao-dan-ong" element={<HanDaoDanOngPage />} />

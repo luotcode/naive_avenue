@@ -43,3 +43,39 @@
   transform: scale(1.1);
   filter: invert(1) drop-shadow(0 0 6px rgba(247, 252, 197, 0.7));
 }
+
+.menu-dropdown {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(14, 14, 15, 0.95);
+  border: 1px solid rgba(247, 252, 197, 0.2);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+  z-index: 500;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.menu-dropdown-item {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(247, 252, 197, 1);
+  font-family: "Schroffer Mono", monospace;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.08em;
+  padding: 10px 14px;
+  text-align: left;
+  border-radius: 6px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.menu-dropdown-item:hover {
+  background: rgba(247, 252, 197, 0.1);
+  transform: translateX(4px);
+}

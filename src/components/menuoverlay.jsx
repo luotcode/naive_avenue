@@ -6,6 +6,7 @@ export default function MenuOverlay() {
   const nav = useNavigate();
   const location = useLocation();
   const [gif, setGif] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const gifs = [
@@ -18,16 +19,34 @@ export default function MenuOverlay() {
     setGif(gifs[randomIndex]);
   }, []);
 
-  const isAboutPage = location.pathname === "/about";
+  const handleMenuClick = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const handleNavigation = (path) => {
+    nav(path);
+    setMenuOpen(false);
+  };
 
   return (
     <div className="menu-wrap">
       <button
         className="menu-btn"
-        onClick={() => nav(isAboutPage ? "/" : "/about")}
+        onClick={handleMenuClick}
       >
-        {isAboutPage ? "BACK" : "ABOUT"}
+        MENU
       </button>
+
+      {menuOpen && (
+        <div className="menu-dropdown">
+          <button className="menu-dropdown-item" onClick={() => handleNavigation("/about")}>
+            ABOUT
+          </button>
+          <button className="menu-dropdown-item" onClick={() => handleNavigation("/directory")}>
+            DIRECTORY
+          </button>
+        </div>
+      )}
 
       {gif && (
         <div

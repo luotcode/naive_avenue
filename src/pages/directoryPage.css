@@ -1,0 +1,227 @@
+:root {
+  --directory-accent: rgba(247, 252, 197, 0.72);
+  --directory-muted: rgba(230, 230, 230, 0.35);
+}
+
+.directory-page {
+  position: relative;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+  padding: 80px 24px 120px;
+  overflow: hidden;
+}
+
+.directory-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/about/light.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.brand {
+  position: absolute;
+  top: 15px;
+  left: 10px;
+  z-index: 10;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.brand img,
+.stage .brand img {
+  height: 150px;
+  width: 150px;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+  transition: transform .2s ease, opacity .2s ease;
+}
+
+.brand:hover img {
+  transform: translateY(-1px) scale(1.02);
+  opacity: 0.95;
+}
+
+.menu {
+  position: fixed;
+  top: 25px;
+  right: 40px;
+  z-index: 20;
+}
+
+.directory-shell {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 120px;
+}
+
+.directory-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+
+.directory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+  gap: 8px 20px;
+  align-items: stretch;
+  grid-auto-rows: 1fr;
+}
+
+.directory-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 12px 14px;
+  background: rgba(0, 0, 0, 0.22);
+  border-radius: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  text-decoration: none;
+  color: var(--fg);
+  cursor: pointer;
+  border: 1px solid rgba(247, 252, 197, 0.12);
+  width: 100%;
+  text-align: left;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+}
+
+.directory-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.38);
+  border-color: rgba(247, 252, 197, 0.32);
+}
+
+.directory-card:focus-visible {
+  outline: 2px solid rgba(247, 252, 197, 0.6);
+  outline-offset: 2px;
+}
+
+.directory-thumb-wrap {
+  position: relative;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.32);
+  background-image: url('/assets/about/light.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.directory-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(2px) brightness(0.9);
+  transition: filter 0.25s ease;
+  z-index: 1;
+}
+
+.directory-thumb-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: none;
+}
+
+.directory-dot {
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border-radius: 100%;
+}
+
+.directory-placeholder-text {
+  font-family: "Charmonman", monospace;
+  font-size: 35px;
+  color: #000;
+  text-align: center;
+  padding: 0 16px;
+  line-height: 1.3;
+  filter: blur(2px) brightness(0.9);
+  transition: filter 0.25s ease;
+}
+
+.directory-number {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-family: "Schroffer Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  color: #0e0e0f;
+  background: var(--directory-accent);
+  padding: 5px 9px;
+  border-radius: 999px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.directory-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.directory-title {
+  font-family: "Charmonman", monospace;
+  font-size: 18px;
+  line-height: 1.35;
+  color: var(--fg);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.directory-artist {
+  font-family: "Inconsolata", monospace;
+  font-size: 14px;
+  color: var(--directory-accent);
+  line-height: 1.4;
+}
+
+.directory-card:hover .directory-thumb,
+.directory-card:focus-visible .directory-thumb,
+.directory-card:hover .directory-placeholder-text,
+.directory-card:focus-visible .directory-placeholder-text {
+  filter: blur(0px) brightness(1);
+}
+
+@media (max-width: 900px) {
+  .directory-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .directory-page {
+    padding-top: 70px;
+  }
+
+  .brand img {
+    height: 110px;
+  }
+
+  .menu {
+    right: 18px;
+    top: 18px;
+  }
+}
