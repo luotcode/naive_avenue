@@ -9,9 +9,9 @@ const works = [
 	{ title: "Into The Eden Of Ambiguities: A Walk With AI", artist: "Đặng Khang Ninh", thumb: "/assets/Eden AI - Dang Khang Ninh.png", path: "/dang-khang-ninh" },
 	{ title: "Art & Leisure (Crying)", artist: "Emily Sarten", thumb: "/assets/Art & Leisure (Crying) - Emily Sarten.png", path: "/emily-sarten" },
 	{ title: "Artificial Divinities", artist: "Hà Thảo", thumb: "/assets/THE CHRONICLE OF ARTIFICIAL DIVINITY - Thảo Hà.png", path: "/ha-thao" },
-	{ title: "you’re so exotic looking!", artist: "Hân Đao", thumb: "/assets/you are so exotic looking! - Hân Đào.png", path: "/han-dao-you-are-so-exotic-looking" },
-	{ title: "đàn-ông.exe", artist: "Hân Đao", thumb: "/assets/Đàn ông - Hân Đào.png", path: "/han-dao-dan-ong" },
-	{ title: "G9", artist: "Ivy Vo", thumb: "/assets/G9 - Ivy Võ.png", path: "/ivy-vo" },
+	{ title: "you’re so exotic looking!", artist: "Hân Đào", thumb: "/assets/you are so exotic looking! - Hân Đào.png", path: "/han-dao-you-are-so-exotic-looking" },
+	{ title: "đàn-ông.exe", artist: "Hân Đào", thumb: "/assets/Đàn ông - Hân Đào.png", path: "/han-dao-dan-ong" },
+	{ title: "G9", artist: "Ivy Võ", thumb: "/assets/G9 - Ivy Vo.png", path: "/ivy-vo" },
 	{ title: "Giấc mơ gi (cha)Pi ti", artist: "Lê Thanh Thảo", thumb: "/assets/Giac mo Chapiti - Le Thanh Thao.png", path: "/le-thanh-thao" },
 	{
 		title: "Diary of a self-proclaimed Schizo-approximating person or just another casual conversation with her muses",
