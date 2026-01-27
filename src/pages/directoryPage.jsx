@@ -21,7 +21,7 @@ const works = [
 	},
 	{ title: "Derivative of Trio A", artist: "Lyon Nguyễn", thumb: "/assets/Derivative of Trio A - Lyon Nguyễn.png", path: "/lyon-nguyen" },
 	{ title: "The AI dance with us!!", artist: "Nicola Bertoglio", thumb: "/assets/The AI Dance with Us! - Nicola Bertoglio.png", path: "/nicola-bertoglio" },
-	{ title: "Re-Impression. Water Lilies, Water Lilies;", artist: "Nguyen Thai Bao", thumb: "/assets/Water lilies.png", path: "/nguyen-thai-bao" },
+	{ title: "Re-Impression. Water Lilies, Water Lilies;", artist: "Nguyễn Thái Bảo", thumb: "/assets/Water lilies.png", path: "/nguyen-thai-bao" },
 	{ title: "Kính chiếu AI", artist: "Nguyễn Hoàng Gia Bảo", thumb: "/assets/Nguyễn Hoàng Gia Bảo_.png", path: "/nguyen-hoang-gia-bao" },
 	{ title: "Human Learning", artist: "Nguyễn Hoàng Giang", thumb: "/assets/Human Learning - Giang IT.png", path: "/nguyen-hoang-giang" },
 	{ title: "Little monster dancing", artist: "Ricardo Bodini", thumb: "", path: "/ricardo-bodini" },
